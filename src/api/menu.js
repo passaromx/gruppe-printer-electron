@@ -9,11 +9,11 @@ const Menu = [
     icon: 'print',
     name: 'About'
   },
-  // {
-  //   title: 'Usuarios',
-  //   icon: 'notifications',
-  //   name: 'users'
-  // }
+  {
+    title: 'Usuarios',
+    icon: 'notifications',
+    name: 'Users'
+  }
 ];
 
 export default Menu;

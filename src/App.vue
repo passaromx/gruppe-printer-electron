@@ -81,6 +81,20 @@
             <VListTileTitle>{{ item.title }}</VListTileTitle>
           </VListTileContent>
         </VListTile>
+
+        <VDivider light></VDivider>
+
+        <VListTile
+          @click="mini = !mini"
+        >
+          <VListTileAction>
+            <VIcon>exit_to_app</VIcon>
+          </VListTileAction>
+
+          <VListTileContent>
+            <VListTileTitle>Cerrar sesión</VListTileTitle>
+          </VListTileContent>
+        </VListTile>
       </VList>
     </VNavigationDrawer>
 
