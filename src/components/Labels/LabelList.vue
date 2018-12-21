@@ -1,34 +1,13 @@
 <template>
   <VContainer>
-    <VLayout row justify-space-between>
-      <h4 class="display-1 mb-4">Etiquetas</h4>
-      <VBtn flat icon color="grey darken-2">
-        <VIcon>refresh</VIcon>
-      </VBtn>
-    </VLayout>
+    <BaseHeader label="Etiquetas" @refresh="selected = []"/>
+
+    <VDialog v-model="dialog" max-width="500" persistent>
+      <LabelForm />
+    </VDialog>
 
     <BaseCard>
-      <VCardTitle>
-        <VLayout row justify-space-between>
-          <VFlex xs4>
-            <VTextField
-              v-model="search"
-              placeholder="Buscar..."
-            />
-          </VFlex>
-          <VFlex xs2>
-            <VScrollYTransition>
-              <VBtn
-                v-if="selected.length > 0"
-                class="white--text"
-                color="red"
-              >
-                Borrar
-              </VBtn>
-            </VScrollYTransition>
-          </VFlex>
-        </VLayout>
-      </VCardTitle>
+      <TableHeader :selected="selected"/>
 
       <VDataTable
         v-model="selected"
@@ -36,7 +15,6 @@
         :items="desserts"
         item-key="name"
         select-all
-        class="elevation-1"
       >
         <template slot="items" slot-scope="props">
           <td>
@@ -60,8 +38,14 @@
 
 <script>
 export default {
+  components: {
+    LabelForm: () => import('@/components/Labels/LabelForm'),
+    TableHeader: () => import('@/components/Shared/TableHeader')
+  },
   data() {
     return {
+      dialog: false,
+      search: '',
       selected: [],
       headers: [
         {
