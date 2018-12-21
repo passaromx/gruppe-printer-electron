@@ -1,9 +1,9 @@
 <template>
-  <HelloWorld />
+  <LabelList />
 </template>
 
 <script>
-import HelloWorld from '../components/HelloWorld';
+import LabelList from '../components/Labels/LabelList';
 
-export default { components: { HelloWorld } };
+export default { components: { LabelList } };
 </script>

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import './plugins/vuetify';
+import './components/Shared';
 import App from './App';
 import router from './router';
 import store from './store';
