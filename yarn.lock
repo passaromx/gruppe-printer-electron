@@ -6777,6 +6777,11 @@ mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdi
   dependencies:
     minimist "0.0.8"
 
+moment@^2.23.0:
+  version "2.23.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.23.0.tgz#759ea491ac97d54bac5ad776996e2a58cc1bc225"
+  integrity sha512-3IE39bHVqFbWWaPOMHZF98Q9c3LDKGTmypMiTM2QygGXXElkFWIH7GxfmlwmY2vwa+wmNsoYZmG2iusf1ZjJoA==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -8326,6 +8331,11 @@ pretty-format@^23.6.0:
   dependencies:
     ansi-regex "^3.0.0"
     ansi-styles "^3.2.0"
+
+printer@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/printer/-/printer-0.2.2.tgz#830b8f5c97b97fd9b464d4f4e105d43337792296"
+  integrity sha1-gwuPXJe5f9m0ZNT04QXUMzd5IpY=
 
 private@^0.1.6:
   version "0.1.8"
@@ -10592,6 +10602,11 @@ vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
+
+vee-validate@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-2.1.5.tgz#ced270f9c7f5eeac560b4d7ab63bda756b71761c"
+  integrity sha512-ygo3uQZrCZjFQcZ/AcFI5UZ3ouaNxtsrs+3o/u4yd3TeZveMwYBI3v6+uKbk2aHmNV6jXLl/aj5BTZTYaf73Lw==
 
 vendors@^1.0.0:
   version "1.0.2"

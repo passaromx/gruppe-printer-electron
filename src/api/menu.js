@@ -1,6 +1,6 @@
 const Menu = [
   {
-    title: 'Etiquetas',
+    title: 'Precintos',
     icon: 'label',
     name: 'Home'
   },
@@ -11,7 +11,7 @@ const Menu = [
   },
   {
     title: 'Usuarios',
-    icon: 'notifications',
+    icon: 'group',
     name: 'Users'
   }
 ];

@@ -1,6 +1,6 @@
 <template>
   <VCard
-    class="elevation-2"
+    v-bind:class="{ 'full-height': isFullHeight }"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -8,8 +8,14 @@
   </VCard>
 </template>
 
+<script>
+export default { props: ['isFullHeight'] };
+</script>
+
+
 <style scoped>
-  .v-card {
-    border-radius: 4px;
+  .full-height {
+    height: 100vh;
+    border-radius: 0;
   }
 </style>

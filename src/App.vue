@@ -1,108 +1,85 @@
 <template>
   <VApp>
-    <!-- <VToolbar app>
-      <VToolbarTitle class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
-      </VToolbarTitle>
-      <VSpacer></VSpacer>
-      <VBtn
-        flat
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
+    <template v-if="!$route.meta.public">
+      <VNavigationDrawer
+        v-model="drawer"
+        :mini-variant="mini"
+        dark
+        fixed
+        app
+        width="250"
+        permanent
       >
-        <span class="mr-2">Latest Release</span>
-      </VBtn>
-    </VToolbar> -->
+        <VList class="pa-1">
+          <VListTile v-if="mini" @click.stop="mini = !mini">
+            <VListTileAction>
+              <VIcon>chevron_right</VIcon>
+            </VListTileAction>
+          </VListTile>
 
-    <VNavigationDrawer
-      v-model="drawer"
-      :mini-variant="mini"
-      dark
-      fixed
-      app
-      width="250"
-      permanent
-    >
-      <VList class="pa-1">
-        <VListTile v-if="mini" @click.stop="mini = !mini">
-          <VListTileAction>
-            <VIcon>chevron_right</VIcon>
-          </VListTileAction>
-        </VListTile>
+          <VListTile avatar tag="div">
+            <VListTileAvatar >
+              <img :src="require('./assets/gruppe.png')">
+            </VListTileAvatar>
 
-        <VListTile avatar tag="div">
-          <VListTileAvatar >
-            <img src="https://randomuser.me/api/portraits/men/85.jpg">
-          </VListTileAvatar>
+            <VListTileContent>
+              <VListTileTitle>Gruppe ZEBRA</VListTileTitle>
+            </VListTileContent>
 
-          <VListTileContent>
-            <VListTileTitle>Gruppe ZEBRA</VListTileTitle>
-          </VListTileContent>
-
-          <VListTileAction>
-            <VBtn icon @click.stop="mini = !mini">
-              <VIcon>chevron_left</VIcon>
-            </VBtn>
-          </VListTileAction>
-        </VListTile>
-      </VList>
-
-      <!-- <VToolbar flat>
-        <VList v-if="!mini">
-          <VListTile>
-            <VListTileTitle class="title">
-              ZEBRA PRINTER
-            </VListTileTitle>
+            <VListTileAction>
+              <VBtn icon @click.stop="mini = !mini">
+                <VIcon>chevron_left</VIcon>
+              </VBtn>
+            </VListTileAction>
           </VListTile>
         </VList>
-        <VToolbarItems>
-          <VBtn icon @click.stop="mini = !mini">
-            <VIcon>chevron_left</VIcon>
-          </VBtn>
-        </VToolbarItems>
-      </VToolbar> -->
 
+        <VList class="pt-0">
+          <VDivider light></VDivider>
 
-      <VList class="pt-0">
-        <VDivider light></VDivider>
+          <VListTile
+            v-for="item in menu"
+            :key="item.title"
+            :to="{ name: item.name }"
+            exact
+          >
+            <VListTileAction>
+              <VIcon>{{ item.icon }}</VIcon>
+            </VListTileAction>
 
-        <VListTile
-          v-for="item in menu"
-          :key="item.title"
-          :to="{ name: item.name }"
-          exact
-        >
-          <VListTileAction>
-            <VIcon>{{ item.icon }}</VIcon>
-          </VListTileAction>
+            <VListTileContent>
+              <VListTileTitle>{{ item.title }}</VListTileTitle>
+            </VListTileContent>
+          </VListTile>
 
-          <VListTileContent>
-            <VListTileTitle>{{ item.title }}</VListTileTitle>
-          </VListTileContent>
-        </VListTile>
+          <VDivider light></VDivider>
 
-        <VDivider light></VDivider>
+          <VListTile
+            @click="$router.push({ name: 'Login' })"
+          >
+            <VListTileAction>
+              <VIcon>exit_to_app</VIcon>
+            </VListTileAction>
 
-        <VListTile
-          @click="mini = !mini"
-        >
-          <VListTileAction>
-            <VIcon>exit_to_app</VIcon>
-          </VListTileAction>
+            <VListTileContent>
+              <VListTileTitle>Cerrar sesión</VListTileTitle>
+            </VListTileContent>
+          </VListTile>
+        </VList>
+      </VNavigationDrawer>
 
-          <VListTileContent>
-            <VListTileTitle>Cerrar sesión</VListTileTitle>
-          </VListTileContent>
-        </VListTile>
-      </VList>
-    </VNavigationDrawer>
+      <VContent>
+        <Transition name="slide" mode="out-in">
+          <RouterView />
+        </Transition>
+      </VContent>
+    </template>
 
-    <VContent>
+    <template v-else>
       <Transition name="slide" mode="out-in">
         <RouterView />
       </Transition>
-    </VContent>
+    </template>
 
     <Snackbar />
   </VApp>
@@ -120,6 +97,14 @@ export default {
       menu,
       mini: false,
     };
+  },
+  mounted() {
+    this.$eventHub.$on('closeDrawer', () => {
+      this.mini = true;
+    });
+  },
+  destroyed() {
+    this.$eventHub.$off('closeDrawer');
   }
 };
 </script>

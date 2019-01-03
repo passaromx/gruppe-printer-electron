@@ -1,14 +1,12 @@
 <template>
-  <VContainer grid-list-lg>
-    <VLayout row wrap>
-      <VFlex xs12 sm6>
-        <FormTile />
-      </VFlex>
-      <VFlex xs12 sm6>
-        <PreviewTile />
-      </VFlex>
-    </VLayout>
-  </VContainer>
+  <VLayout row wrap>
+    <VFlex xs12 sm4>
+      <FormTile />
+    </VFlex>
+    <VFlex xs12 sm8>
+      <PreviewTile />
+    </VFlex>
+  </VLayout>
 </template>
 
 <script>
@@ -19,6 +17,9 @@ export default {
   components: {
     FormTile,
     PreviewTile
+  },
+  mounted() {
+    this.$eventHub.$emit('closeDrawer');
   }
 };
 </script>

@@ -27,6 +27,10 @@ function createWindow() {
     win.loadURL('app://./index.html');
   }
 
+  win.webContents.on('did-finish-load', () => {
+    console.log('loaded', win.webContents.getPrinters());
+  });
+
   win.on('closed', () => {
     win = null;
   });
