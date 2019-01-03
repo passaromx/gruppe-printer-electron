@@ -2,12 +2,12 @@ const Menu = [
   {
     title: 'Precintos',
     icon: 'label',
-    name: 'Home'
+    name: 'Labels'
   },
   {
     title: 'Impresión',
     icon: 'print',
-    name: 'About'
+    name: 'Printer'
   },
   {
     title: 'Usuarios',

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home';
+import Printer from './views/Printer';
 
 Vue.use(Router);
 
@@ -17,16 +17,16 @@ export default new Router({
       component: () => import(/* webpackChunkName: "login" */ './views/Login.vue'),
     },
     {
-      path: '/',
-      name: 'Home',
+      path: '/printer',
+      name: 'Printer',
       meta: { requiresAuth: true },
-      component: Home,
+      component: Printer,
     },
     {
-      path: '/about',
+      path: '/labels',
       meta: { requiresAuth: true },
-      name: 'About',
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
+      name: 'Labels',
+      component: () => import(/* webpackChunkName: "about" */ './views/Labels.vue'),
     },
     {
       path: '/users',
@@ -34,5 +34,9 @@ export default new Router({
       name: 'Users',
       component: () => import(/* webpackChunkName: "users" */ './views/Users.vue'),
     },
+    {
+      path: '*',
+      redirect: '/Login'
+    }
   ],
 });

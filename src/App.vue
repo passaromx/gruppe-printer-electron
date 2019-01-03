@@ -1,85 +1,78 @@
 <template>
   <VApp>
-    <template v-if="!$route.meta.public">
-      <VNavigationDrawer
-        v-model="drawer"
-        :mini-variant="mini"
-        dark
-        fixed
-        app
-        width="250"
-        permanent
-      >
-        <VList class="pa-1">
-          <VListTile v-if="mini" @click.stop="mini = !mini">
-            <VListTileAction>
-              <VIcon>chevron_right</VIcon>
-            </VListTileAction>
-          </VListTile>
+    <VNavigationDrawer
+      v-if="isLoggedIn"
+      v-model="drawer"
+      :mini-variant="mini"
+      dark
+      fixed
+      app
+      width="250"
+      permanent
+    >
+      <VList class="pa-1">
+        <VListTile v-if="mini" @click.stop="mini = !mini">
+          <VListTileAction>
+            <VIcon>chevron_right</VIcon>
+          </VListTileAction>
+        </VListTile>
 
-          <VListTile avatar tag="div">
-            <VListTileAvatar >
-              <img :src="require('./assets/gruppe.png')">
-            </VListTileAvatar>
+        <VListTile avatar tag="div">
+          <VListTileAvatar >
+            <img :src="require('./assets/gruppe.png')">
+          </VListTileAvatar>
 
-            <VListTileContent>
-              <VListTileTitle>Gruppe ZEBRA</VListTileTitle>
-            </VListTileContent>
+          <VListTileContent>
+            <VListTileTitle>Gruppe ZEBRA</VListTileTitle>
+          </VListTileContent>
 
-            <VListTileAction>
-              <VBtn icon @click.stop="mini = !mini">
-                <VIcon>chevron_left</VIcon>
-              </VBtn>
-            </VListTileAction>
-          </VListTile>
-        </VList>
+          <VListTileAction>
+            <VBtn icon @click.stop="mini = !mini">
+              <VIcon>chevron_left</VIcon>
+            </VBtn>
+          </VListTileAction>
+        </VListTile>
+      </VList>
 
-        <VList class="pt-0">
-          <VDivider light></VDivider>
+      <VList class="pt-0">
+        <VDivider light></VDivider>
 
-          <VListTile
-            v-for="item in menu"
-            :key="item.title"
-            :to="{ name: item.name }"
-            exact
-          >
-            <VListTileAction>
-              <VIcon>{{ item.icon }}</VIcon>
-            </VListTileAction>
+        <VListTile
+          v-for="item in menu"
+          :key="item.title"
+          :to="{ name: item.name }"
+          exact
+        >
+          <VListTileAction>
+            <VIcon>{{ item.icon }}</VIcon>
+          </VListTileAction>
 
-            <VListTileContent>
-              <VListTileTitle>{{ item.title }}</VListTileTitle>
-            </VListTileContent>
-          </VListTile>
+          <VListTileContent>
+            <VListTileTitle>{{ item.title }}</VListTileTitle>
+          </VListTileContent>
+        </VListTile>
 
-          <VDivider light></VDivider>
+        <VDivider light></VDivider>
 
-          <VListTile
-            @click="$router.push({ name: 'Login' })"
-          >
-            <VListTileAction>
-              <VIcon>exit_to_app</VIcon>
-            </VListTileAction>
+        <VListTile
+          @click="logout"
+        >
+          <VListTileAction>
+            <VIcon>exit_to_app</VIcon>
+          </VListTileAction>
 
-            <VListTileContent>
-              <VListTileTitle>Cerrar sesión</VListTileTitle>
-            </VListTileContent>
-          </VListTile>
-        </VList>
-      </VNavigationDrawer>
+          <VListTileContent>
+            <VListTileTitle>Cerrar sesión</VListTileTitle>
+          </VListTileContent>
+        </VListTile>
+      </VList>
+    </VNavigationDrawer>
 
-      <VContent>
-        <Transition name="slide" mode="out-in">
-          <RouterView />
-        </Transition>
-      </VContent>
-    </template>
-
-    <template v-else>
+    <VContent>
       <Transition name="slide" mode="out-in">
         <RouterView />
       </Transition>
-    </template>
+    </VContent>
 
     <Snackbar />
   </VApp>
@@ -87,6 +80,7 @@
 
 <script>
 import menu from '@/api/menu';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'App',
@@ -97,6 +91,23 @@ export default {
       menu,
       mini: false,
     };
+  },
+  computed: {
+    ...mapGetters('cognito', ['isLoggedIn']),
+    ...mapState(['isReady'])
+  },
+  methods: {
+    ...mapActions('cognito', ['signOut']),
+    logout() {
+      this.signOut().then(() => {
+        this.$router.push({ name: 'Login' });
+      });
+    }
+  },
+  watch: {
+    isReady(val) {
+      if (val && this.isLoggedIn) this.$router.push({ name: 'Printer' });
+    }
   },
   mounted() {
     this.$eventHub.$on('closeDrawer', () => {

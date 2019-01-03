@@ -18,6 +18,9 @@
             label="Correo"
             v-model="email"
             append-icon="alternate_email"
+            data-vv-name="email"
+            v-validate="'required|email'"
+            :error-messages="errors.collect('email')"
           />
           <VTextField
             label="Contraseña"
@@ -25,9 +28,19 @@
             :append-icon="show ? 'visibility' : 'visibility_off'"
             :type="show ? 'text' : 'password'"
             @click:append="show = !show"
+            data-vv-name="password"
+            v-validate="'required'"
+            :error-messages="errors.collect('password')"
           />
           <VLayout justify-end>
-            <VBtn type="submit" class="mt-3">Iniciar Sesión</VBtn>
+            <VBtn
+              type="submit"
+              class="mt-3"
+              :disabled="loading"
+              :loading="loading"
+            >
+              Iniciar Sesión
+            </VBtn>
           </VLayout>
         </form>
       </VContainer>
@@ -42,17 +55,53 @@
 </template>
 
 <script>
+import { mapActions, mapMutations } from 'vuex';
+
 export default {
+  $_veeValidate: { validator: 'new' },
   data() {
     return {
+      loading: false,
       show: false,
       email: null,
       password: null
     };
   },
   methods: {
+    ...mapActions('cognito', ['signInUser']),
+    ...mapMutations([
+      'setIsLoading',
+      'setSnackbar'
+    ]),
     validate() {
-      console.log('validating');
+      this.$validator.validate().then(res => {
+        if (res) this.submit();
+      });
+    },
+    submit() {
+      console.log('submitting', this.email);
+      this.setIsLoading(true);
+      this.signInUser({
+        username: this.email,
+        password: this.password
+      })
+        .then(() => {
+          this.setSnackbar({
+            type: 'success',
+            msg: `Successfully signed in user ${this.email}`
+          });
+
+          this.$router.push({ name: 'Printer' });
+        })
+        .catch(err => {
+          this.setSnackbar({
+            type: 'error',
+            msg: err
+          });
+        })
+        .finally(() => {
+          this.setIsLoading(false);
+        });
     }
   }
 };
