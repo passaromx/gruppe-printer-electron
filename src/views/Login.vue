@@ -36,8 +36,8 @@
             <VBtn
               type="submit"
               class="mt-3"
-              :disabled="loading"
-              :loading="loading"
+              :disabled="isLoading"
+              :loading="isLoading"
             >
               Iniciar Sesión
             </VBtn>
@@ -55,18 +55,18 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex';
+import { mapActions, mapMutations, mapState } from 'vuex';
 
 export default {
   $_veeValidate: { validator: 'new' },
   data() {
     return {
-      loading: false,
       show: false,
       email: null,
       password: null
     };
   },
+  computed: { ...mapState(['isLoading']) },
   methods: {
     ...mapActions('cognito', ['signInUser']),
     ...mapMutations([
@@ -86,17 +86,17 @@ export default {
         password: this.password
       })
         .then(() => {
-          this.setSnackbar({
-            type: 'success',
-            msg: `Successfully signed in user ${this.email}`
-          });
+          // this.setSnackbar({
+          //   type: 'success',
+          //   msg: `Successfully signed in user ${this.email}`
+          // });
 
           this.$router.push({ name: 'Printer' });
         })
-        .catch(err => {
+        .catch(() => {
           this.setSnackbar({
             type: 'error',
-            msg: err
+            msg: 'Credenciales inválidas'
           });
         })
         .finally(() => {

@@ -22,10 +22,10 @@
 import { mapState } from 'vuex';
 
 const ICON_MAP = {
-  error: 'mdi-alert-octagon',
-  info: 'mdi-information',
-  success: 'mdi-check-circle',
-  warning: 'mdi-alert-circle'
+  error: 'report',
+  info: 'info',
+  success: 'check_circle',
+  warning: 'warning'
 };
 
 export default {
