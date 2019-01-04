@@ -1,13 +1,11 @@
 <template>
-  <VContainer>
-    <BaseHeader label="Etiquetas" @refresh="selected = []"/>
-
+  <div>
     <VDialog v-model="dialog" max-width="500" persistent>
       <LabelForm />
     </VDialog>
 
     <BaseCard>
-      <TableHeader :selected="selected"/>
+      <TableHeader :selected="selected" @newItem="dialog = true"/>
 
       <VDataTable
         v-model="selected"
@@ -33,7 +31,7 @@
         </template>
       </VDataTable>
     </BaseCard>
-  </VContainer>
+  </div>
 </template>
 
 <script>

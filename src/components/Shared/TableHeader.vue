@@ -1,36 +1,69 @@
 <template>
-  <VCardTitle>
-    <VLayout row wrap>
-      <VFlex xs12 sm4>
-        <VTextField
-          v-model="search"
-          placeholder="Buscar..."
-        />
-      </VFlex>
-      <VFlex xs12 sm8>
-        <VLayout row justify-end>
-          <VScrollYTransition>
+  <div>
+    <VExpandTransition>
+      <div v-if="selected.length > 0" class="delete-bar">
+        <VContainer fluid class="py-0" style="height: 100%">
+          <VLayout
+            fill-height
+            row
+            justify-space-between
+            align-center
+          >
+            <span>
+              {{ selected.length }} registro{{ selected.length > 1 ? 's' : '' }}
+              selecionado{{ selected.length > 1 ? 's' : '' }}
+            </span>
             <VBtn
-              v-if="selected.length > 0"
-              class="white--text"
-              outline
+              class="mx-0"
+              flat
               color="red"
-              @click="$emit('deleteItems')"
+              @click="$emit('newItem')"
             >
+              <VIcon class="mr-2">delete</VIcon>
               Borrar
             </VBtn>
-          </VScrollYTransition>
-          <VBtn
-            outline
-            color="success"
-            @click="$emit('newItem')"
-          >
-            Crear
-          </VBtn>
-        </VLayout>
-      </VFlex>
-    </VLayout>
-  </VCardTitle>
+          </VLayout>
+        </VContainer>
+
+      </div>
+    </VExpandTransition>
+    <VCardTitle>
+      <VLayout row wrap>
+        <VFlex xs12 sm3>
+          <VTextField
+            class="pt-0"
+            v-model="search"
+            placeholder="Buscar..."
+            append-icon="search"
+            hide-details
+            clearable
+          />
+        </VFlex>
+        <VFlex xs12 sm9>
+          <VLayout row justify-end>
+            <VBtn
+              class="mx-0"
+              flat
+              color="secondary"
+              @click="$emit('newItem')"
+            >
+              <VIcon class="mr-2">filter_list</VIcon>
+              Filtros
+            </VBtn>
+            <VBtn
+              class="mx-0"
+              flat
+              color="secondary"
+              @click="$emit('newItem')"
+            >
+              <VIcon class="mr-2">add</VIcon>
+              Crear
+            </VBtn>
+          </VLayout>
+        </VFlex>
+      </VLayout>
+    </VCardTitle>
+  </div>
 </template>
 
 <script>
@@ -41,3 +74,14 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.delete-bar {
+  background-color: #e0e0e0;
+  position: absolute;
+  width: 100%;
+  height: 65px;
+  border-radius: 3px 3px 0 0;
+  z-index: 2;
+}
+</style>

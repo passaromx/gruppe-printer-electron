@@ -95,7 +95,10 @@
           </VFlex>
         </VLayout>
         <VLayout justify-end>
-          <VBtn >PDF</VBtn>
+          <VBtn>
+            <VIcon class="mr-2">cloud_download</VIcon>
+            PDF
+          </VBtn>
           <VBtn color="primary">Imprimir</VBtn>
         </VLayout>
       </VContainer>

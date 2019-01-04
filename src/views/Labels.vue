@@ -1,5 +1,8 @@
 <template>
-  <LabelList />
+  <VContainer>
+    <BaseHeader label="Etiquetas"/>
+    <LabelList />
+  </VContainer>
 </template>
 
 <script>

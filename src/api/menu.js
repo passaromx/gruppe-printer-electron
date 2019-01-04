@@ -10,9 +10,9 @@ const Menu = [
     name: 'Printer'
   },
   {
-    title: 'Usuarios',
+    title: 'Clientes',
     icon: 'group',
-    name: 'Users'
+    name: 'Clients'
   }
 ];
 

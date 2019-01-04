@@ -29,10 +29,10 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/Labels.vue'),
     },
     {
-      path: '/users',
+      path: '/clients',
       meta: { requiresAuth: true },
-      name: 'Users',
-      component: () => import(/* webpackChunkName: "users" */ './views/Users.vue'),
+      name: 'Clients',
+      component: () => import(/* webpackChunkName: "users" */ './views/Clients.vue'),
     },
     {
       path: '*',

@@ -1,0 +1,63 @@
+<template>
+  <BaseCard>
+    <VToolbar
+      dark
+      tabs
+      color="secondary"
+    >
+      <VToolbarTitle>Soluciones Passaro</VToolbarTitle>
+      <div slot="extension">
+        <VBtn
+          color="primary"
+          dark
+          small
+          absolute
+          bottom
+          right
+          fab
+        >
+          <VIcon>add</VIcon>
+        </VBtn>
+        <VTabs
+          slot="extension"
+          v-model="model"
+          left
+          color="secondary"
+          slider-color="primary"
+        >
+          <VTab
+            v-for="(item, i) in tabs"
+            :key="i"
+            :href="`#tab-${i}`"
+          >
+            {{ item }}
+          </VTab>
+        </VTabs>
+      </div>
+    </VToolbar>
+
+    <VTabsItems v-model="model">
+      <VTabItem
+        v-for="(item, i) in tabs"
+        :value="`tab-${i}`"
+        :key="i"
+      >
+        <VCardText class="mt-3">
+          <FactoryTab v-if="item === 'Plantas'"/>
+        </VCardText>
+      </VTabItem>
+    </VTabsItems>
+  </BaseCard>
+</template>
+
+<script>
+export default {
+  components: { FactoryTab: () => import('@/components/Clients/FactoryTab') },
+  data() {
+    return {
+      tabs: ['Plantas', 'Usuarios', 'Impresoras'],
+      model: 'tab-2',
+    };
+  }
+};
+</script>
