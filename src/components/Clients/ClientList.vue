@@ -20,19 +20,19 @@
           </td>
           <td>{{ props.item.name }}</td>
           <td class="justify-center layout px-0">
-          <VIcon
-            small
-            class="mr-2"
-          >
-            edit
-          </VIcon>
-          <VIcon
-            small
-            @click="deleteItem(props.item)"
-          >
-            settings
-          </VIcon>
-        </td>
+            <VIcon
+              small
+              class="mr-2"
+            >
+              edit
+            </VIcon>
+            <VIcon
+              small
+              @click="deleteItem(props.item)"
+            >
+              settings
+            </VIcon>
+          </td>
         </template>
       </VDataTable>
     </BaseCard>

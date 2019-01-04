@@ -29,7 +29,7 @@
     </VExpandTransition>
     <VCardTitle>
       <VLayout row wrap>
-        <VFlex xs12 sm3>
+        <VFlex xs12 v-bind:class="[ condensed ? 'sm3' : 'sm6']">
           <VTextField
             class="pt-0"
             v-model="search"
@@ -39,9 +39,10 @@
             clearable
           />
         </VFlex>
-        <VFlex xs12 sm9>
+        <VFlex xs12 v-bind:class="[ condensed ? 'sm9' : 'sm6']" v-if="!hideActions">
           <VLayout row justify-end>
             <VBtn
+              v-if="filters"
               class="mx-0"
               flat
               color="secondary"
@@ -68,7 +69,18 @@
 
 <script>
 export default {
-  props: ['selected'],
+  props: {
+    selected: Array,
+    filters: Array,
+    condensed: {
+      type: Boolean,
+      default: false
+    },
+    hideActions: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return { search: '' };
   }

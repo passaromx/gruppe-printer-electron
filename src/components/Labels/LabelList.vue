@@ -5,7 +5,7 @@
     </VDialog>
 
     <BaseCard>
-      <TableHeader :selected="selected" @newItem="dialog = true"/>
+      <TableHeader :selected="selected" @newItem="dialog = true" condensed/>
 
       <VDataTable
         v-model="selected"

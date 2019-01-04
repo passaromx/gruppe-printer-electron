@@ -42,8 +42,9 @@
         :value="`tab-${i}`"
         :key="i"
       >
-        <VCardText class="mt-3">
+        <VCardText class="pt-5 custom-tab">
           <FactoryTab v-if="item === 'Plantas'"/>
+          <UsersTab v-else-if="item === 'Usuarios'"/>
         </VCardText>
       </VTabItem>
     </VTabsItems>
@@ -52,7 +53,10 @@
 
 <script>
 export default {
-  components: { FactoryTab: () => import('@/components/Clients/FactoryTab') },
+  components: {
+    FactoryTab: () => import('@/components/Clients/FactoryTab'),
+    UsersTab: () => import('@/components/Clients/UsersTab')
+  },
   data() {
     return {
       tabs: ['Plantas', 'Usuarios', 'Impresoras'],
@@ -61,3 +65,9 @@ export default {
   }
 };
 </script>
+
+<style>
+.custom-tab {
+  max-height: 70vh;
+}
+</style>
