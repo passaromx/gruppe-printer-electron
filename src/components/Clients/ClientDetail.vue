@@ -6,18 +6,25 @@
       color="secondary"
     >
       <VToolbarTitle>Soluciones Passaro</VToolbarTitle>
+      <VSpacer />
+      <VIcon>refresh</VIcon>
+
       <div slot="extension">
-        <VBtn
-          color="primary"
-          dark
-          small
-          absolute
-          bottom
-          right
-          fab
-        >
-          <VIcon>add</VIcon>
-        </VBtn>
+        <VFabTransition>
+          <VBtn
+            v-show="model !== 'tab-2'"
+            color="primary"
+            dark
+            small
+            absolute
+            bottom
+            right
+            fab
+          >
+            <VIcon>add</VIcon>
+          </VBtn>
+        </VFabTransition>
+
         <VTabs
           slot="extension"
           v-model="model"
@@ -42,7 +49,7 @@
         :value="`tab-${i}`"
         :key="i"
       >
-        <VCardText class="pt-5 custom-tab">
+        <VCardText class="pt-5">
           <FactoryTab v-if="item === 'Plantas'"/>
           <UsersTab v-else-if="item === 'Usuarios'"/>
         </VCardText>
@@ -60,7 +67,7 @@ export default {
   data() {
     return {
       tabs: ['Plantas', 'Usuarios', 'Impresoras'],
-      model: 'tab-2',
+      model: 'tab-0',
     };
   }
 };

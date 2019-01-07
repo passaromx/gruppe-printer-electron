@@ -1,7 +1,7 @@
 <template>
   <VContainer grid-list-lg>
-    <BaseHeader label="Clientes" @refresh="selected = []"/>
-    <VLayout row>
+    <!-- <BaseHeader label="Clientes" @refresh="selected = []"/> -->
+    <VLayout row fill-height>
       <VFlex xs6>
         <ClientList />
       </VFlex>

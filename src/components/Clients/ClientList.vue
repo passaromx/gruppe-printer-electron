@@ -1,7 +1,18 @@
 <template>
   <div>
     <BaseCard>
-      <TableHeader :selected="selected"/>
+      <VCardTitle>
+        <h5 class="headline">Clientes</h5>
+        <VSpacer />
+        <VIcon>refresh</VIcon>
+      </VCardTitle>
+      <VDivider />
+
+      <VDialog max-width="400px" v-model="dialog">
+        <ClientForm />
+      </VDialog>
+
+      <TableHeader :selected="selected" @newItem="dialog = true"/>
 
       <VDataTable
         v-model="selected"
@@ -42,10 +53,14 @@
 
 <script>
 export default {
-  components: { TableHeader: () => import('@/components/Shared/TableHeader') },
+  components: {
+    TableHeader: () => import('@/components/Shared/TableHeader'),
+    ClientForm: () => import('@/components/Clients/ClientForm')
+  },
   data() {
     return {
       selected: [],
+      dialog: false,
       headers: [
         {
           text: 'Nombre',

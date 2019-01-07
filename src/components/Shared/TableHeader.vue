@@ -93,7 +93,7 @@ export default {
   position: absolute;
   width: 100%;
   height: 65px;
-  border-radius: 3px 3px 0 0;
+  /* border-radius: 3px 3px 0 0; */
   z-index: 2;
 }
 </style>
