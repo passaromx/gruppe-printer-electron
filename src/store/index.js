@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import attachCognitoModule from '@vuetify/vuex-cognito-module';
+import labels from './modules/labels';
 
 Vue.use(Vuex);
 
@@ -21,7 +22,8 @@ const store = new Vuex.Store({
     // setPassword: set('password'),
     setUser: set('user'),
     setSnackbar: set('snackbar')
-  }
+  },
+  modules: { labels }
 });
 
 attachCognitoModule(store, {

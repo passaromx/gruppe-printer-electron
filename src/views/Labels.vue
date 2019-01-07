@@ -1,6 +1,6 @@
 <template>
   <VContainer>
-    <BaseHeader label="Etiquetas"/>
+    <!-- <BaseHeader label="Etiquetas"/> -->
     <LabelList />
   </VContainer>
 </template>

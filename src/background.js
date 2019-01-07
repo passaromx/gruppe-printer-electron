@@ -13,8 +13,10 @@ protocol.registerStandardSchemes(['app'], { secure: true });
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 800,
-    height: 600
+    height: 700,
+    width: 1000,
+    minHeight: 700,
+    minWidth: 1000
   });
 
   if (isDevelopment || process.env.IS_TEST) {
@@ -35,6 +37,19 @@ function createWindow() {
     win = null;
   });
 }
+
+// ipcMain.on('open-dialog', e => {
+//   dialog.showOpenDialog({
+//     defaultPath: '/Users/rayon/Desktop',
+//     buttonLabel: 'Abrir'
+//   }, openPath => {
+//     let file = null;
+//     if (openPath) {
+//       file = fs.createReadStream(openPath[0]);
+//     }
+//     e.sender.send('file-selected', file);
+//   });
+// });
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

@@ -16,8 +16,6 @@
     </VLayout>
     <VuePerfectScrollbar :settings="scrollSettings">
       <VList style="max-height: 500px">
-        <!-- <VSubheader inset>Folders</VSubheader> -->
-
         <VListTile
           v-for="(item, i) in filteredItems"
           :key="i"
@@ -61,24 +59,6 @@ export default {
           icon: 'folder',
           iconClass: 'grey lighten-1 white--text',
           title: 'Merida',
-          subtitle: '65,000 impresiones'
-        },
-        {
-          icon: 'folder',
-          iconClass: 'grey lighten-1 white--text',
-          title: 'Jalisco',
-          subtitle: '65,000 impresiones'
-        },
-        {
-          icon: 'folder',
-          iconClass: 'grey lighten-1 white--text',
-          title: 'Merida',
-          subtitle: '65,000 impresiones'
-        },
-        {
-          icon: 'folder',
-          iconClass: 'grey lighten-1 white--text',
-          title: 'Jalisco',
           subtitle: '65,000 impresiones'
         },
         {
