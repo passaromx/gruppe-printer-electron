@@ -8,11 +8,11 @@
       </VCardTitle>
       <VDivider />
 
-      <VDialog max-width="400px" v-model="dialog">
+      <!-- <VDialog max-width="400px" v-model="dialog">
         <ClientForm />
-      </VDialog>
+      </VDialog> -->
 
-      <TableHeader :selected="selected" @newItem="dialog = true"/>
+      <TableHeader :selected="selected" @newItem="$eventHub.$emit('openFormDialog', { form: 'client' })"/>
 
       <VDataTable
         v-model="selected"
@@ -55,7 +55,7 @@
 export default {
   components: {
     TableHeader: () => import('@/components/Shared/TableHeader'),
-    ClientForm: () => import('@/components/Clients/ClientForm')
+    // ClientForm: () => import('@/components/Clients/ClientForm')
   },
   data() {
     return {

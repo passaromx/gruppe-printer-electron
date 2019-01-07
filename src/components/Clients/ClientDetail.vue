@@ -20,6 +20,7 @@
             bottom
             right
             fab
+            @click="openForm"
           >
             <VIcon>add</VIcon>
           </VBtn>
@@ -45,13 +46,15 @@
 
     <VTabsItems v-model="model">
       <VTabItem
+        class="mt-4"
         v-for="(item, i) in tabs"
         :value="`tab-${i}`"
         :key="i"
       >
-        <VCardText class="pt-5">
+        <VCardText>
           <FactoryTab v-if="item === 'Plantas'"/>
           <UsersTab v-else-if="item === 'Usuarios'"/>
+          <!-- <PrintersTab v-else /> -->
         </VCardText>
       </VTabItem>
     </VTabsItems>
@@ -69,6 +72,12 @@ export default {
       tabs: ['Plantas', 'Usuarios', 'Impresoras'],
       model: 'tab-0',
     };
+  },
+  methods: {
+    openForm() {
+      const form = this.model === 'tab-0' ? 'factory' : 'user';
+      this.$eventHub.$emit('openFormDialog', { form });
+    }
   }
 };
 </script>
