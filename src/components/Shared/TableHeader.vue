@@ -17,7 +17,7 @@
               class="mx-0"
               flat
               color="red"
-              @click="$emit('newItem')"
+              @click="deleteItems"
             >
               <VIcon class="mr-2">delete</VIcon>
               Borrar
@@ -68,6 +68,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+
 export default {
   props: {
     selected: Array,
@@ -76,6 +78,7 @@ export default {
       type: Boolean,
       default: false
     },
+    module: String,
     hideActions: {
       type: Boolean,
       default: false
@@ -83,6 +86,16 @@ export default {
   },
   data() {
     return { search: '' };
+  },
+  methods: {
+    ...mapMutations(['setToDelete']),
+    deleteItems() {
+      const toDelete = {
+        items: this.selected,
+        module: this.module
+      };
+      this.setToDelete(toDelete);
+    }
   }
 };
 </script>

@@ -1,6 +1,8 @@
 <template>
   <BaseCard>
-    <BaseFormTitle>Nueva Etiqueta</BaseFormTitle>
+    <BaseFormTitle>
+      {{ isEditMode ? `Editar Etiqueta: ${editedItem.sku}` : 'Nueva Etiqueta'}}
+    </BaseFormTitle>
     <VCardText>
       <!-- sku, name, label file, auth file, pdf & png -->
       <VTextField
@@ -17,13 +19,17 @@
         :error-messages="errors.collect('sku')"/>
 
       <VTextField
-        label="Seleccion de etiqueta"
-        v-model="label.name"
+        label="Etiqueta"
+        :value="labelName"
         data-vv-name="label"
         v-validate="'required'"
+        append-icon="attach_file"
         clearable
+        hint="Toca para seleccionar archivo"
+        persistent-hint
         @click="pickFile('label')"
-        @click:clear="label = null"
+        @click:clear="label = { name: null }"
+        readonly
         :error-messages="errors.collect('label')"
       />
       <input
@@ -35,13 +41,17 @@
         @change="onFilePicked">
 
       <VTextField
-        label="Archivo de autorización"
-        v-model="auth.name"
+        label="Autorización"
+        :value="authName"
         data-vv-name="auth"
         v-validate="'required'"
+        append-icon="attach_file"
+        hint="Toca para seleccionar archivo"
+        persistent-hint
         @click="pickFile('auth')"
         @click:clear="auth = null"
         clearable
+        readonly
         :error-messages="errors.collect('auth')"
       />
       <input
@@ -52,15 +62,33 @@
         accept="*"
         @change="onFilePicked">
 
+        <VExpandTransition v-if="auth || label">
+          <div class="mt-4" v-if="loading">
+            <VLayout row justify-space-between>
+              <span>{{ uploadProgress === 100 ? 'Creando pdf & png' : 'Subiendo archivos'}}</span>
+              <span>{{ uploadProgress }} %</span>
+            </VLayout>
+            <VProgressLinear
+              v-model="uploadProgress"
+              :indeterminate="uploadProgress === 100"/>
+          </div>
+        </VExpandTransition>
     </VCardText>
 
     <VCardActions>
       <VSpacer />
-      <VBtn flat @click="close">Cancelar</VBtn>
+      <VBtn
+        flat
+        @click="close"
+        :disabled="loading"
+      >
+        Cancelar
+      </VBtn>
       <VBtn
         flat
         color="success"
         @click="validate"
+        :disabled="loading"
         :loading="loading"
       >
         Guardar
@@ -76,22 +104,45 @@ export default {
   $_veeValidate: { validator: 'new' },
   data() {
     return {
-      label: { name: null },
-      auth: { name: null },
+      label: null,
+      auth: null,
     };
   },
   props: ['editedItem'],
-  computed: { ...mapState('labels', ['loading']) },
+  computed: {
+    ...mapState('labels', ['loading', 'uploadProgress']),
+    isEditMode() {
+      return !!this.editedItem._id;
+    },
+    labelName() {
+      if (this.label) {
+        return this.label.name;
+      }
+      if (this.editedItem.label) {
+        return this.editedItem.label.name;
+      }
+      return null;
+    },
+    authName() {
+      if (this.auth) {
+        return this.auth.name;
+      }
+      if (this.editedItem.authorization) {
+        return this.editedItem.authorization.name;
+      }
+      return null;
+    }
+  },
   methods: {
-    ...mapActions('labels', ['store']),
+    ...mapActions('labels', ['store', 'update']),
     pickFile(input) {
       console.log(input);
       this.$refs[input].click();
     },
     onFilePicked(e) {
-      console.log(e);
       const { id } = e.target;
       const files = e.target.files || e.dataTransfer.files;
+      console.log('files', files);
 
       if (files[0] !== undefined) {
         const filename = files[0].name;
@@ -122,12 +173,18 @@ export default {
         auth: this.auth
       };
 
-      console.log(data);
-      this.store(data);
+      if (this.isEditMode) {
+        data.id = this.editedItem._id;
+        this.update(data).then(() => { this.close(); });
+      } else {
+        this.store(data).then(() => { this.close(); });
+      }
     },
     close() {
       this.$emit('closeDialog');
-      this.errors.clear();
+      this.label = null;
+      this.auth = null;
+      this.$validator.reset();
     }
   }
 };

@@ -8,19 +8,18 @@ Vue.use(Vuex);
 const set = property => (store, payload) => { store[property] = payload; };
 
 const store = new Vuex.Store({
+  getters: { deleteConfirmDialog: state => state.toDelete !== null },
   state: {
-    // email: '',
     isLoading: false,
     isReady: false,
-    // password: '',
+    toDelete: null,
     snackbar: {}
   },
   mutations: {
-    // setEmail: set('email'),
     setIsReady: set('isReady'),
     setIsLoading: set('isLoading'),
-    // setPassword: set('password'),
     setUser: set('user'),
+    setToDelete: set('toDelete'),
     setSnackbar: set('snackbar')
   },
   modules: { labels }

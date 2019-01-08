@@ -74,6 +74,7 @@
       </Transition>
     </VContent>
 
+    <DeleteConfirm />
     <Snackbar />
   </VApp>
 </template>
@@ -84,7 +85,10 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'App',
-  components: { Snackbar: () => import('@/components/Snackbar') },
+  components: {
+    DeleteConfirm: () => import('@/components/DeleteConfirm'),
+    Snackbar: () => import('@/components/Snackbar')
+  },
   data() {
     return {
       drawer: null,
