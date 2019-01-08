@@ -21,7 +21,7 @@ export const labelListHeaders = [
   {
     text: 'Etiqueta',
     value: 'label',
-    align: 'right',
+    align: 'center',
     sortable: false
   },
   {

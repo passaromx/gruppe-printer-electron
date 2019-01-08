@@ -8,10 +8,17 @@
       <VContainer class="pa-0" grid-list-lg>
         <VLayout row wrap>
           <VFlex xs12>
-            <VTextField
+            <VSelect
+              :items="printers"
+              v-model="printer"
+              label="Impresora"
+              outline
+              item-text="name"
+              item-value="name"/>
+            <!-- <VTextField
               outline
               v-model="test"
-              label="Impresora" />
+              label="Impresora" /> -->
           </VFlex>
           <VFlex xs8>
             <VTextField
@@ -107,12 +114,15 @@
 </template>
 
 <script>
+/* eslint-disable import/no-extraneous-dependencies */
+import { ipcRenderer } from 'electron';
 import moment from 'moment';
 
 export default {
   data() {
     return {
-      test: 'ZEBRA-23F56',
+      printer: 'Zebra_Technologies_ZTC_110Xi4_203dpi_ZPL',
+      printers: [],
       place: 'TX',
       copies: 1,
       label: 'Y4041',
@@ -122,6 +132,12 @@ export default {
       turn: 2,
       group: 'C'
     };
+  },
+  mounted() {
+    ipcRenderer.send('get-printers');
+    ipcRenderer.on('printers-fetched', (e, printers) => {
+      this.printers = printers;
+    });
   },
   computed: {
     formattedDate() {

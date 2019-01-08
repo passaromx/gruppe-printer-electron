@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { app, protocol, BrowserWindow } from 'electron';
+import { app, protocol, BrowserWindow, ipcMain } from 'electron';
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -29,27 +29,19 @@ function createWindow() {
     win.loadURL('app://./index.html#login');
   }
 
-  win.webContents.on('did-finish-load', () => {
-    console.log('loaded', win.webContents.getPrinters());
-  });
+  // win.webContents.on('did-finish-load', () => {
+  //   console.log('loaded', win.webContents.getPrinters());
+  // });
 
   win.on('closed', () => {
     win = null;
   });
 }
 
-// ipcMain.on('open-dialog', e => {
-//   dialog.showOpenDialog({
-//     defaultPath: '/Users/rayon/Desktop',
-//     buttonLabel: 'Abrir'
-//   }, openPath => {
-//     let file = null;
-//     if (openPath) {
-//       file = fs.createReadStream(openPath[0]);
-//     }
-//     e.sender.send('file-selected', file);
-//   });
-// });
+ipcMain.on('get-printers', e => {
+  const printers = win.webContents.getPrinters();
+  e.sender.send('printers-fetched', printers);
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

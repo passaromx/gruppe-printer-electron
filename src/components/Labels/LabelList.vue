@@ -40,20 +40,52 @@
               {{ props.item.authorization.name || 'n/a' }}
             </a>
           </td>
-          <td class="text-xs-right">
-            <a href="javascript:void(0)" @click="previewFile(props.item.labelPng)">
+          <td>
+            <VLayout row justify-center>
+              <VTooltip bottom>
+                <VBtn
+                  slot="activator"
+                  flat
+                  color="grey darken-2"
+                  icon
+                  @click="previewFile(props.item.labelPng)"
+                >
+                  <VIcon>image</VIcon>
+                </VBtn>
+                <span>Ver imagen</span>
+              </VTooltip>
+              <VTooltip bottom>
+                <VBtn
+                  slot="activator"
+                  flat
+                  color="grey darken-2"
+                  icon
+                  @click="previewFile(props.item.labelPdf)"
+                >
+                  <VIcon>picture_as_pdf</VIcon>
+                </VBtn>
+                <span>Ver PDF</span>
+              </VTooltip>
+
+            </VLayout>
+
+            <!-- <a href="javascript:void(0)" @click="previewFile(props.item.labelPdf)">
               {{ props.item.labelPng.name || 'n/a' }}
-            </a>
+            </a> -->
           </td>
           <td>
-            <VBtn
-              flat
-              color="grey darken-2"
-              icon
-              @click="editItem(props.item)"
-            >
-              <VIcon small>edit</VIcon>
-            </VBtn>
+            <VTooltip bottom>
+              <VBtn
+                slot="activator"
+                flat
+                color="grey darken-2"
+                icon
+                @click="editItem(props.item)"
+              >
+                <VIcon small>edit</VIcon>
+              </VBtn>
+              <span>Editar</span>
+            </VTooltip>
           </td>
         </template>
       </VDataTable>
@@ -62,6 +94,9 @@
 </template>
 
 <script>
+/* eslint-disable import/no-extraneous-dependencies */
+import { remote } from 'electron';
+
 import { labelListHeaders } from '@/api/constants';
 import { mapActions, mapState } from 'vuex';
 
@@ -110,9 +145,19 @@ export default {
       this.dialog = true;
     },
     previewFile(file) {
-      console.log(file);
+      let pdfWindow = new remote.BrowserWindow({
+        width: 500,
+        height: 800,
+        webPreferences: { plugins: true }
+      });
+
       const url = `http://192.168.3.84:1337${file.url}`;
-      window.open(url, file.name);
+      pdfWindow.loadURL(url);
+      pdfWindow.setMenu(null);
+      pdfWindow.on('closed', () => {
+        pdfWindow = null;
+      });
+      // window.open(url, file.name);
     },
     clearForm() {
       this.dialog = false;
