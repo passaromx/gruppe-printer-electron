@@ -26,9 +26,14 @@ export default {
       this.showing = form;
       this.dialog = true;
     });
+    this.$eventHub.$on('close', () => {
+      this.showing = null;
+      this.dialog = false;
+    });
   },
   onDestroy() {
     this.$eventHub.$off('openFormDialog');
+    this.$eventHub.$off('close');
   }
 };
 </script>

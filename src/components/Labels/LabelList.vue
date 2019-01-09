@@ -6,7 +6,12 @@
 
     <BaseCard>
       <VCardTitle>
-        <h5 class="headline">Precintos</h5>
+        <!-- <h5 class="headline">Precintos</h5> -->
+        <VSelect
+          :items="clients"
+          :value="selectedClient"
+          label="Cliente"
+          @change="onClientChanged"/>
         <VSpacer />
         <VIcon @click="fetch">refresh</VIcon>
       </VCardTitle>
@@ -107,6 +112,8 @@ export default {
   },
   data() {
     return {
+      clients: ['Soluciones Pássaro', 'Otro cliente'],
+      selectedClient: null,
       dialog: false,
       search: '',
       selected: [],
@@ -158,6 +165,11 @@ export default {
         pdfWindow = null;
       });
       // window.open(url, file.name);
+    },
+    onClientChanged(val) {
+      console.log(val);
+      // set state.selectedClient
+      // fetch client labels
     },
     clearForm() {
       this.dialog = false;

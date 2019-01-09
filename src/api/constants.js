@@ -31,4 +31,15 @@ export const labelListHeaders = [
   }
 ];
 
-export const userListHeaders = [];
+export const userListHeaders = [
+  {
+    text: 'Nombre',
+    align: 'left',
+    value: 'name'
+  },
+  {
+    text: 'Acciones',
+    align: 'center',
+    value: 'calories'
+  }
+];

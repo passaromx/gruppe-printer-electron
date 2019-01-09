@@ -72,7 +72,10 @@ import { mapMutations } from 'vuex';
 
 export default {
   props: {
-    selected: Array,
+    selected: {
+      type: Array,
+      default: () => []
+    },
     filters: Array,
     condensed: {
       type: Boolean,

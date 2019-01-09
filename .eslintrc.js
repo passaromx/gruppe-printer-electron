@@ -13,6 +13,7 @@ module.exports = {
     'comma-dangle': 'off',
     'arrow-parens': ['error', 'as-needed'],
     // "no-shadow": ["error", { "allow": ['state'] }],
+    'no-plusplus': 'off',
     'max-len': ['error', { code: 120 }],
     'no-param-reassign': ['error', { props: false }],
     'object-curly-newline': ['error', { multiline: true, minProperties: 5 }],

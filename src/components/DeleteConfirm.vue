@@ -41,7 +41,9 @@ export default {
     message() {
       switch (this.toDelete.module) {
         case 'labels':
-          return `Deseas eliminar ${this.toDelete.items.length} precintos`;
+          return `¿Deseas eliminar ${this.toDelete.items.length} precintos?`;
+        case 'clients':
+          return `¿Deseas eliminar el cliente "${this.toDelete.items[0].name}" con sus etiquetas, usuarios y plantas?`;
         default:
           return 'default msg';
       }

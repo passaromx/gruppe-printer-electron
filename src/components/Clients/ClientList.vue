@@ -4,46 +4,43 @@
       <VCardTitle>
         <h5 class="headline">Clientes</h5>
         <VSpacer />
-        <VIcon>refresh</VIcon>
+        <VIcon @click="fetch">refresh</VIcon>
       </VCardTitle>
       <VDivider />
 
-      <!-- <VDialog max-width="400px" v-model="dialog">
-        <ClientForm />
-      </VDialog> -->
-
-      <TableHeader :selected="selected" @newItem="$eventHub.$emit('openFormDialog', { form: 'client' })"/>
+      <TableHeader @newItem="newItem"/>
 
       <VDataTable
-        v-model="selected"
-        :headers="headers"
-        :items="desserts"
-        item-key="name"
-        select-all
+        :loading="fetching"
+        :headers="userListHeaders"
+        :items="clients"
       >
         <template slot="items" slot-scope="props">
-          <td>
-            <VCheckbox
-              v-model="props.selected"
-              primary
-              hide-details
-            ></VCheckbox>
-          </td>
-          <td>{{ props.item.name }}</td>
-          <td class="justify-center layout px-0">
-            <VIcon
-              small
-              class="mr-2"
-            >
-              edit
-            </VIcon>
-            <VIcon
-              small
-              @click="deleteItem(props.item)"
-            >
-              settings
-            </VIcon>
-          </td>
+          <tr :active="selectedClient._id === props.item._id" @click="setSelectedClient(props.item)">
+            <!-- <td>
+              <VCheckbox
+                v-model="props.selected"
+                primary
+                hide-details
+              ></VCheckbox>
+            </td> -->
+            <td>{{ props.item.name }}</td>
+            <td class="justify-center layout px-0">
+              <VIcon
+                small
+                class="mr-2"
+                @click="editItem(props.item)"
+              >
+                edit
+              </VIcon>
+              <VIcon
+                small
+                @click="deleteItem(props.item)"
+              >
+                delete
+              </VIcon>
+            </td>
+          </tr>
         </template>
       </VDataTable>
     </BaseCard>
@@ -52,6 +49,9 @@
 </template>
 
 <script>
+import { userListHeaders } from '@/api/constants';
+import { mapActions, mapState, mapMutations } from 'vuex';
+
 export default {
   components: {
     TableHeader: () => import('@/components/Shared/TableHeader'),
@@ -59,28 +59,65 @@ export default {
   },
   data() {
     return {
-      selected: [],
+      userListHeaders,
       dialog: false,
-      headers: [
-        {
-          text: 'Nombre',
-          align: 'left',
-          value: 'name'
+      editedItem: {
+        name: null,
+        settings: {
+          weight: true,
+          factory: true,
+          date: true,
+          line: true,
+          shift: true,
+          group: true,
         },
-        {
-          text: 'Acciones',
-          align: 'center',
-          value: 'calories'
-        }
-      ],
-      desserts: [
-        {
-          name: 'Soluciones Passaro',
-          factories: [],
-          users: []
-        }
-      ]
+        factories: [],
+        users: [],
+        printers: []
+      },
+      defaultItem: {
+        name: null,
+        settings: {
+          weight: true,
+          factory: true,
+          date: true,
+          line: true,
+          shift: true,
+          group: true,
+        },
+        factories: [],
+        users: [],
+        printers: []
+      }
     };
+  },
+  mounted() {
+    this.fetch();
+  },
+  computed: { ...mapState('clients', ['clients', 'fetching', 'selectedClient']) },
+  methods: {
+    ...mapActions('clients', ['fetch']),
+    ...mapMutations(['setToDelete']),
+    ...mapMutations('clients', ['setSelectedClient']),
+    newItem() {
+      this.openDialogWith(this.defaultItem);
+    },
+    editItem(item) {
+      this.openDialogWith(item);
+    },
+    deleteItem(item) {
+      const toDelete = {
+        items: [item],
+        module: 'clients'
+      };
+      this.setToDelete(toDelete);
+    },
+    openDialogWith(item) {
+      this.$eventHub.$emit('openFormDialog', {
+        form: 'client',
+        editedItem: Object.assign({}, item)
+      });
+    }
   }
 };
 </script>

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import attachCognitoModule from '@vuetify/vuex-cognito-module';
 import labels from './modules/labels';
+import clients from './modules/clients';
 
 Vue.use(Vuex);
 
@@ -22,7 +23,10 @@ const store = new Vuex.Store({
     setToDelete: set('toDelete'),
     setSnackbar: set('snackbar')
   },
-  modules: { labels }
+  modules: {
+    labels,
+    clients
+  }
 });
 
 attachCognitoModule(store, {

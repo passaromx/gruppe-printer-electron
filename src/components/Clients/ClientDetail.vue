@@ -5,9 +5,9 @@
       tabs
       color="secondary"
     >
-      <VToolbarTitle>Soluciones Passaro</VToolbarTitle>
+      <VToolbarTitle>{{ selectedClient.name }}</VToolbarTitle>
       <VSpacer />
-      <VIcon>refresh</VIcon>
+      <!-- <VIcon>refresh</VIcon> -->
 
       <div slot="extension">
         <VFabTransition>
@@ -62,6 +62,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   components: {
     FactoryTab: () => import('@/components/Clients/FactoryTab'),
@@ -73,6 +75,7 @@ export default {
       model: 'tab-0',
     };
   },
+  computed: { ...mapState('clients', ['selectedClient']) },
   methods: {
     openForm() {
       const form = this.model === 'tab-0' ? 'factory' : 'user';
