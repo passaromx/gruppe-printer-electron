@@ -44,6 +44,10 @@ export default {
           return `¿Deseas eliminar ${this.toDelete.items.length} precintos?`;
         case 'clients':
           return `¿Deseas eliminar el cliente "${this.toDelete.items[0].name}" con sus etiquetas, usuarios y plantas?`;
+        case 'clients/factories':
+          return `¿Deseas eliminar la planta "${this.toDelete.items[0].name}" con sus usuarios asignados?`;
+        case 'clients/users':
+          return `¿Deseas eliminar el usuario "${this.toDelete.items[0].email}"?`;
         default:
           return 'default msg';
       }
@@ -52,14 +56,17 @@ export default {
   methods: {
     ...mapMutations(['setToDelete']),
     confirmDelete() {
-      console.log('confirmed');
       this.loading = true;
-      this.$store.dispatch(`${this.toDelete.module}/delete`, this.toDelete.items.map(item => item._id))
+      const method = this.toDelete.method ? this.toDelete.method : 'delete';
+      const storeModule = this.toDelete.module.includes('/')
+        ? this.toDelete.module.split('/')[0]
+        : this.toDelete.module;
+      this.$store.dispatch(`${storeModule}/${method}`, this.toDelete.items.map(item => item._id))
         .then(() => {
           this.close();
+          this.$eventHub.$emit('clear-selected');
         })
         .finally(() => {
-          this.$eventHub.$emit('clear-selected');
           this.loading = false;
         });
     },

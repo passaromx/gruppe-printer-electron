@@ -137,12 +137,12 @@ export default {
         client._id = this.editedItem._id;
         this.update(client)
           .then(() => {
-            this.$eventHub.$emit('close');
+            this.$eventHub.$emit('closeFormDialog');
           });
       } else {
         this.store(client)
           .then(() => {
-            this.$eventHub.$emit('close');
+            this.$eventHub.$emit('closeFormDialog');
           });
       }
     }

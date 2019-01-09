@@ -35,9 +35,31 @@
             </VListTileContent>
 
             <VListTileAction>
-              <VBtn icon ripple>
+              <VMenu bottom left>
+                <VBtn
+                  flat
+                  color="grey"
+                  slot="activator"
+                  icon
+                >
+                  <VIcon>more_vert</VIcon>
+                </VBtn>
+
+                <VList>
+                  <VListTile @click="showDetail(item)">
+                    <VListTileTitle><VIcon small class="mr-3">file_copy</VIcon>Ver detalle</VListTileTitle>
+                  </VListTile>
+                  <VListTile @click="editItem(item)">
+                    <VListTileTitle><VIcon small class="mr-3">edit</VIcon>Editar</VListTileTitle>
+                  </VListTile>
+                  <VListTile @click="deleteItem(item)">
+                    <VListTileTitle><VIcon small class="mr-3">delete</VIcon>Borrar</VListTileTitle>
+                  </VListTile>
+                </VList>
+              </VMenu>
+              <!-- <VBtn icon ripple>
                 <VIcon color="grey lighten-1">more_vert</VIcon>
-              </VBtn>
+              </VBtn> -->
             </VListTileAction>
           </VListTile>
         </VList>
@@ -47,7 +69,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   components: {
@@ -77,6 +99,26 @@ export default {
       }
       return this.factories;
     }
+  },
+  methods: {
+    ...mapMutations(['setToDelete']),
+    showDetail(item) {
+      console.log(item);
+    },
+    editItem(item) {
+      this.$eventHub.$emit('openFormDialog', {
+        form: 'factory',
+        editedItem: Object.assign({}, item)
+      });
+    },
+    deleteItem(item) {
+      const toDelete = {
+        items: [item],
+        module: 'clients/factories',
+        method: 'deleteFactory'
+      };
+      this.setToDelete(toDelete);
+    },
   }
 };
 </script>

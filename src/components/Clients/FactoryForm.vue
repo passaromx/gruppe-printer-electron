@@ -35,6 +35,7 @@
             <VTextField
               label="Correo"
               v-model="editedItem.email"
+              append-icon="mail"
               data-vv-name="email"
               v-validate="'required|email'"
               :error-messages="errors.collect('email')"/>
@@ -44,6 +45,7 @@
               type="number"
               label="Teléfono"
               v-model="editedItem.phone"
+              append-icon="phone"
               data-vv-name="phone"
               v-validate="'required'"
               :error-messages="errors.collect('phone')"/>
@@ -53,7 +55,13 @@
     </VCardText>
     <VCardActions>
       <VSpacer></VSpacer>
-      <VBtn flat :disabled="loading">Cancelar</VBtn>
+      <VBtn
+        flat
+        :disabled="loading"
+        @click="$eventHub.$emit('closeFormDialog');"
+      >
+        Cancelar
+      </VBtn>
       <VBtn
         flat
         color="success"
@@ -71,13 +79,20 @@ import { mapState, mapActions } from 'vuex';
 export default {
   props: ['editedItem'],
   $_veeValidate: { validator: 'new' },
+  watch: {
+    editedItem() {
+      this.$validator.reset();
+    }
+  },
   computed: {
     // isEditMode: () => !!this.editedItem._id,
-    isEditMode: () => false,
+    isEditMode() {
+      return !!this.editedItem._id;
+    },
     ...mapState('clients', ['selectedClient', 'loading'])
   },
   methods: {
-    ...mapActions('clients', ['storeFactory']),
+    ...mapActions('clients', ['storeFactory', 'updateFactory']),
     validate() {
       this.$validator.validate().then(res => {
         if (res) {
@@ -90,7 +105,12 @@ export default {
       if (!this.isEditMode) {
         this.storeFactory(this.editedItem)
           .then(() => {
-            // close form
+            this.$eventHub.$emit('closeFormDialog');
+          });
+      } else {
+        this.updateFactory(this.editedItem)
+          .then(() => {
+            this.$eventHub.$emit('closeFormDialog');
           });
       }
     }

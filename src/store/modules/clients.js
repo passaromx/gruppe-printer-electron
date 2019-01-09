@@ -2,9 +2,12 @@ import axios from '@/plugins/axios';
 import { set } from '@/utils';
 import factoryActions from './factories/actions';
 import factoryMutations from './factories/mutations';
+import userActions from './users/actions';
+import userMutations from './users/mutations';
 
 const actions = {
   ...factoryActions,
+  ...userActions,
   fetch({ commit }) {
     commit('setFetching', true);
     axios.get('clients')
@@ -72,6 +75,7 @@ const mutations = {
   setLoading: set('loading'),
   setSelectedClient: set('selectedClient'),
   ...factoryMutations,
+  ...userMutations,
   storeItem: (state, { data }) => {
     state.clients.push(data);
   },

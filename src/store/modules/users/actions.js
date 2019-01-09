@@ -1,13 +1,13 @@
 import axios from '@/plugins/axios';
 
 export default {
-  storeFactory({ commit }, data) {
+  storeUser({ commit }, data) {
     commit('setLoading', true);
     return new Promise((resolve, reject) => {
-      axios.post('factories', data)
+      axios.post('users', data)
         .then(res => {
           resolve(res);
-          commit('storeFactory', res);
+          commit('storeUser', res);
           console.log(res);
         })
         .catch(err => {
@@ -17,13 +17,13 @@ export default {
         .finally(() => { commit('setLoading', false); });
     });
   },
-  updateFactory({ commit }, data) {
+  updateUser({ commit }, data) {
     commit('setLoading', true);
     return new Promise((resolve, reject) => {
-      axios.put(`factories/${data._id}`, data)
+      axios.put(`users/${data._id}`, data)
         .then(res => {
           resolve(res);
-          commit('updateFactory', res);
+          commit('updateUser', res);
           console.log(res);
         })
         .catch(err => {
@@ -33,12 +33,12 @@ export default {
         .finally(() => { commit('setLoading', false); });
     });
   },
-  deleteFactory({ commit }, items) {
+  deleteUser({ commit }, items) {
     const id = items[0];
     return new Promise((resolve, reject) => {
-      axios.delete(`factories/${id}`)
+      axios.delete(`users/${id}`)
         .then(res => {
-          commit('deleteFactory', id);
+          commit('deleteUser', id);
           resolve(res);
           console.log(res);
         })
