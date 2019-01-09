@@ -1,5 +1,5 @@
 <template>
-  <VDialog v-model="dialog" max-width="450px">
+  <VDialog v-model="dialog" max-width="400px">
     <ClientForm :editedItem="editedItem" v-if="showing === 'client'"/>
     <FactoryForm :editedItem="editedItem" v-else-if="showing === 'factory'"/>
     <UserForm :editedItem="editedItem" v-else-if="showing === 'user'"/>

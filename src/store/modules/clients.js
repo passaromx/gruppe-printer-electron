@@ -1,8 +1,10 @@
 import axios from '@/plugins/axios';
-
-const set = property => (state, payload) => { state[property] = payload; };
+import { set } from '@/utils';
+import factoryActions from './factories/actions';
+import factoryMutations from './factories/mutations';
 
 const actions = {
+  ...factoryActions,
   fetch({ commit }) {
     commit('setFetching', true);
     axios.get('clients')
@@ -69,6 +71,7 @@ const mutations = {
   setFetching: set('fetching'),
   setLoading: set('loading'),
   setSelectedClient: set('selectedClient'),
+  ...factoryMutations,
   storeItem: (state, { data }) => {
     state.clients.push(data);
   },
@@ -82,16 +85,26 @@ const mutations = {
   }
 };
 
+const getters = {
+  factories: state => state.selectedClient.factories,
+  users: state => state.selectedClient.users
+};
+
 const state = {
   clients: [],
   fetching: false,
   loading: false,
-  selectedClient: { name: 'Selecciona un cliente' }
+  selectedClient: {
+    name: 'Selecciona un cliente',
+    factories: [],
+    users: []
+  }
 };
 
 export default {
   namespaced: true,
   actions,
   mutations,
-  state
+  state,
+  getters
 };

@@ -78,8 +78,31 @@ export default {
   computed: { ...mapState('clients', ['selectedClient']) },
   methods: {
     openForm() {
-      const form = this.model === 'tab-0' ? 'factory' : 'user';
-      this.$eventHub.$emit('openFormDialog', { form });
+      // const form = this.model === 'tab-0' ? 'factory' : 'user';
+      let form;
+      let editedItem;
+      switch (this.model) {
+        case 'tab-0':
+          form = 'factory';
+          editedItem = Object.assign({}, {
+            name: null,
+            code: null,
+            contactName: null,
+            email: null,
+            phone: null
+          });
+          break;
+        case 'tab-1':
+          form = 'user';
+          editedItem = Object.assign({}, { test: 'rest' });
+          break;
+        default:
+          break;
+      }
+      this.$eventHub.$emit('openFormDialog', {
+        form,
+        editedItem
+      });
     }
   }
 };
