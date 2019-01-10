@@ -92,7 +92,7 @@ export default {
     };
   },
   mounted() {
-    this.fetch();
+    if (this.clients.length === 0) this.fetch();
   },
   computed: { ...mapState('clients', ['clients', 'fetching', 'selectedClient']) },
   methods: {

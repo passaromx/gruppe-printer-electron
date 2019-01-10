@@ -8,6 +8,7 @@
     <span class="subheading">No se encontraron registros</span>
     <span class="subheading">Agrega una planta para continuar</span>
   </VLayout>
+
 </template>
 
 <script>
