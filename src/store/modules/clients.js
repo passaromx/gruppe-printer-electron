@@ -99,7 +99,7 @@ const state = {
   fetching: false,
   loading: false,
   selectedClient: {
-    name: 'Selecciona un cliente',
+    name: null,
     factories: [],
     users: []
   }

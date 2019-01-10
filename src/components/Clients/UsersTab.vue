@@ -2,7 +2,7 @@
   <FilterableList :items="users" :settings="settings">
     <VListTileContent slot-scope="props">
       <VListTileTitle>{{ props.item.email }}</VListTileTitle>
-      <VListTileSubtitle>Some other info</VListTileSubtitle>
+      <VListTileSubTitle>Some Other info</VListTileSubTitle>
     </VListTileContent>
   </FilterableList>
 </template>

@@ -4,7 +4,7 @@ export default {
   storeUser({ commit }, data) {
     commit('setLoading', true);
     return new Promise((resolve, reject) => {
-      axios.post('users', data)
+      axios.post('auth/local/register', data)
         .then(res => {
           resolve(res);
           commit('storeUser', res);

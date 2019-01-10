@@ -6,7 +6,8 @@
     class="pa-4"
   >
     <span class="subheading">No se encontraron registros</span>
-    <span class="subheading">Agrega una planta para continuar</span>
+    <span v-if="selectedClient.name" class="subheading">Agrega una planta para continuar</span>
+    <span v-else class="subheading mt-2 text-xs-center">Selecciona o agrega un cliente para continuar</span>
   </VLayout>
 
 </template>
