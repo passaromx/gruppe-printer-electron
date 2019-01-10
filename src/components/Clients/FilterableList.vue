@@ -14,7 +14,7 @@
           :key="i"
           avatar
         >
-          <slot />
+          <slot v-bind:item="item"/>
 
           <VListTileAction>
             <VMenu bottom left>
