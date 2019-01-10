@@ -68,7 +68,7 @@ export default {
   },
   computed: { ...mapState(['isLoading']) },
   methods: {
-    ...mapActions('cognito', ['signInUser']),
+    ...mapActions('auth', ['signInUser']),
     ...mapMutations([
       'setIsLoading',
       'setSnackbar'
@@ -82,7 +82,7 @@ export default {
       console.log('submitting', this.email);
       this.setIsLoading(true);
       this.signInUser({
-        username: this.email,
+        identifier: this.email,
         password: this.password
       })
         .then(() => {

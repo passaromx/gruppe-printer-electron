@@ -97,11 +97,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('cognito', ['isLoggedIn']),
+    ...mapGetters('auth', ['isLoggedIn']),
     ...mapState(['isReady'])
   },
   methods: {
-    ...mapActions('cognito', ['signOut']),
+    ...mapActions('auth', ['signOut']),
     logout() {
       this.signOut().then(() => {
         this.$router.push({ name: 'Login' });
