@@ -1,4 +1,5 @@
 import axios from '@/plugins/axios';
+import { handleError, showSuccessAlert } from '@/utils';
 
 export default {
   storeFactory({ commit }, data) {
@@ -8,11 +9,11 @@ export default {
         .then(res => {
           resolve(res);
           commit('storeFactory', res);
-          console.log(res);
+          showSuccessAlert('Planta creada exitosamente', commit);
         })
         .catch(err => {
           reject();
-          console.log(err);
+          handleError(err, commit);
         })
         .finally(() => { commit('setLoading', false); });
     });
@@ -24,11 +25,11 @@ export default {
         .then(res => {
           resolve(res);
           commit('updateFactory', res);
-          console.log(res);
+          showSuccessAlert('Planta actualizada exitosamente', commit);
         })
         .catch(err => {
           reject();
-          console.log(err);
+          handleError(err, commit);
         })
         .finally(() => { commit('setLoading', false); });
     });
@@ -40,11 +41,11 @@ export default {
         .then(res => {
           commit('deleteFactory', id);
           resolve(res);
-          console.log(res);
+          showSuccessAlert('Planta eliminada exitosamente', commit);
         })
         .catch(err => {
           reject(err);
-          console.log(err);
+          handleError(err, commit);
         });
     });
   }

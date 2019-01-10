@@ -1,7 +1,7 @@
 import axios from '@/plugins/axios';
 import authAxios from 'axios';
 import { apiURL } from '@/api/constants';
-import { set } from '@/utils';
+import { set, handleError } from '@/utils';
 import router from '@/router';
 
 const getters = { isLoggedIn: store => store.session && store.session.jwt };
@@ -30,11 +30,6 @@ const actions = {
           console.log(err.response);
         });
     });
-    // find for user in local storage
-    // authenticate stored jwt
-    // on resolve
-    //     store in state session, set loggedIn true, set axios auth header
-    // on reject set logged in to false
   },
   signInUser({ commit }, data) {
     return new Promise((resolve, reject) => {
@@ -55,7 +50,7 @@ const actions = {
         })
         .catch(err => {
           reject();
-          console.log(err.response);
+          handleError(err, commit);
         });
     });
   },

@@ -1,5 +1,5 @@
 import axios from '@/plugins/axios';
-import { set } from '@/utils';
+import { set, handleError, showSuccessAlert } from '@/utils';
 import factoryActions from './factories/actions';
 import factoryMutations from './factories/mutations';
 import userActions from './users/actions';
@@ -16,7 +16,7 @@ const actions = {
         if (res.data.length > 0) commit('setSelectedClient', res.data[0]);
       })
       .catch(err => {
-        console.log(err);
+        handleError(err, commit);
       })
       .finally(() => { commit('setFetching', false); });
   },
@@ -27,11 +27,11 @@ const actions = {
         .then(res => {
           resolve(res);
           commit('storeItem', res);
-          console.log(res);
+          showSuccessAlert('Cliente creado exitosamente', commit);
         })
         .catch(err => {
           reject();
-          console.log(err);
+          handleError(err, commit);
         })
         .finally(() => { commit('setLoading', false); });
     });
@@ -43,11 +43,11 @@ const actions = {
         .then(res => {
           resolve(res);
           commit('updateItem', res);
-          console.log(res);
+          showSuccessAlert('Cliente actualizado exitosamente', commit);
         })
         .catch(err => {
           reject();
-          console.log(err);
+          handleError(err, commit);
         })
         .finally(() => { commit('setLoading', false); });
     });
@@ -59,11 +59,11 @@ const actions = {
         .then(res => {
           commit('deleteItem', id);
           resolve(res);
-          console.log(res);
+          showSuccessAlert('Cliente eliminado exitosamente', commit);
         })
         .catch(err => {
           reject(err);
-          console.log(err);
+          handleError(err, commit);
         });
     });
   }

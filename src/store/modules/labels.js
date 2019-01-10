@@ -1,6 +1,5 @@
 import axios from '@/plugins/axios';
-
-const set = property => (state, payload) => { state[property] = payload; };
+import { set, handleError, showSuccessAlert } from '@/utils';
 
 const actions = {
   fetch({ commit }) {
@@ -11,7 +10,7 @@ const actions = {
         console.log(res.data);
       })
       .catch(err => {
-        console.log(err);
+        handleError(err, commit);
       })
       .finally(() => {
         commit('setFetching', false);
@@ -35,11 +34,11 @@ const actions = {
         .then(res => {
           commit('storeItem', res);
           resolve(res);
-          console.log(res);
+          showSuccessAlert('Etiqueta creada exitosamente', commit);
         })
         .catch(err => {
           reject(err);
-          console.log(err);
+          handleError(err, commit);
         })
         .finally(() => {
           commit('setProgress', 0);
@@ -65,12 +64,12 @@ const actions = {
       })
         .then(res => {
           commit('updateItem', res);
-          console.log(res);
+          showSuccessAlert('Etiqueta actualizada exitosamente', commit);
           resolve(res);
         })
         .catch(err => {
           reject(err);
-          console.log(err);
+          handleError(err, commit);
         })
         .finally(() => {
           commit('setProgress', 0);
@@ -79,18 +78,17 @@ const actions = {
     });
   },
   delete({ commit }, items) {
-    console.log(items);
     const ids = items.join(',');
     return new Promise((resolve, reject) => {
       axios.delete(`labels/deleteMany?ids=${ids}`)
         .then(res => {
           commit('deleteItems', items);
           resolve(res);
-          console.log(res);
+          showSuccessAlert('Etiqueta eliminada exitosamente', commit);
         })
         .catch(err => {
           reject(err);
-          console.log(err);
+          handleError(err, commit);
         });
     });
   }
