@@ -158,7 +158,7 @@ export default {
         webPreferences: { plugins: true }
       });
 
-      const url = `http://192.168.3.84:1337${file.url}`;
+      const url = `http://f3ca56c9.ngrok.io${file.url}`;
       pdfWindow.loadURL(url);
       pdfWindow.setMenu(null);
       pdfWindow.on('closed', () => {

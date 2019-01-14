@@ -2,7 +2,8 @@ const Menu = [
   {
     title: 'Precintos',
     icon: 'label',
-    name: 'Labels'
+    name: 'Labels',
+    isAdmin: true
   },
   {
     title: 'Impresión',
@@ -12,7 +13,8 @@ const Menu = [
   {
     title: 'Clientes',
     icon: 'group',
-    name: 'Clients'
+    name: 'Clients',
+    isAdmin: true
   }
 ];
 

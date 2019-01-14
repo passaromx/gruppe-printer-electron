@@ -1,10 +1,17 @@
-import axios from '@/plugins/axios';
-import authAxios from 'axios';
-import { apiURL } from '@/api/constants';
+import axios, { authAxios } from '@/plugins/axios';
+import { apiURL, roles } from '@/api/constants';
 import { set, handleError } from '@/utils';
 import router from '@/router';
 
-const getters = { isLoggedIn: store => store.session && store.session.jwt };
+const getters = {
+  isLoggedIn: store => store.session && store.session.jwt,
+  isAdmin: store => {
+    if (store.user && store.user.role) {
+      return store.user.role._id === roles.admin;
+    }
+    return false;
+  }
+};
 
 const actions = {
   fetchSession({ commit }) {
@@ -33,11 +40,13 @@ const actions = {
   },
   signInUser({ commit }, data) {
     return new Promise((resolve, reject) => {
+      delete authAxios.defaults.headers.common.Authorization;
       authAxios.post(`${apiURL}auth/local`, data)
         .then(res => {
           resolve(res);
           const { user, jwt } = res.data;
           axios.defaults.headers.common.Authorization = `Bearer ${jwt}`;
+          console.log(authAxios.defaults);
           commit('setUser', user);
           commit('setSession', { jwt });
 

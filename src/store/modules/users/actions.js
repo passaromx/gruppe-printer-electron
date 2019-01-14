@@ -39,6 +39,7 @@ export default {
     return new Promise((resolve, reject) => {
       axios.delete(`users/${id}`)
         .then(res => {
+          console.log(res);
           commit('deleteUser', id);
           resolve(res);
           showSuccessAlert('Usuario eliminado exitosamente', commit);
