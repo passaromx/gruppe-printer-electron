@@ -4,17 +4,22 @@ import { set, handleError, showSuccessAlert } from '@/utils';
 const actions = {
   fetch({ commit }) {
     commit('setFetching', true);
-    axios.get('labels')
-      .then(res => {
-        commit('setLabels', res.data);
-        console.log(res.data);
-      })
-      .catch(err => {
-        handleError(err, commit);
-      })
-      .finally(() => {
-        commit('setFetching', false);
-      });
+    return new Promise((resolve, reject) => {
+      // axios.get(`labels?client=${client}`)
+      axios.get('labels')
+        .then(res => {
+          resolve(res.data);
+          commit('setLabels', res.data);
+          console.log(res.data);
+        })
+        .catch(err => {
+          reject();
+          handleError(err, commit);
+        })
+        .finally(() => {
+          commit('setFetching', false);
+        });
+    });
   },
   store({ commit }, data) {
     const formData = new FormData();
@@ -99,6 +104,7 @@ const mutations = {
   setFetching: set('fetching'),
   setLoading: set('loading'),
   setProgress: set('uploadProgress'),
+  setClient: set('fromClient'),
   storeItem: (state, { data }) => {
     state.labels.push(data);
   },
@@ -114,8 +120,20 @@ const mutations = {
   }
 };
 
+const getters = {
+  formattedLabels: state => state.labels.map(label => {
+    const limit = 60;
+    const description = `${label.sku} - ${label.name}`;
+    label.description = description.length > limit
+      ? `${description.slice(0, limit)}...`
+      : description;
+    return label;
+  })
+};
+
 const state = {
   labels: [],
+  fromClient: null,
   fetching: false,
   loading: false,
   uploadProgress: 0
@@ -124,6 +142,7 @@ const state = {
 export default {
   namespaced: true,
   state,
+  getters,
   actions,
   mutations
 };

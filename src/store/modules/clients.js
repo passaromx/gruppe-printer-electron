@@ -10,15 +10,22 @@ const actions = {
   ...userActions,
   fetch({ commit }) {
     commit('setFetching', true);
-    axios.get('clients')
-      .then(res => {
-        commit('setClients', res.data);
-        if (res.data.length > 0) commit('setSelectedClient', res.data[0]);
-      })
-      .catch(err => {
-        handleError(err, commit);
-      })
-      .finally(() => { commit('setFetching', false); });
+    return new Promise((resolve, reject) => {
+      axios.get('clients')
+        .then(res => {
+          resolve(res);
+          commit('setClients', res.data);
+          if (res.data.length > 0) {
+            commit('setSelectedClient', res.data[0]);
+            commit('labels/setClient', res.data[0]._id, { root: true });
+          }
+        })
+        .catch(err => {
+          reject();
+          handleError(err, commit);
+        })
+        .finally(() => { commit('setFetching', false); });
+    });
   },
   store({ commit }, data) {
     commit('setLoading', true);

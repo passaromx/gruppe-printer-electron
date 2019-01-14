@@ -7,13 +7,14 @@
     <BaseCard>
       <VCardTitle>
         <!-- <h5 class="headline">Precintos</h5> -->
-        <VSelect
-          :items="clients"
-          :value="selectedClient"
-          label="Cliente"
-          @change="onClientChanged"/>
-        <VSpacer />
-        <VIcon @click="fetch">refresh</VIcon>
+        <VLayout row justify-space-between align-center>
+          <VFlex xs4>
+            <ClientSelect />
+          </VFlex>
+          <VFlex xs1 class="text-xs-right">
+            <VIcon @click="fetch">refresh</VIcon>
+          </VFlex>
+        </VLayout>
       </VCardTitle>
       <VDivider />
 
@@ -107,13 +108,12 @@ import { mapActions, mapState } from 'vuex';
 
 export default {
   components: {
+    ClientSelect: () => import('@/components/Labels/ClientSelect'),
     LabelForm: () => import('@/components/Labels/LabelForm'),
     TableHeader: () => import('@/components/Shared/TableHeader')
   },
   data() {
     return {
-      clients: ['Soluciones Pássaro', 'Otro cliente'],
-      selectedClient: null,
       dialog: false,
       search: '',
       selected: [],
@@ -138,12 +138,17 @@ export default {
   },
   mounted() {
     this.$eventHub.$on('clear-selected', () => { this.selected = []; });
-    if (this.labels.lenght === 0) this.fetch();
   },
   onDestroy() {
     this.$eventHub.$off('clear-selected');
   },
-  computed: { ...mapState('labels', ['fetching', 'labels']) },
+  computed: { ...mapState('labels', ['fetching', 'labels', 'fromClient']) },
+  watch: {
+    fromClient(val) {
+      console.log(val);
+      this.fetch(val);
+    }
+  },
   methods: {
     ...mapActions('labels', ['fetch']),
     editItem(item) {
@@ -165,11 +170,6 @@ export default {
         pdfWindow = null;
       });
       // window.open(url, file.name);
-    },
-    onClientChanged(val) {
-      console.log(val);
-      // set state.selectedClient
-      // fetch client labels
     },
     clearForm() {
       this.dialog = false;

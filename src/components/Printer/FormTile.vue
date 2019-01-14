@@ -15,32 +15,10 @@
               outline
               item-text="name"
               item-value="name"/>
-            <!-- <VTextField
-              outline
-              v-model="test"
-              label="Impresora" /> -->
           </VFlex>
-          <VFlex xs8>
-            <VTextField
-              outline
-              v-model="label"
-              hide-details
-              label="SKU" />
-          </VFlex>
-          <VFlex xs4>
-            <VTextField
-              number
-              outline
-              v-model="copies"
-              hide-details
-              label="Copias" />
-          </VFlex>
-          <VFlex xs4>
-            <VTextField
-              number
-              outline
-              v-model="place"
-              label="Planta" />
+          <VFlex xs12>
+            <LabelAutocomplete
+              :messages="errors.collect('labels')"/>
           </VFlex>
           <VFlex xs8>
             <VMenu
@@ -74,6 +52,30 @@
                   <v-btn flat color="primary" @click="$refs.expiresMenu.save(editedItem.expiresAt)">OK</v-btn> -->
                 </VDatePicker>
               </VMenu>
+          </VFlex>
+          <VFlex xs4>
+            <VTextField
+              number
+              outline
+              v-model="copies"
+              label="Copias"
+              v-validate="'required'"
+              data-vv-name="copies"
+              :error-messages="errors.collect('copies')"/>
+          </VFlex>
+          <VFlex xs6>
+            <VTextField
+              number
+              outline
+              v-model="place"
+              label="Planta" />
+          </VFlex>
+          <VFlex xs6>
+            <VTextField
+              number
+              outline
+              v-model="place"
+              label="Peso neto" />
           </VFlex>
           <VFlex xs12>
             <span class="subheading">Nomenclatura</span>
@@ -119,6 +121,8 @@ import { ipcRenderer } from 'electron';
 import moment from 'moment';
 
 export default {
+  $_veeValidate: { validator: 'new' },
+  components: { LabelAutocomplete: () => import('@/components/Printer/LabelAutocomplete') },
   data() {
     return {
       printer: 'Zebra_Technologies_ZTC_110Xi4_203dpi_ZPL',

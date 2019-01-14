@@ -110,7 +110,7 @@ export default {
   },
   props: ['editedItem'],
   computed: {
-    ...mapState('labels', ['loading', 'uploadProgress']),
+    ...mapState('labels', ['loading', 'uploadProgress', 'fromClient']),
     isEditMode() {
       return !!this.editedItem._id;
     },
@@ -177,6 +177,8 @@ export default {
         data.id = this.editedItem._id;
         this.update(data).then(() => { this.close(); });
       } else {
+        data.client = this.fromClient;
+        console.log(data);
         this.store(data).then(() => { this.close(); });
       }
     },
