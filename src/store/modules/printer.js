@@ -4,7 +4,8 @@ const actions = {};
 
 const mutations = {
   setLabels: set('labels'),
-  setIsSyncing: set('isSyncing')
+  setIsSyncing: set('isSyncing'),
+  setLabel: set('label')
 };
 
 const state = {
