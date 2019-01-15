@@ -5,7 +5,7 @@
     </VCardTitle>
     <!-- <VDivider /> -->
     <VCardText>
-      <VContainer class="pa-0" grid-list-lg>
+      <VContainer class="pa-0" grid-list-md>
         <VLayout row wrap>
           <VFlex xs12>
             <VSelect
@@ -18,6 +18,9 @@
           </VFlex>
           <VFlex xs12>
             <LabelAutocomplete
+              name="labels"
+              @change="handleChange"
+              v-validate="'required'"
               :messages="errors.collect('labels')"/>
           </VFlex>
           <VFlex xs8>
@@ -108,7 +111,13 @@
             <VIcon class="mr-2">cloud_download</VIcon>
             PDF
           </VBtn>
-          <VBtn color="primary">Imprimir</VBtn>
+          <VBtn
+            @click="validate"
+            :disabled="errors.any()"
+            color="primary"
+          >
+            Imprimir
+          </VBtn>
         </VLayout>
       </VContainer>
     </VCardText>
@@ -150,6 +159,12 @@ export default {
       }
       return moment().format('L');
     }
+  },
+  methods: {
+    handleChange(val) {
+      console.log(val);
+    },
+    validate() {}
   }
 };
 </script>

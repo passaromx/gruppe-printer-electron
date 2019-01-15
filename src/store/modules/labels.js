@@ -2,11 +2,11 @@ import axios from '@/plugins/axios';
 import { set, handleError, showSuccessAlert } from '@/utils';
 
 const actions = {
-  fetch({ commit }) {
+  fetch({ commit }, client) {
     commit('setFetching', true);
     return new Promise((resolve, reject) => {
-      // axios.get(`labels?client=${client}`)
-      axios.get('labels')
+      axios.get(`labels?client=${client}`)
+      // axios.get('labels')
         .then(res => {
           resolve(res.data);
           commit('setLabels', res.data);
@@ -23,10 +23,13 @@ const actions = {
   },
   store({ commit }, data) {
     const formData = new FormData();
-    const { name, sku, label, auth } = data;
+    const {
+      name, sku, label, auth, client
+    } = data;
     formData.append('name', name);
     formData.append('sku', sku);
     formData.append('label', label);
+    formData.append('client', client);
     formData.append('authorization', auth);
     commit('setLoading', true);
     return new Promise((resolve, reject) => {

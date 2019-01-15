@@ -28,13 +28,13 @@ const actions = {
           const user = res.data;
           commit('setUser', user);
           commit('setSession', { jwt: token });
-          console.log(res.data);
+          // console.log(res.data);
         })
         .catch(err => {
           reject(err);
           if (localStorage) localStorage.removeItem('token');
           router.push({ name: 'Login' });
-          console.log(err.response);
+          // console.log(err.response);
         });
     });
   },
@@ -46,7 +46,6 @@ const actions = {
           resolve(res);
           const { user, jwt } = res.data;
           axios.defaults.headers.common.Authorization = `Bearer ${jwt}`;
-          console.log(authAxios.defaults);
           commit('setUser', user);
           commit('setSession', { jwt });
 
@@ -54,8 +53,6 @@ const actions = {
             localStorage.setItem('token', jwt);
             localStorage.setItem('USER', JSON.stringify(res.data.user));
           }
-
-          console.log('data', res.data);
         })
         .catch(err => {
           reject();

@@ -2,6 +2,7 @@
   <VAutocomplete
     outline
     @input="handleInput"
+    v-on="$listeners"
     v-model="selectedLabel"
     label="Producto"
     :loading="fetching"
@@ -45,12 +46,14 @@ export default {
   computed: {
     ...mapState(['fetching']),
     ...mapGetters(['formattedLabels']),
+    client() {
+      return this.$store.state.auth.user.client._id || null;
+    }
   },
   watch: {
     search() {
       if (this.formattedLabels.length > 0 || this.fetching) return;
-
-      this.fetch();
+      if (this.client) this.fetch(this.client);
     }
   },
   methods: {
