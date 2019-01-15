@@ -192,13 +192,15 @@ export default {
       this.handleChange();
     },
     handleChange() {
-      const data = {
-        description: this.description,
-        expireDate: this.expireDate,
-        productionDate: this.productionDate
-      };
-      ipcRenderer.send('getZpl', this.selectedLabel, data);
-      console.log(this.selectedLabel);
+      if (this.selectedLabel) {
+        const data = {
+          description: this.description,
+          expireDate: this.expireDate,
+          productionDate: this.productionDate
+        };
+        ipcRenderer.send('getZpl', this.selectedLabel, data);
+        console.log(this.selectedLabel);
+      }
     },
     validate() {}
   }
