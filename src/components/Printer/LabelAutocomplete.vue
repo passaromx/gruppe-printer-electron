@@ -2,10 +2,11 @@
   <VAutocomplete
     outline
     @input="handleInput"
+    @change="handleChange"
     v-on="$listeners"
     v-model="selectedLabel"
     label="Producto"
-    :loading="fetching"
+    :loading="isSyncing"
     :search-input.sync="search"
     clearable
     :readonly="selectedLabel != null"
@@ -21,7 +22,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex';
 
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('labels');
+const { mapState, mapGetters, mapMutations } = createNamespacedHelpers('printer');
 
 export default {
   props: ['name', 'messages'],
@@ -44,23 +45,26 @@ export default {
     };
   },
   computed: {
-    ...mapState(['fetching']),
+    ...mapState(['isSyncing']),
     ...mapGetters(['formattedLabels']),
     client() {
       return this.$store.state.auth.user.client._id || null;
     }
   },
-  watch: {
-    search() {
-      if (this.formattedLabels.length > 0 || this.fetching) return;
-      if (this.client) this.fetch(this.client);
-    }
-  },
+  // watch: {
+  //   search() {
+  //     if (this.formattedLabels.length > 0 || this.fetching) return;
+  //     if (this.client) this.fetch(this.client);
+  //   }
+  // },
   methods: {
-    ...mapActions(['fetch']),
+    ...mapMutations(['setSelectedLabel']),
+    // ...mapActions(['fetch']),
     handleInput(value) {
-      console.log(value);
       this.$emit('input', value);
+    },
+    handleChange(value) {
+      this.setSelectedLabel(value);
     }
   }
 };
