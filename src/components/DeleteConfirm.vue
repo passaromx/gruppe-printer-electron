@@ -56,6 +56,7 @@ export default {
   methods: {
     ...mapMutations(['setToDelete']),
     confirmDelete() {
+      console.log(this.toDelete);
       this.loading = true;
       const method = this.toDelete.method ? this.toDelete.method : 'delete';
       const storeModule = this.toDelete.module.includes('/')

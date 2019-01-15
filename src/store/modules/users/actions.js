@@ -1,4 +1,5 @@
 import axios from '@/plugins/axios';
+import { handleError, showSuccessAlert } from '@/utils';
 
 export default {
   storeUser({ commit }, data) {
@@ -8,11 +9,11 @@ export default {
         .then(res => {
           resolve(res);
           commit('storeUser', res);
-          console.log(res);
+          showSuccessAlert('Usuario creado exitosamente', commit);
         })
         .catch(err => {
           reject();
-          console.log(err);
+          handleError(err, commit);
         })
         .finally(() => { commit('setLoading', false); });
     });
@@ -24,11 +25,11 @@ export default {
         .then(res => {
           resolve(res);
           commit('updateUser', res);
-          console.log(res);
+          showSuccessAlert('Usuario actualizado exitosamente', commit);
         })
         .catch(err => {
           reject();
-          console.log(err);
+          handleError(err, commit);
         })
         .finally(() => { commit('setLoading', false); });
     });
@@ -38,13 +39,14 @@ export default {
     return new Promise((resolve, reject) => {
       axios.delete(`users/${id}`)
         .then(res => {
+          console.log(res);
           commit('deleteUser', id);
           resolve(res);
-          console.log(res);
+          showSuccessAlert('Usuario eliminado exitosamente', commit);
         })
         .catch(err => {
           reject(err);
-          console.log(err);
+          handleError(err, commit);
         });
     });
   }

@@ -38,7 +38,7 @@
         <VDivider light></VDivider>
 
         <VListTile
-          v-for="item in menu"
+          v-for="item in filteredMenu"
           :key="item.title"
           :to="{ name: item.name }"
           exact
@@ -49,6 +49,19 @@
 
           <VListTileContent>
             <VListTileTitle>{{ item.title }}</VListTileTitle>
+          </VListTileContent>
+        </VListTile>
+
+        <VListTile
+          v-if="!isAdmin"
+          @click="sync"
+        >
+          <VListTileAction>
+            <VIcon>sync</VIcon>
+          </VListTileAction>
+
+          <VListTileContent>
+            <VListTileTitle>Sincronizar</VListTileTitle>
           </VListTileContent>
         </VListTile>
 
@@ -97,15 +110,21 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('cognito', ['isLoggedIn']),
-    ...mapState(['isReady'])
+    ...mapGetters('auth', ['isLoggedIn', 'isAdmin']),
+    ...mapState(['isReady']),
+    filteredMenu() {
+      return this.isAdmin ? this.menu : this.menu.filter(item => !item.isAdmin);
+    }
   },
   methods: {
-    ...mapActions('cognito', ['signOut']),
+    ...mapActions('auth', ['signOut']),
     logout() {
       this.signOut().then(() => {
         this.$router.push({ name: 'Login' });
       });
+    },
+    sync() {
+      console.log('sync pressed');
     }
   },
   watch: {

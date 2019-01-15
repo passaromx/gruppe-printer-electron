@@ -1,28 +1,36 @@
 import axios from '@/plugins/axios';
-
-const set = property => (state, payload) => { state[property] = payload; };
+import { set, handleError, showSuccessAlert } from '@/utils';
 
 const actions = {
-  fetch({ commit }) {
+  fetch({ commit }, client) {
     commit('setFetching', true);
-    axios.get('labels')
-      .then(res => {
-        commit('setLabels', res.data);
-        console.log(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-      .finally(() => {
-        commit('setFetching', false);
-      });
+    return new Promise((resolve, reject) => {
+      axios.get(`labels?client=${client}`)
+      // axios.get('labels')
+        .then(res => {
+          resolve(res.data);
+          commit('setLabels', res.data);
+          console.log(res.data);
+        })
+        .catch(err => {
+          reject();
+          handleError(err, commit);
+          // get offline data
+        })
+        .finally(() => {
+          commit('setFetching', false);
+        });
+    });
   },
   store({ commit }, data) {
     const formData = new FormData();
-    const { name, sku, label, auth } = data;
+    const {
+      name, sku, label, auth, client
+    } = data;
     formData.append('name', name);
     formData.append('sku', sku);
     formData.append('label', label);
+    formData.append('client', client);
     formData.append('authorization', auth);
     commit('setLoading', true);
     return new Promise((resolve, reject) => {
@@ -35,11 +43,11 @@ const actions = {
         .then(res => {
           commit('storeItem', res);
           resolve(res);
-          console.log(res);
+          showSuccessAlert('Etiqueta creada exitosamente', commit);
         })
         .catch(err => {
           reject(err);
-          console.log(err);
+          handleError(err, commit);
         })
         .finally(() => {
           commit('setProgress', 0);
@@ -65,12 +73,12 @@ const actions = {
       })
         .then(res => {
           commit('updateItem', res);
-          console.log(res);
+          showSuccessAlert('Etiqueta actualizada exitosamente', commit);
           resolve(res);
         })
         .catch(err => {
           reject(err);
-          console.log(err);
+          handleError(err, commit);
         })
         .finally(() => {
           commit('setProgress', 0);
@@ -79,18 +87,17 @@ const actions = {
     });
   },
   delete({ commit }, items) {
-    console.log(items);
     const ids = items.join(',');
     return new Promise((resolve, reject) => {
       axios.delete(`labels/deleteMany?ids=${ids}`)
         .then(res => {
           commit('deleteItems', items);
           resolve(res);
-          console.log(res);
+          showSuccessAlert('Etiqueta eliminada exitosamente', commit);
         })
         .catch(err => {
           reject(err);
-          console.log(err);
+          handleError(err, commit);
         });
     });
   }
@@ -101,6 +108,7 @@ const mutations = {
   setFetching: set('fetching'),
   setLoading: set('loading'),
   setProgress: set('uploadProgress'),
+  setClient: set('fromClient'),
   storeItem: (state, { data }) => {
     state.labels.push(data);
   },
@@ -116,8 +124,20 @@ const mutations = {
   }
 };
 
+const getters = {
+  formattedLabels: state => state.labels.map(label => {
+    const limit = 60;
+    const description = `${label.sku} - ${label.name}`;
+    label.description = description.length > limit
+      ? `${description.slice(0, limit)}...`
+      : description;
+    return label;
+  })
+};
+
 const state = {
   labels: [],
+  fromClient: null,
   fetching: false,
   loading: false,
   uploadProgress: 0
@@ -126,6 +146,7 @@ const state = {
 export default {
   namespaced: true,
   state,
+  getters,
   actions,
   mutations
 };

@@ -83,7 +83,7 @@ export default {
       const toDelete = {
         items: [item],
         module: this.settings.module,
-        method: this.settings.method
+        method: this.settings.deleteMethod
       };
       this.setToDelete(toDelete);
     }
