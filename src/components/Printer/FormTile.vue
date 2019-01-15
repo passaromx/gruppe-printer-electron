@@ -162,6 +162,7 @@ export default {
   },
   methods: {
     handleChange(val) {
+      ipcRenderer.send('getZpl', val);
       console.log(val);
     },
     validate() {}
