@@ -1,12 +1,34 @@
 <template>
-  <VLayout row wrap>
-    <VFlex xs12 sm4 lg3>
-      <FormTile />
-    </VFlex>
-    <VFlex xs12 sm8 lg9>
-      <PreviewTile />
-    </VFlex>
-  </VLayout>
+  <div>
+    <VDialog
+      v-model="isSyncing"
+      persistent
+      width="300"
+    >
+      <VCard
+        color="primary"
+        dark
+      >
+        <VCardText>
+          Sincronizando, espera por favor...
+          <VProgressLinear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></VProgressLinear>
+        </VCardText>
+      </VCard>
+    </VDialog>
+    <VLayout row wrap>
+      <VFlex xs12 sm4>
+        <FormTile />
+      </VFlex>
+      <VFlex xs12 sm8>
+        <PreviewTile />
+      </VFlex>
+    </VLayout>
+  </div>
+
 </template>
 
 <script>
@@ -21,6 +43,7 @@ export default {
     FormTile,
     PreviewTile
   },
+  // data: () => ({ dialog: true }),
   mounted() {
     this.$eventHub.$emit('closeDrawer');
 
@@ -33,6 +56,7 @@ export default {
   watch: {
     isReady(val) {
       if (val && this.isLoggedIn) {
+        console.log('syncing');
         ipcRenderer.send('sync', this.user.client._id);
         this.setIsSyncing(true);
       }

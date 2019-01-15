@@ -23,89 +23,104 @@
               v-validate="'required'"
               :messages="errors.collect('labels')"/>
           </VFlex>
-          <VFlex xs8>
-            <VMenu
-                ref="dateMenu"
-                lazy
-                :close-on-content-click="false"
-                v-model="dateMenu"
-                transition="scale-transition"
-                offset-y
-                full-width
-                :nudge-right="40"
-                min-width="290px"
-                :return-value.sync="date"
-              >
-                <VTextField
-                  slot="activator"
-                  label="Fecha"
-                  outline
-                  v-model="formattedDate"
-                  append-icon="event"
-                  required
-                  readonly
-                ></VTextField>
-                <VDatePicker
-                  v-model="date"
-                  no-title
-                  scrollable
-                  @input="$refs.dateMenu.save(date)">
-                  <!-- <v-spacer></v-spacer>
-                  <v-btn flat color="primary" @click="expiresMenu = false">Cancelar</v-btn>
-                  <v-btn flat color="primary" @click="$refs.expiresMenu.save(editedItem.expiresAt)">OK</v-btn> -->
-                </VDatePicker>
-              </VMenu>
+          <VFlex xs6>
+            <DatePicker
+              :disabled="!selectedLabel"
+              @change="handleDate('production', $event)"
+              name="productionDate"
+              label="Fecha de producción"
+              v-validate="'required'"
+              :messages="errors.collect('productionDate')"/>
+          </VFlex>
+          <VFlex xs6>
+            <DatePicker
+              :disabled="!selectedLabel"
+              @change="expireDate = $value"
+              name="expireDate"
+              label="Fecha de caducidad"
+              v-validate="'required'"
+              :messages="errors.collect('expireDate')"/>
           </VFlex>
           <VFlex xs4>
             <VTextField
               number
+              :disabled="!selectedLabel"
               outline
               v-model="copies"
               label="Copias"
-              v-validate="'required'"
+              v-validate="'required|min_value:1'"
               data-vv-name="copies"
               :error-messages="errors.collect('copies')"/>
           </VFlex>
-          <VFlex xs6>
+          <!-- <VFlex xs6>
             <VTextField
-              number
+              :disabled="!selectedLabel"
               outline
+              v-validate="'required'"
+              data-vv-name="place"
+              :error-messages="errors.collect('place')"
               v-model="place"
               label="Planta" />
-          </VFlex>
-          <VFlex xs6>
+          </VFlex> -->
+          <!-- <VFlex xs3>
             <VTextField
               number
+              :disabled="!selectedLabel"
               outline
-              v-model="place"
+              v-validate="'required|min_value:1'"
+              data-vv-name="weight"
+              :error-messages="errors.collect('weight')"
+              v-model="weight"
               label="Peso neto" />
-          </VFlex>
+          </VFlex> -->
           <VFlex xs12>
             <span class="subheading">Nomenclatura</span>
           </VFlex>
 
-          <VFlex xs4>
+          <VFlex xs3>
             <VTextField
               number
+              :disabled="!selectedLabel"
               outline
+              v-validate="'required|min_value:1'"
+              data-vv-name="line"
+              :error-messages="errors.collect('line')"
               v-model="line"
               label="Línea" />
           </VFlex>
-          <VFlex xs4>
+          <VFlex xs3>
             <VTextField
               number
+              :disabled="!selectedLabel"
               outline
+              v-validate="'required|min_value:1'"
+              data-vv-name="turn"
+              :error-messages="errors.collect('turn')"
               v-model="turn"
               label="Turno" />
           </VFlex>
-          <VFlex xs4>
+          <VFlex xs3>
             <VTextField
-              number
               outline
+              :disabled="!selectedLabel"
               v-model="group"
+              v-validate="'required'"
+              data-vv-name="group"
+              :error-messages="errors.collect('group')"
               label="Grupo" />
           </VFlex>
+          <VFlex xs3>
+            <VTextField
+              outline
+              :disabled="!selectedLabel"
+              v-model="sequential"
+              v-validate="'required'"
+              data-vv-name="sequential"
+              :error-messages="errors.collect('sequential')"
+              label="Consecutivo" />
+          </VFlex>
         </VLayout>
+        <!-- <span>{{ description }}</span> -->
         <VLayout justify-end>
           <VBtn>
             <VIcon class="mr-2">cloud_download</VIcon>
@@ -127,23 +142,27 @@
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
 import { ipcRenderer } from 'electron';
-import moment from 'moment';
+import { mapState } from 'vuex';
 
 export default {
   $_veeValidate: { validator: 'new' },
-  components: { LabelAutocomplete: () => import('@/components/Printer/LabelAutocomplete') },
+  components: {
+    LabelAutocomplete: () => import('@/components/Printer/LabelAutocomplete'),
+    DatePicker: () => import('@/components/Printer/DatePicker')
+  },
   data() {
     return {
       printer: 'Zebra_Technologies_ZTC_110Xi4_203dpi_ZPL',
       printers: [],
       place: 'TX',
       copies: 1,
-      label: 'Y4041',
-      dateMenu: false,
-      date: null,
+      expireDate: null,
+      productionDate: null,
+      weight: 1,
       line: 4,
       turn: 2,
-      group: 'C'
+      group: 'C',
+      sequential: '001'
     };
   },
   mounted() {
@@ -153,16 +172,26 @@ export default {
     });
   },
   computed: {
-    formattedDate() {
-      if (this.date) {
-        return moment(this.date).utc().format('L');
-      }
-      return moment().format('L');
+    ...mapState('printer', ['selectedLabel']),
+    description() {
+      return `${this.line}-${this.turn}-${this.group}-${this.sequential}`;
     }
   },
   methods: {
+    handleDate(picker, value) {
+      console.log(value);
+      if (picker === 'production') {
+        this.productionDate = value;
+      } else {
+        this.expireDate = value;
+      }
+    },
     handleChange(val) {
       ipcRenderer.send('getZpl', val);
+      // const data = {
+      //   description: this.description,
+      //   date: this.formattedDate
+      // };
       console.log(val);
     },
     validate() {}
