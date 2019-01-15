@@ -7,19 +7,19 @@ const endTrail = '^PQ';
 
 module.exports = async (filePath, data = {
   description: 'Variables',
-  expiresDate: '2018-01-01',
+  expireDate: '2018-01-01',
   productionDate: '2017-01-01',
   copies: 1
 }) => new Promise(async (resolve, reject) => {
   try {
-    const { description, expiresDate, productionDate, copies } = data;
+    const { description, expireDate, productionDate, copies } = data;
     const start = `^XA
       ^MMC
       ^PW768
       ^LL1199
       ^LS0
       ^FT221,590^A0I,31,31^FH\^FD${description}^FS
-      ^FT231,680^A0I,31,31^FH\^FD${expiresDate}^FS
+      ^FT231,680^A0I,31,31^FH\^FD${expireDate}^FS
       ^FT231,765^A0I,31,31^FH\^FD${productionDate}^FS${startTrail}`;
 
     const end = `^PQ${copies},1,1,Y^XZ`;

@@ -59,7 +59,6 @@ ipcMain.on('getZpl', (e, label, data) => {
 
   getZpl(label.label.url, data)
     .then(zpl => {
-      console.log(zpl);
       getPreview(zpl)
         .then(renderLabel => {
           e.sender.send('label', renderLabel);
