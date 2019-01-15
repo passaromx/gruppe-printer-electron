@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import attachCognitoModule from '@vuetify/vuex-cognito-module';
 import labels from './modules/labels';
 import clients from './modules/clients';
+import printer from './modules/printer';
 
 Vue.use(Vuex);
 
@@ -25,7 +26,8 @@ const store = new Vuex.Store({
   },
   modules: {
     labels,
-    clients
+    clients,
+    printer
   }
 });
 

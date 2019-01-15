@@ -8,6 +8,7 @@ module.exports = {
     '@vue/airbnb',
   ],
   rules: {
+    'global-require': 'off',
     'consistent-return': 'off',
     'no-underscore-dangle': ['error', { allow: ['_id'] }],
     'comma-dangle': 'off',
