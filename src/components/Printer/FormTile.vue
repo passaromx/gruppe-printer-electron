@@ -35,7 +35,7 @@
           <VFlex xs6>
             <DatePicker
               :disabled="!selectedLabel"
-              @change="expireDate = $value"
+              @change="handleDate('expire', $event)"
               name="expireDate"
               label="Fecha de caducidad"
               v-validate="'required'"
@@ -82,6 +82,7 @@
               number
               :disabled="!selectedLabel"
               outline
+              @change="handleChange"
               v-validate="'required|min_value:1'"
               data-vv-name="line"
               :error-messages="errors.collect('line')"
@@ -93,6 +94,7 @@
               number
               :disabled="!selectedLabel"
               outline
+              @change="handleChange"
               v-validate="'required|min_value:1'"
               data-vv-name="turn"
               :error-messages="errors.collect('turn')"
@@ -104,6 +106,7 @@
               outline
               :disabled="!selectedLabel"
               v-model="group"
+              @change="handleChange"
               v-validate="'required'"
               data-vv-name="group"
               :error-messages="errors.collect('group')"
@@ -114,6 +117,7 @@
               outline
               :disabled="!selectedLabel"
               v-model="sequential"
+              @change="handleChange"
               v-validate="'required'"
               data-vv-name="sequential"
               :error-messages="errors.collect('sequential')"
@@ -185,14 +189,16 @@ export default {
       } else {
         this.expireDate = value;
       }
+      this.handleChange();
     },
-    handleChange(val) {
-      ipcRenderer.send('getZpl', val);
-      // const data = {
-      //   description: this.description,
-      //   date: this.formattedDate
-      // };
-      console.log(val);
+    handleChange() {
+      const data = {
+        description: this.description,
+        expireDate: this.expireDate,
+        productionDate: this.productionDate
+      };
+      ipcRenderer.send('getZpl', this.selectedLabel, data);
+      console.log(this.selectedLabel);
     },
     validate() {}
   }
