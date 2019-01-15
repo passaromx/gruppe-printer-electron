@@ -10,13 +10,18 @@ const actions = {
 
   sync({ commit }, labels) {
     commit('setLabels', labels);
+  },
+
+  renderLabel({ commit }, label) {
+    commit('setLabel', label);
   }
 };
 
 const mutations = {
   setLabels: set('labels'),
   setLoadingLabels: set('loadingLabels'),
-  setIsSyncing: set('isSyncing')
+  setIsSyncing: set('isSyncing'),
+  setLabel: set('label')
 };
 
 const state = {

@@ -45,8 +45,8 @@ ipcMain.on('get-printers', e => {
   e.sender.send('printers-fetched', printers);
 });
 
-ipcMain.on('sync', e => {
-  sync()
+ipcMain.on('sync', (e, client) => {
+  sync(client)
     .then(data => {
       e.sender.send('synced', data);
     })
