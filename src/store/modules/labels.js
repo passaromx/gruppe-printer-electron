@@ -124,17 +124,6 @@ const mutations = {
   }
 };
 
-const getters = {
-  formattedLabels: state => state.labels.map(label => {
-    const limit = 60;
-    const description = `${label.sku} - ${label.name}`;
-    label.description = description.length > limit
-      ? `${description.slice(0, limit)}...`
-      : description;
-    return label;
-  })
-};
-
 const state = {
   labels: [],
   fromClient: null,
@@ -146,7 +135,6 @@ const state = {
 export default {
   namespaced: true,
   state,
-  getters,
   actions,
   mutations
 };
