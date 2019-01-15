@@ -2,6 +2,8 @@
 import { app, protocol, BrowserWindow, ipcMain } from 'electron';
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
 
+const { sync } = require('./utils/offline/label');
+
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -41,6 +43,14 @@ function createWindow() {
 ipcMain.on('get-printers', e => {
   const printers = win.webContents.getPrinters();
   e.sender.send('printers-fetched', printers);
+});
+
+ipcMain.on('sync', e => {
+  sync()
+    .then(data => {
+      e.sender.send('synced', data);
+    })
+    .catch(err => console.log(err));
 });
 
 // Quit when all windows are closed.

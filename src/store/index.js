@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import { set } from '@/utils';
 import auth from './modules/auth';
 import clients from './modules/clients';
+import printer from './modules/printer';
 import labels from './modules/labels';
 
 Vue.use(Vuex);
@@ -25,6 +26,7 @@ const store = new Vuex.Store({
   modules: {
     labels,
     clients,
+    printer,
     auth
   }
 });
