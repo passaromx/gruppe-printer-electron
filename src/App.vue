@@ -93,6 +93,8 @@
 </template>
 
 <script>
+/* eslint-disable import/no-extraneous-dependencies */
+import { ipcRenderer } from 'electron';
 import menu from '@/api/menu';
 import { mapState, mapGetters, mapActions } from 'vuex';
 
@@ -112,6 +114,7 @@ export default {
   computed: {
     ...mapGetters('auth', ['isLoggedIn', 'isAdmin']),
     ...mapState(['isReady']),
+    ...mapState('auth', ['user']),
     filteredMenu() {
       return this.isAdmin ? this.menu : this.menu.filter(item => !item.isAdmin);
     }
@@ -124,6 +127,7 @@ export default {
       });
     },
     sync() {
+      ipcRenderer.send('sync', this.user.client._id);
       console.log('sync pressed');
     }
   },
