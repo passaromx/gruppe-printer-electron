@@ -6,11 +6,13 @@ const { apiURL } = require('../../../api/constants');
 
 module.exports = () => new Promise((resolve, reject) => {
   let config = JSON.parse(fs.readFileSync('src/data/config.json', 'utf8'));
+  let labels = JSON.parse(fs.readFileSync('src/data/labels.json', 'utf8'));
 
   const { lastSync } = config;
   request(`${apiURL}labels/sync?updatedAt_gte=${lastSync}`, { json: true }, (err, response, body) => {
     config.lastSync = body.lastSync;
-    let { labels } = body;
+    if (body.labels.length > 0) labels = [...labels, ...body.labels];
+    const labelsJson = [...labels];
     labels = JSON.stringify(labels);
     config = JSON.stringify(config);
     body.uploads.forEach(upload => {
@@ -30,6 +32,6 @@ module.exports = () => new Promise((resolve, reject) => {
     fs.writeFileSync('src/data/labels.json', labels);
 
 
-    resolve(body.labels);
+    resolve(labelsJson);
   });
 });
