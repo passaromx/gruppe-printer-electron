@@ -2,6 +2,7 @@
 node_modules
 /dist
 /src/utils/offline/printer
+/src/data
 
 # local env files
 .env.local
