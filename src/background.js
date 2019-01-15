@@ -2,6 +2,7 @@
 import { app, protocol, BrowserWindow, ipcMain } from 'electron';
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
 
+const fs = require('fs');
 const { sync } = require('./utils/offline/label');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -49,6 +50,25 @@ ipcMain.on('sync', (e, client) => {
   sync(client)
     .then(data => {
       e.sender.send('synced', data);
+    })
+    .catch(err => console.log(err));
+});
+
+ipcMain.on('getZpl', (e, label, data) => {
+  const { getZpl, getPreview } = require('./utils/offline/printer');
+
+  getZpl(label.label.url, data)
+    .then(zpl => {
+      console.log(zpl);
+      getPreview(zpl)
+        .then(renderLabel => {
+          e.sender.send('label', renderLabel);
+        })
+        .catch(err => {
+          const renderLabel = fs.readFileSync(`src/data${label.labelPng.url}`, { encoding: 'base64' });
+          e.sender.send('label', `data:image/jpeg;base64,${renderLabel}`);
+          console.log(err);
+        });
     })
     .catch(err => console.log(err));
 });

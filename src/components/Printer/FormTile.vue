@@ -187,6 +187,7 @@ export default {
       }
     },
     handleChange(val) {
+      ipcRenderer.send('getZpl', val);
       // const data = {
       //   description: this.description,
       //   date: this.formattedDate

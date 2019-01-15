@@ -48,6 +48,7 @@ export default {
     this.$eventHub.$emit('closeDrawer');
 
     ipcRenderer.on('synced', (e, data) => {
+      console.log('synced', data);
       this.setIsSyncing(false);
       this.setLabels(data);
     });

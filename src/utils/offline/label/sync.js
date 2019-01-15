@@ -16,6 +16,7 @@ module.exports = client => new Promise((resolve, reject) => {
     labels = JSON.stringify(labels);
     config = JSON.stringify(config);
     body.uploads.forEach(upload => {
+      console.log(upload.url);
       request(`${apiURL}${upload.url}`, { encoding: null }, (error, resp, download) => {
         if (error) reject(error);
         const filename = upload.url;
