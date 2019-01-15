@@ -15,6 +15,7 @@ const actions = {
         .catch(err => {
           reject();
           handleError(err, commit);
+          // get offline data
         })
         .finally(() => {
           commit('setFetching', false);
