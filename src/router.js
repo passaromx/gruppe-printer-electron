@@ -1,10 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Printer from './views/Printer';
+import { roles } from '@/api/constants';
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   // mode: 'history',
   routes: [
     {
@@ -24,13 +25,19 @@ export default new Router({
     },
     {
       path: '/labels',
-      meta: { requiresAuth: true },
+      meta: {
+        requiresAuth: true,
+        isAdmin: true
+      },
       name: 'Labels',
       component: () => import(/* webpackChunkName: "about" */ './views/Labels.vue'),
     },
     {
       path: '/clients',
-      meta: { requiresAuth: true },
+      meta: {
+        requiresAuth: true,
+        isAdmin: true
+      },
       name: 'Clients',
       component: () => import(/* webpackChunkName: "users" */ './views/Clients.vue'),
     },
@@ -40,3 +47,18 @@ export default new Router({
     }
   ],
 });
+
+router.beforeEach((to, from, next) => {
+  const user = JSON.parse(localStorage.getItem('USER'));
+  if (to.matched.some(record => record.meta.isAdmin)) {
+    if (user.role._id === roles.admin) {
+      next();
+    } else {
+      next({ name: 'Printer' });
+    }
+  } else {
+    next();
+  }
+});
+
+export default router;

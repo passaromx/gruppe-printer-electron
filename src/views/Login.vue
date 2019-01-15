@@ -13,7 +13,7 @@
             height="150"
             width="60%" />
         </VLayout>
-        <form @submit="validate" class="mx-5 mt-5">
+        <form class="mx-5 mt-5">
           <VTextField
             label="Correo"
             v-model="email"
@@ -34,10 +34,10 @@
           />
           <VLayout justify-end>
             <VBtn
-              type="submit"
               class="mt-3"
               :disabled="isLoading"
               :loading="isLoading"
+              @click="validate"
             >
               Iniciar Sesión
             </VBtn>
@@ -68,7 +68,7 @@ export default {
   },
   computed: { ...mapState(['isLoading']) },
   methods: {
-    ...mapActions('cognito', ['signInUser']),
+    ...mapActions('auth', ['signInUser']),
     ...mapMutations([
       'setIsLoading',
       'setSnackbar'
@@ -82,7 +82,7 @@ export default {
       console.log('submitting', this.email);
       this.setIsLoading(true);
       this.signInUser({
-        username: this.email,
+        identifier: this.email,
         password: this.password
       })
         .then(() => {

@@ -1,9 +1,9 @@
 <template>
   <VLayout row wrap>
-    <VFlex xs12 sm4>
+    <VFlex xs12 sm4 lg3>
       <FormTile />
     </VFlex>
-    <VFlex xs12 sm8>
+    <VFlex xs12 sm8 lg9>
       <PreviewTile />
     </VFlex>
   </VLayout>

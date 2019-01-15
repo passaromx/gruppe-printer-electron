@@ -8,10 +8,10 @@
         <VLayout column>
           <VFlex xs12>
             <VTextField
-              label="Correo"
+              label="Correo o usuario"
               v-model="editedItem.email"
               data-vv-name="email"
-              v-validate="'required|email'"
+              v-validate="'required'"
               :error-messages="errors.collect('email')"/>
           </VFlex>
           <VFlex xs12>
@@ -75,12 +75,12 @@ export default {
       });
     },
     submit() {
-      // this.editedItem.client = this.selectedClient._id;
+      this.editedItem.client = this.selectedClient._id;
       if (!this.isEditMode) {
         // admin role
-        this.editedItem.role = '5c2f94bdf80d6665bf53b9d8';
+        // this.editedItem.role = '5c2f94bdf80d6665bf53b9d8';
         // client role
-        // this.editedItem.role = '5c2f94bdf80d6665bf53b9d9';
+        this.editedItem.role = '5c2f94bdf80d6665bf53b9d9';
         console.log(this.editedItem);
         this.storeUser(this.editedItem)
           .then(() => {

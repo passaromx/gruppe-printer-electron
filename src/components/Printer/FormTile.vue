@@ -5,7 +5,7 @@
     </VCardTitle>
     <!-- <VDivider /> -->
     <VCardText>
-      <VContainer class="pa-0" grid-list-lg>
+      <VContainer class="pa-0" grid-list-md>
         <VLayout row wrap>
           <VFlex xs12>
             <VSelect
@@ -15,32 +15,13 @@
               outline
               item-text="name"
               item-value="name"/>
-            <!-- <VTextField
-              outline
-              v-model="test"
-              label="Impresora" /> -->
           </VFlex>
-          <VFlex xs8>
-            <VTextField
-              outline
-              v-model="label"
-              hide-details
-              label="SKU" />
-          </VFlex>
-          <VFlex xs4>
-            <VTextField
-              number
-              outline
-              v-model="copies"
-              hide-details
-              label="Copias" />
-          </VFlex>
-          <VFlex xs4>
-            <VTextField
-              number
-              outline
-              v-model="place"
-              label="Planta" />
+          <VFlex xs12>
+            <LabelAutocomplete
+              name="labels"
+              @change="handleChange"
+              v-validate="'required'"
+              :messages="errors.collect('labels')"/>
           </VFlex>
           <VFlex xs8>
             <VMenu
@@ -75,6 +56,30 @@
                 </VDatePicker>
               </VMenu>
           </VFlex>
+          <VFlex xs4>
+            <VTextField
+              number
+              outline
+              v-model="copies"
+              label="Copias"
+              v-validate="'required'"
+              data-vv-name="copies"
+              :error-messages="errors.collect('copies')"/>
+          </VFlex>
+          <VFlex xs6>
+            <VTextField
+              number
+              outline
+              v-model="place"
+              label="Planta" />
+          </VFlex>
+          <VFlex xs6>
+            <VTextField
+              number
+              outline
+              v-model="place"
+              label="Peso neto" />
+          </VFlex>
           <VFlex xs12>
             <span class="subheading">Nomenclatura</span>
           </VFlex>
@@ -106,7 +111,13 @@
             <VIcon class="mr-2">cloud_download</VIcon>
             PDF
           </VBtn>
-          <VBtn color="primary">Imprimir</VBtn>
+          <VBtn
+            @click="validate"
+            :disabled="errors.any()"
+            color="primary"
+          >
+            Imprimir
+          </VBtn>
         </VLayout>
       </VContainer>
     </VCardText>
@@ -119,6 +130,8 @@ import { ipcRenderer } from 'electron';
 import moment from 'moment';
 
 export default {
+  $_veeValidate: { validator: 'new' },
+  components: { LabelAutocomplete: () => import('@/components/Printer/LabelAutocomplete') },
   data() {
     return {
       printer: 'Zebra_Technologies_ZTC_110Xi4_203dpi_ZPL',
@@ -146,6 +159,12 @@ export default {
       }
       return moment().format('L');
     }
+  },
+  methods: {
+    handleChange(val) {
+      console.log(val);
+    },
+    validate() {}
   }
 };
 </script>
