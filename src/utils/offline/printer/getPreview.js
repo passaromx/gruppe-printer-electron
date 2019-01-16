@@ -2,7 +2,7 @@ const request = require('request');
 
 module.exports = zpl => new Promise((resolve, reject) => {
   const options = {
-    url: 'http://api.labelary.com/v1/printers/8dpmm/labels/4.25x6/0/',
+    url: 'http://api.labelary.com/v1/printers/8dpmm/labels/4x6/0/',
     headers: { 'X-Rotation': 180 },
     encoding: null,
     formData: { file: zpl },

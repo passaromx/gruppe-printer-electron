@@ -1,5 +1,5 @@
 
-export const apiURL = 'http://192.168.1.104:1337/';
+export const apiURL = 'http://localhost:1337/';
 // export const apiURL = 'http://localhost:1337/';
 
 export const roles = {

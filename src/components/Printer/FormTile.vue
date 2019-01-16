@@ -166,13 +166,17 @@ export default {
       line: 4,
       turn: 2,
       group: 'C',
-      sequential: '001'
+      sequential: '001',
+      zpl: ''
     };
   },
   mounted() {
     ipcRenderer.send('get-printers');
     ipcRenderer.on('printers-fetched', (e, printers) => {
       this.printers = printers;
+    });
+    ipcRenderer.on('zplReady', (e, zpl) => {
+      this.zpl = zpl;
     });
   },
   computed: {
@@ -202,7 +206,9 @@ export default {
         console.log(this.selectedLabel);
       }
     },
-    validate() {}
+    validate() {
+      ipcRenderer.send('print', this.printer, this.zpl);
+    }
   }
 };
 </script>

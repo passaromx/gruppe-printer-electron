@@ -18,9 +18,9 @@ module.exports = async (filePath, data = {
       ^PW768
       ^LL1199
       ^LS0
-      ^FT221,590^A0I,31,31^FH\^FD${description || ''}^FS
-      ^FT231,680^A0I,31,31^FH\^FD${expireDate || ''}^FS
-      ^FT231,765^A0I,31,31^FH\^FD${productionDate || ''}^FS${startTrail}`;
+      ^FT301,590^A0I,31,31^FH\^FD${description || ''}^FS
+      ^FT301,680^A0I,31,31^FH\^FD${expireDate || ''}^FS
+      ^FT301,765^A0I,31,31^FH\^FD${productionDate || ''}^FS${startTrail}`;
 
     const end = `^PQ${copies},1,1,Y^XZ`;
 
