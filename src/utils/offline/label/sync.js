@@ -10,7 +10,9 @@ module.exports = client => new Promise((resolve, reject) => {
 
   const { lastSync } = config;
   request(`${apiURL}labels/sync?client=${client}&updatedAt_gte=${lastSync}`, { json: true }, (err, response, body) => {
-    console.log(err, body);
+    if (err || !body) reject(err);
+    config.lastSync = body.lastSync;
+
     if (body.labels.length > 0) labels = [...labels, ...body.labels];
     const labelsJson = [...labels];
     labels = JSON.stringify(labels);

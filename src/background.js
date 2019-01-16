@@ -4,6 +4,7 @@ import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-buil
 
 const fs = require('fs');
 const { sync } = require('./utils/offline/label');
+const { printLabel } = require('./utils/offline/printer');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -57,9 +58,9 @@ ipcMain.on('sync', (e, client) => {
 
 ipcMain.on('getZpl', (e, label, data) => {
   const { getZpl, getPreview } = require('./utils/offline/printer');
-
   getZpl(label.label.url, data)
     .then(zpl => {
+      e.sender.send('zplReady', zpl);
       getPreview(zpl)
         .then(renderLabel => {
           e.sender.send('label', renderLabel);
@@ -70,6 +71,12 @@ ipcMain.on('getZpl', (e, label, data) => {
           console.log(err);
         });
     })
+    .catch(err => console.log(err));
+});
+
+ipcMain.on('print', (e, printer, data) => {
+  printLabel(printer, data)
+    .then(printed => console.log(printed))
     .catch(err => console.log(err));
 });
 
