@@ -4,7 +4,8 @@ const mutations = {
   setLabels: set('labels'),
   setSelectedLabel: set('selectedLabel'),
   setIsSyncing: set('isSyncing'),
-  setLabel: set('label')
+  setLabel: set('label'),
+  setPreviewLoader: set('previewLoader')
 };
 
 const getters = {
@@ -22,6 +23,7 @@ const state = {
   labels: [],
   selectedLabel: null,
   syncing: false,
+  previewLoader: false
 };
 
 export default {
