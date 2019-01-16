@@ -15,6 +15,7 @@ let win;
 // Standard scheme must be registered before the app is ready
 protocol.registerStandardSchemes(['app'], { secure: true });
 function createWindow() {
+  // console.log(process.versions);
   // Create the browser window.
   win = new BrowserWindow({
     height: 700,

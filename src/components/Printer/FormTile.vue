@@ -29,6 +29,7 @@
               @change="handleDate('production', $event)"
               name="productionDate"
               label="Fecha de producción"
+              v-model="productionDate"
               v-validate="'required'"
               :messages="errors.collect('productionDate')"/>
           </VFlex>
@@ -38,9 +39,11 @@
               @change="handleDate('expire', $event)"
               name="expireDate"
               label="Fecha de caducidad"
+              v-model="expireDate"
               v-validate="'required'"
               :messages="errors.collect('expireDate')"/>
           </VFlex>
+          <!-- + 90 días -->
           <VFlex xs4>
             <VTextField
               number
@@ -146,7 +149,15 @@
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
 import { ipcRenderer } from 'electron';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
+
+const today = new Date();
+
+const addDays = (date, days) => {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+};
 
 export default {
   $_veeValidate: { validator: 'new' },
@@ -160,8 +171,8 @@ export default {
       printers: [],
       place: 'TX',
       copies: 1,
-      expireDate: null,
-      productionDate: null,
+      productionDate: new Date().toISOString().substr(0, 10),
+      expireDate: addDays(today, 90).toISOString().substr(0, 10),
       weight: 1,
       line: 4,
       turn: 2,
@@ -186,6 +197,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('printer', ['setPreviewLoader']),
     handleDate(picker, value) {
       console.log(value);
       if (picker === 'production') {
@@ -202,8 +214,9 @@ export default {
           expireDate: this.expireDate,
           productionDate: this.productionDate
         };
+
+        this.setPreviewLoader(true);
         ipcRenderer.send('getZpl', this.selectedLabel, data);
-        console.log(this.selectedLabel);
       }
     },
     validate() {
