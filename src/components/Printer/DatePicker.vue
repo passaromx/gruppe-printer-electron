@@ -13,13 +13,11 @@
     :return-value.sync="date"
   >
     <VTextField
-      v-on="$listeners"
       :disabled="disabled"
       slot="activator"
       :label="label"
       outline
-      @input="handleInput"
-      v-model="formattedDate"
+      :value="formattedDate"
       append-icon="event"
       :error-messages="messages"
       required
@@ -30,7 +28,7 @@
       v-model="date"
       no-title
       scrollable
-      @input="$refs.dateMenu.save(date)">
+      @input="handleInput">
       <!-- <v-spacer></v-spacer>
       <v-btn flat color="primary" @click="expiresMenu = false">Cancelar</v-btn>
       <v-btn flat color="primary" @click="$refs.expiresMenu.save(editedItem.expiresAt)">OK</v-btn> -->
@@ -52,27 +50,32 @@ export default {
       return this.name;
     }
   },
-  props: ['name', 'label', 'messages', 'disabled'],
+  props: ['name', 'value', 'label', 'messages', 'disabled'],
   data() {
     return {
       dateMenu: false,
-      date: null
+      date: this.value
     };
+  },
+  mounted() {
+    console.log(this.value);
+    this.handleInput(this.date);
   },
   computed: {
     formattedDate() {
-      if (this.date) {
-        return moment(this.date).utc().format('L');
+      if (this.value) {
+        return moment(this.value).utc().format('L');
       }
-      return moment().format('L');
+      return null;
     }
   },
   methods: {
     handleInput(value) {
-      this.$emit('input', value);
+      this.$refs.dateMenu.save(value);
+      this.$emit('input', this.date);
     },
-    handleChange(value) {
-      this.$emit('change', value);
+    handleChange() {
+      this.$emit('change', this.date);
     }
   }
 };
