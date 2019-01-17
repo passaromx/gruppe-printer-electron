@@ -56,7 +56,7 @@
 
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
-import { mapActions, mapMutations, mapState } from 'vuex';
+import { mapActions, mapMutations, mapState, mapGetters } from 'vuex';
 
 export default {
   $_veeValidate: { validator: 'new' },
@@ -68,7 +68,10 @@ export default {
       password: null
     };
   },
-  computed: { ...mapState(['isLoading']) },
+  computed: {
+    ...mapState(['isLoading']),
+    ...mapGetters('auth', ['isAdmin'])
+  },
   methods: {
     ...mapActions('auth', ['signInUser']),
     ...mapMutations([
@@ -81,18 +84,14 @@ export default {
       });
     },
     submit() {
-      console.log('submitting', this.email);
+      // console.log('submitting', this.email);
       this.setIsLoading(true);
       this.signInUser({
         identifier: this.email,
         password: this.password
       })
         .then(() => {
-          // this.setSnackbar({
-          //   type: 'success',
-          //   msg: `Successfully signed in user ${this.email}`
-          // });
-          this.$router.push({ name: 'Printer' });
+          this.$router.push({ name: this.isAdmin ? 'Labels' : 'Printer' });
         })
         .catch(() => {
         })

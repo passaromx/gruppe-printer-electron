@@ -72,9 +72,6 @@ export default {
       scrollSettings: { maxScrollbarLength: 160 },
     };
   },
-  mounted() {
-    console.log('mounted');
-  },
   watch: {
     items(val) {
       // console.log('list', val);

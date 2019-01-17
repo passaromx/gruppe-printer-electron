@@ -58,7 +58,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.value);
     this.handleInput(this.date);
   },
   computed: {

@@ -120,7 +120,9 @@ export default {
     ...mapState(['isReady']),
     ...mapState('auth', ['user']),
     filteredMenu() {
-      return this.isAdmin ? this.menu : this.menu.filter(item => !item.isAdmin);
+      return this.isAdmin
+        ? this.menu.filter(item => item.isAdmin)
+        : this.menu.filter(item => !item.isAdmin);
     }
   },
   methods: {
