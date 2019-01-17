@@ -41,7 +41,7 @@ const actions = {
     });
   },
   signInUser({ commit }, data) {
-    console.log(data);
+    // console.log(data);
     return new Promise((resolve, reject) => {
       delete authAxios.defaults.headers.common.Authorization;
       authAxios.post(`${apiURL}auth/local`, data)

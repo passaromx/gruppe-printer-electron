@@ -69,8 +69,8 @@ export default {
     });
   },
   watch: {
-    isLoggedIn() {
-      this.sync();
+    isLoggedIn(val) {
+      if (val && !this.dialog) this.sync();
     }
   },
   computed: {
@@ -88,8 +88,9 @@ export default {
     }
   },
   destroyed() {
-    this.$eventHub.off('sync');
-    ipcRenderer.removeAllListeners();
+    this.$eventHub.$off('sync');
+    ipcRenderer.removeListener('synced', () => {});
+    ipcRenderer.removeListener('error-sync', () => {});
   }
 };
 </script>
