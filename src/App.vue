@@ -104,6 +104,11 @@ export default {
     DeleteConfirm: () => import('@/components/DeleteConfirm'),
     Snackbar: () => import('@/components/Snackbar')
   },
+  mounted() {
+    this.$eventHub.$on('closeDrawer', () => {
+      this.mini = true;
+    });
+  },
   data() {
     return {
       drawer: null,
@@ -121,7 +126,7 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['signOut']),
-    ...mapMutations('printer', ['setIsSyncing']),
+    ...mapMutations('printer', ['setIsSyncing', 'setLabels', 'setConfig']),
     logout() {
       this.signOut().then(() => {
         this.$router.push({ name: 'Login' });
@@ -137,15 +142,10 @@ export default {
     isReady(val) {
       if (val && this.isLoggedIn) {
         this.setIsSyncing(true);
-        ipcRenderer.send('sync', this.user.client._id);
+        if (this.user.client) ipcRenderer.send('sync', this.user.client._id);
         this.$router.push({ name: 'Printer' });
       }
     }
-  },
-  mounted() {
-    this.$eventHub.$on('closeDrawer', () => {
-      this.mini = true;
-    });
   },
   destroyed() {
     this.$eventHub.$off('closeDrawer');

@@ -33,10 +33,10 @@
 
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
-import { ipcRenderer } from 'electron';
 import FormTile from '@/components/Printer/FormTile';
 import PreviewTile from '@/components/Printer/PreviewTile';
 import { mapGetters, mapMutations, mapState, mapActions } from 'vuex';
+import { ipcRenderer } from 'electron';
 
 export default {
   components: {
@@ -45,24 +45,35 @@ export default {
   },
   // data: () => ({ dialog: true }),
   mounted() {
+    console.log('printr mounted');
     this.$eventHub.$emit('closeDrawer');
-
     ipcRenderer.on('synced', (e, data) => {
       console.log('synced', data);
-      this.setIsSyncing(false);
+
       this.setLabels(data.labels);
       this.setConfig(data.config);
+      setTimeout(() => this.setIsSyncing(false), 1000);
     });
 
     ipcRenderer.on('errorSync', (e, error) => {
+      console.log('errorsync');
+      // this.setIsSyncing(false);
+      setTimeout(() => this.setIsSyncing(false), 1000);
       this.sendError({
         error,
         type: 'warning'
       });
-      this.setIsSyncing(false);
     });
   },
-  watch: {},
+  watch: {
+    isReady(val) {
+      if (val && this.isLoggedIn) {
+        this.setIsSyncing(true);
+        if (this.user.client) ipcRenderer.send('sync', this.user.client._id);
+        this.$router.push({ name: 'Printer' });
+      }
+    }
+  },
   computed: {
     ...mapGetters('auth', ['isLoggedIn']),
     ...mapState('printer', ['isSyncing']),
