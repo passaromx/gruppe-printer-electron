@@ -10,11 +10,19 @@ module.exports = client => new Promise((resolve, reject) => {
 
   const { lastSync } = config;
   request(`${apiURL}labels/sync?client=${client}&updatedAt_gte=${lastSync}`, { json: true }, (err, response, body) => {
-    if (err || !body) reject(err);
+    if (err || !body.labels) {
+      resolve({
+        err: err || new Error('no labels'),
+        labels,
+        config
+      });
+      return;
+    }
     config.lastSync = body.lastSync;
 
     if (body.labels.length > 0) labels = [...labels, ...body.labels];
     const labelsJson = [...labels];
+    const configJson = { ...config };
     labels = JSON.stringify(labels);
     config = JSON.stringify(config);
     body.uploads.forEach(upload => {
@@ -35,6 +43,9 @@ module.exports = client => new Promise((resolve, reject) => {
     fs.writeFileSync('src/data/labels.json', labels);
 
 
-    resolve(labelsJson);
+    resolve({
+      labels: labelsJson,
+      config: configJson
+    });
   });
 });

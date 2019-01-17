@@ -114,13 +114,17 @@ export default {
           expireDate: '',
           productionDate: ''
         };
-
-        this.setPreviewLoader(true);
-        ipcRenderer.send('getZpl', this.selectedLabel, data);
+        console.log(data);
+        // this.setPreviewLoader(true);
       }
     },
     validate() {
-      ipcRenderer.send('print', this.printer, this.zpl);
+      const data = {
+        description: this.description,
+        expireDate: this.expireDate,
+        productionDate: this.productionDate
+      };
+      ipcRenderer.send('print', this.printer, this.selectedLabel, data);
     }
   }
 };

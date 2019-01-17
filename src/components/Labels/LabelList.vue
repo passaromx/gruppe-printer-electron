@@ -103,7 +103,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { remote } from 'electron';
 
-import { labelListHeaders } from '@/api/constants';
+import { labelListHeaders, filesURL } from '@/api/constants';
 import { mapActions, mapState } from 'vuex';
 
 export default {
@@ -163,7 +163,7 @@ export default {
         webPreferences: { plugins: true }
       });
 
-      const url = `http://192.168.1.182:1337${file.url}`;
+      const url = `${filesURL}${file.url}`;
       pdfWindow.loadURL(url);
       pdfWindow.setMenu(null);
       pdfWindow.on('closed', () => {

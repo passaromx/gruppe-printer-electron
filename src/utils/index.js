@@ -7,8 +7,7 @@ export const showSuccessAlert = (msg, commit) => {
   }, { root: true });
 };
 
-export const handleError = (err, commit) => {
-  console.log(err.response);
+export const handleError = (err, commit, type = 'error') => {
   const status = err.response ? err.response.status : 505;
 
   let message = '';
@@ -41,9 +40,8 @@ export const handleError = (err, commit) => {
       message = 'Error de comunicación, intenta más tarde';
       break;
   }
-
   commit('setSnackbar', {
-    type: 'error',
+    type,
     msg: message
   }, { root: true });
 };

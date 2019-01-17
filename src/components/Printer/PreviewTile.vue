@@ -12,7 +12,7 @@
       <VImg
         v-if="selectedLabel && label"
         alt="label"
-        :src="label"
+        :src="require(`../../data${selectedLabel.labelPng.url}`)"
         contain
         class="preview-img"/>
       <VLayout
@@ -31,7 +31,6 @@
 
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
-import { ipcRenderer } from 'electron';
 import { mapState, mapMutations } from 'vuex';
 // import { nymVars } from '@/api/constants';
 
@@ -47,10 +46,7 @@ export default {
     }
   },
   mounted() {
-    ipcRenderer.on('label', (e, label) => {
-      this.label = label;
-      this.setPreviewLoader(false);
-    });
+    this.setPreviewLoader(false);
   },
   methods: { ...mapMutations('printer', ['setPreviewLoader', 'setVariableValue']) }
 };
