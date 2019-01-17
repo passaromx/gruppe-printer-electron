@@ -64,7 +64,6 @@ ipcMain.on('sync', (e, client, button) => {
 ipcMain.on('login', (e, user, password, client, authenticate) => {
   login(user, password, client, authenticate)
     .then(data => {
-      console.log(data);
       e.sender.send('logged', data);
     })
     .catch(err => {
