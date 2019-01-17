@@ -9,12 +9,12 @@
           </VarDisplay>
         </div>
       </div>
-      <!-- <VImg
-        v-if="selectedLabel"
+      <VImg
+        v-if="selectedLabel && user"
         alt="label"
-        :src="require(`../../data${selectedLabel.labelPng.url}`)"
+        :src="require(`../../data/${user.client._id}${selectedLabel.labelPng.url}`)"
         contain
-        class="preview-img"/> -->
+        class="preview-img"/>
       <VLayout
         v-if="selectedLabel && previewLoader"
         class="loader-bg"
@@ -41,6 +41,7 @@ export default {
   },
   computed: {
     ...mapState('printer', ['selectedLabel', 'previewLoader', 'variables']),
+    ...mapState('auth', ['user']),
     keys() {
       return Object.keys(this.variables);
     }

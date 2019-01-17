@@ -84,7 +84,7 @@ export default {
     sync(fromNavigation) {
       this.dialog = true;
       console.log('syncing');
-      ipcRenderer.send('sync', this.user.client._id, fromNavigation);
+      ipcRenderer.send('sync', this.user.client, fromNavigation);
     }
   },
   destroyed() {
