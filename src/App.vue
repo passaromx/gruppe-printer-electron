@@ -133,17 +133,13 @@ export default {
       });
     },
     sync() {
-      console.log('user', this.user);
-      ipcRenderer.send('sync', this.user.client._id, true);
-      console.log('sync pressed');
+      ipcRenderer.send('sync', this.user.client, true);
     }
   },
   watch: {
     isReady(val) {
       if (val && this.isLoggedIn) {
-        this.setIsSyncing(true);
-        if (this.user.client) ipcRenderer.send('sync', this.user.client._id);
-        this.$router.push({ name: 'Printer' });
+        this.$router.push({ name: this.isAdmin ? 'Labels' : 'Printer' });
       }
     }
   },

@@ -1,7 +1,7 @@
 <template>
   <div>
     <VDialog
-      v-model="isSyncing"
+      v-model="dialog"
       persistent
       width="300"
     >
@@ -43,22 +43,20 @@ export default {
     FormTile,
     PreviewTile
   },
-  // data: () => ({ dialog: true }),
+  data: () => ({ dialog: true }),
   mounted() {
-    console.log('printr mounted');
     this.$eventHub.$emit('closeDrawer');
+    if (this.user && this.user.client) ipcRenderer.send('sync', this.user.client);
     ipcRenderer.on('synced', (e, data) => {
-      console.log('synced', data);
-
       this.setLabels(data.labels);
       this.setConfig(data.config);
-      setTimeout(() => this.setIsSyncing(false), 1000);
+      this.setIsSyncing(false);
+      this.dialog = false;
     });
 
     ipcRenderer.on('errorSync', (e, error) => {
-      console.log('errorsync');
-      // this.setIsSyncing(false);
-      setTimeout(() => this.setIsSyncing(false), 1000);
+      this.setIsSyncing(false);
+      this.dialog = false;
       this.sendError({
         error,
         type: 'warning'
@@ -69,9 +67,11 @@ export default {
     isReady(val) {
       if (val && this.isLoggedIn) {
         this.setIsSyncing(true);
-        if (this.user.client) ipcRenderer.send('sync', this.user.client._id);
-        this.$router.push({ name: 'Printer' });
+        if (this.user.client) ipcRenderer.send('sync', this.user.client);
       }
+    },
+    isSyncing(val) {
+      console.log('isisyncing new val', val);
     }
   },
   computed: {
