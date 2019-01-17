@@ -1,4 +1,1 @@
-module.exports = {
-  sync: require('./sync'),
-  getLabels: require('./getLabels')
-};
+module.exports = { sync: require('./sync') };
