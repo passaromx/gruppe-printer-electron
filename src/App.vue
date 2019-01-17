@@ -94,7 +94,6 @@
 
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
-import { ipcRenderer } from 'electron';
 import menu from '@/api/menu';
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
 
@@ -133,17 +132,16 @@ export default {
       });
     },
     sync() {
-      console.log('user', this.user);
-      ipcRenderer.send('sync', this.user.client._id, true);
+      this.$eventHub.$emit('sync');
       console.log('sync pressed');
     }
   },
   watch: {
     isReady(val) {
       if (val && this.isLoggedIn) {
-        this.setIsSyncing(true);
-        if (this.user.client) ipcRenderer.send('sync', this.user.client._id);
-        this.$router.push({ name: 'Printer' });
+        // this.setIsSyncing(true);
+        // if (this.user.client) ipcRenderer.send('sync', this.user.client._id);
+        this.$router.push({ name: this.isAdmin ? 'Labels' : 'Printer' });
       }
     }
   },
