@@ -28,7 +28,6 @@ const state = {
   labels: [],
   config: {},
   selectedLabel: null,
-  syncing: false,
   previewLoader: false,
   variables: {}
 };

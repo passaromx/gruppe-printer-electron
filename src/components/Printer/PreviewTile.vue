@@ -10,7 +10,7 @@
         </div>
       </div>
       <VImg
-        v-if="selectedLabel && label"
+        v-if="selectedLabel"
         alt="label"
         :src="require(`../../data${selectedLabel.labelPng.url}`)"
         contain
