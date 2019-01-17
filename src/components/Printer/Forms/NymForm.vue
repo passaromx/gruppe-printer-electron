@@ -135,7 +135,7 @@ export default {
       });
     });
   },
-  onDestroyed() {
+  destroyed() {
     this.$eventHub.$off('validate');
   },
   methods: {

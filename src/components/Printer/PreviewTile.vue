@@ -2,7 +2,7 @@
   <BaseCard flat :isFullHeight="true" color="grey lighten-2">
 
     <VLayout fill-height align-center justify-center>
-      <div class="variable-wrapper" v-if="selectedLabel && label">
+      <div class="variable-wrapper" v-if="selectedLabel">
         <div v-for="(key, index) in keys" :key="index">
           <VarDisplay :name="key" :data="variables[key].styles">
             {{ variables[key].value }}
@@ -10,7 +10,7 @@
         </div>
       </div>
       <VImg
-        v-if="selectedLabel && label"
+        v-if="selectedLabel"
         alt="label"
         :src="require(`../../data${selectedLabel.labelPng.url}`)"
         contain
