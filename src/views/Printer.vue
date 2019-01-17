@@ -36,7 +36,7 @@
 import { ipcRenderer } from 'electron';
 import FormTile from '@/components/Printer/FormTile';
 import PreviewTile from '@/components/Printer/PreviewTile';
-import { mapGetters, mapMutations, mapState } from 'vuex';
+import { mapGetters, mapMutations, mapState, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -50,24 +50,28 @@ export default {
     ipcRenderer.on('synced', (e, data) => {
       console.log('synced', data);
       this.setIsSyncing(false);
-      this.setLabels(data);
+      this.setLabels(data.labels);
+      this.setConfig(data.config);
+    });
+
+    ipcRenderer.on('errorSync', (e, error) => {
+      this.sendError({
+        error,
+        type: 'warning'
+      });
+      this.setIsSyncing(false);
     });
   },
-  watch: {
-    isReady(val) {
-      if (val && this.isLoggedIn) {
-        console.log('syncing');
-        ipcRenderer.send('sync', this.user.client._id);
-        this.setIsSyncing(true);
-      }
-    }
-  },
+  watch: {},
   computed: {
     ...mapGetters('auth', ['isLoggedIn']),
     ...mapState('printer', ['isSyncing']),
     ...mapState('auth', ['user']),
     ...mapState(['isReady'])
   },
-  methods: { ...mapMutations('printer', ['setIsSyncing', 'setLabels']), }
+  methods: {
+    ...mapMutations('printer', ['setIsSyncing', 'setLabels', 'setConfig']),
+    ...mapActions(['sendError'])
+  }
 };
 </script>

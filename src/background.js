@@ -3,8 +3,10 @@ import { app, protocol, BrowserWindow, ipcMain } from 'electron';
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
 
 const fs = require('fs');
-const { printLabel } = require('./utils/offline/printer');
 const { sync } = require('./utils/offline/label');
+const { printLabel } = require('./utils/offline/printer');
+const { login } = require('./utils/offline/session');
+
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -48,31 +50,56 @@ ipcMain.on('get-printers', e => {
   e.sender.send('printers-fetched', printers);
 });
 
-ipcMain.on('sync', (e, client) => {
+ipcMain.on('sync', (e, client, button) => {
   sync(client)
     .then(data => {
       e.sender.send('synced', data);
+      if (data.err && button) e.sender.send('errorSync', data.err);
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      e.sender.send('errorSync', err);
+      console.log('err', err);
+    });
 });
 
-ipcMain.on('getZpl', (e, label, data) => {
-  const { getZpl, getPreview } = require('./utils/offline/printer');
+ipcMain.on('login', (e, user, password, client, authenticate) => {
+  login(user, password, client, authenticate)
+    .then(data => {
+      console.log(data);
+      e.sender.send('logged', data);
+    })
+    .catch(err => {
+      console.log('err', err);
+      e.sender.send('wrongCredentials', err);
+    });
+});
 
+// ipcMain.on('getZpl', (e, label, data) => {
+//   const { getZpl, getPreview } = require('./utils/offline/printer');
+//   getZpl(label.label.url, data)
+//     .then(zpl => {
+//       e.sender.send('zplReady', zpl);
+//       getPreview(zpl)
+//         .then(renderLabel => {
+//           e.sender.send('label', renderLabel);
+//         })
+//         .catch(err => {
+//           const renderLabel = fs.readFileSync(`src/data${label.labelPng.url}`, { encoding: 'base64' });
+//           e.sender.send('label', `data:image/jpeg;base64,${renderLabel}`);
+//           console.log(err);
+//         });
+//     })
+//     .catch(err => console.log(err));
+// });
+
+ipcMain.on('print', (e, printer, label, data) => {
+  const { getZpl } = require('./utils/offline/printer');
   getZpl(label.label.url, data)
     .then(zpl => {
-      e.sender.send('zplReady', zpl);
-      getPreview(zpl)
-        .then(renderLabel => {
-          e.sender.send('label', renderLabel);
-        })
-        .catch(err => {
-          const renderLabel = fs.readFileSync(`src/data${label.labelPng.url}`, { encoding: 'base64' });
-          e.sender.send('label', `data:image/jpeg;base64,${renderLabel}`);
-          console.log(err);
-        });
-    })
-    .catch(err => console.log(err));
+      printLabel(printer, zpl)
+        .then(printed => console.log(printed))
+        .catch(err => console.log(err));
+    });
 });
 
 ipcMain.on('print', (e, printer, data) => {

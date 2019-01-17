@@ -177,7 +177,8 @@ export default {
       line: 4,
       turn: 2,
       group: 'C',
-      sequential: '001'
+      sequential: '001',
+      zpl: ''
     };
   },
   mounted() {
@@ -198,7 +199,6 @@ export default {
   methods: {
     ...mapMutations('printer', ['setPreviewLoader']),
     handleDate(picker, value) {
-      console.log(value);
       if (picker === 'production') {
         this.productionDate = value;
       } else {
@@ -213,13 +213,17 @@ export default {
           expireDate: this.expireDate,
           productionDate: this.productionDate
         };
-
-        this.setPreviewLoader(true);
-        ipcRenderer.send('getZpl', this.selectedLabel, data);
+        console.log(data);
+        // this.setPreviewLoader(true);
       }
     },
     validate() {
-      ipcRenderer.send('print', this.printer, this.zpl);
+      const data = {
+        description: this.description,
+        expireDate: this.expireDate,
+        productionDate: this.productionDate
+      };
+      ipcRenderer.send('print', this.printer, this.selectedLabel, data);
     }
   }
 };
