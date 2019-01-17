@@ -35,7 +35,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import FormTile from '@/components/Printer/FormTile';
 import PreviewTile from '@/components/Printer/PreviewTile';
-import { mapGetters, mapMutations, mapState, mapActions } from 'vuex';
+import { mapMutations, mapState, mapActions, mapGetters } from 'vuex';
 import { ipcRenderer } from 'electron';
 
 export default {
@@ -43,20 +43,25 @@ export default {
     FormTile,
     PreviewTile
   },
-  data: () => ({ dialog: true }),
+  data: () => ({ dialog: false }),
   mounted() {
+    console.log('printer mounted');
     this.$eventHub.$emit('closeDrawer');
-    if (this.user && this.user.client) ipcRenderer.send('sync', this.user.client);
+
+    if (this.user && this.user.client) this.sync();
+
+    this.$eventHub.$on('sync', () => this.sync(true));
+
     ipcRenderer.on('synced', (e, data) => {
+      console.log('synced', data);
       this.setLabels(data.labels);
       this.setConfig(data.config);
-      this.setIsSyncing(false);
-      this.dialog = false;
+      setTimeout(() => { this.dialog = false; }, 300);
     });
 
     ipcRenderer.on('errorSync', (e, error) => {
-      this.setIsSyncing(false);
-      this.dialog = false;
+      console.log('errorsync');
+      setTimeout(() => { this.dialog = false; }, 300);
       this.sendError({
         error,
         type: 'warning'
@@ -64,25 +69,27 @@ export default {
     });
   },
   watch: {
-    isReady(val) {
-      if (val && this.isLoggedIn) {
-        this.setIsSyncing(true);
-        if (this.user.client) ipcRenderer.send('sync', this.user.client);
-      }
-    },
-    isSyncing(val) {
-      console.log('isisyncing new val', val);
+    isLoggedIn() {
+      this.sync();
     }
   },
   computed: {
     ...mapGetters('auth', ['isLoggedIn']),
     ...mapState('printer', ['isSyncing']),
     ...mapState('auth', ['user']),
-    ...mapState(['isReady'])
   },
   methods: {
     ...mapMutations('printer', ['setIsSyncing', 'setLabels', 'setConfig']),
-    ...mapActions(['sendError'])
+    ...mapActions(['sendError']),
+    sync(fromNavigation) {
+      this.dialog = true;
+      console.log('syncing');
+      ipcRenderer.send('sync', this.user.client._id, fromNavigation);
+    }
+  },
+  destroyed() {
+    this.$eventHub.off('sync');
+    ipcRenderer.removeAllListeners();
   }
 };
 </script>

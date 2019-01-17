@@ -94,7 +94,6 @@
 
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
-import { ipcRenderer } from 'electron';
 import menu from '@/api/menu';
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
 
@@ -133,7 +132,7 @@ export default {
       });
     },
     sync() {
-      ipcRenderer.send('sync', this.user.client, true);
+      this.$eventHub.$emit('sync');
     }
   },
   watch: {
