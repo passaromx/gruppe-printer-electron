@@ -2,6 +2,7 @@
   <div>
     <TabSearch
       :items="items"
+      :filter="settings.filter"
       @searchResults="filteredItems = $event"
       v-if="items.length !== 0"/>
 
@@ -70,6 +71,15 @@ export default {
       filteredItems: [],
       scrollSettings: { maxScrollbarLength: 160 },
     };
+  },
+  mounted() {
+    console.log('mounted');
+  },
+  watch: {
+    items(val) {
+      // console.log('list', val);
+      this.filteredItems = val;
+    }
   },
   methods: {
     ...mapMutations(['setToDelete']),

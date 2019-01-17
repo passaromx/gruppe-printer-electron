@@ -17,7 +17,8 @@ export default {
       settings: {
         form: 'user',
         module: 'clients/users',
-        deleteMethod: 'deleteUser'
+        deleteMethod: 'deleteUser',
+        filter: 'email'
       }
     };
   },
