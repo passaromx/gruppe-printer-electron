@@ -185,6 +185,9 @@ export default {
     ipcRenderer.on('printers-fetched', (e, printers) => {
       this.printers = printers;
     });
+    ipcRenderer.on('zplReady', (e, zpl) => {
+      this.zpl = zpl;
+    });
   },
   computed: {
     ...mapState('printer', ['selectedLabel']),
@@ -215,7 +218,9 @@ export default {
         ipcRenderer.send('getZpl', this.selectedLabel, data);
       }
     },
-    validate() {}
+    validate() {
+      ipcRenderer.send('print', this.printer, this.zpl);
+    }
   }
 };
 </script>

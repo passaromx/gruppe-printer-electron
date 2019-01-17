@@ -3,6 +3,7 @@ import { app, protocol, BrowserWindow, ipcMain } from 'electron';
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
 
 const fs = require('fs');
+const { printLabel } = require('./utils/offline/printer');
 const { sync } = require('./utils/offline/label');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -60,6 +61,7 @@ ipcMain.on('getZpl', (e, label, data) => {
 
   getZpl(label.label.url, data)
     .then(zpl => {
+      e.sender.send('zplReady', zpl);
       getPreview(zpl)
         .then(renderLabel => {
           e.sender.send('label', renderLabel);
@@ -70,6 +72,12 @@ ipcMain.on('getZpl', (e, label, data) => {
           console.log(err);
         });
     })
+    .catch(err => console.log(err));
+});
+
+ipcMain.on('print', (e, printer, data) => {
+  printLabel(printer, data)
+    .then(printed => console.log(printed))
     .catch(err => console.log(err));
 });
 
