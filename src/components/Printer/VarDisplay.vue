@@ -1,0 +1,31 @@
+<template>
+  <span
+    class="description"
+    v-bind:style="styles"
+  >
+    <slot />
+  </span>
+</template>
+
+<script>
+export default {
+  props: ['name', 'data'],
+  computed: {
+    styles() {
+      return {
+        top: `${this.data.top}%`,
+        left: `${this.data.left}%`,
+        fontWeight: this.data.weight
+      };
+    }
+  }
+};
+</script>
+
+<style scoped>
+  .description {
+    position: absolute;
+    z-index: 2;
+    line-height: 25px;
+  }
+</style>

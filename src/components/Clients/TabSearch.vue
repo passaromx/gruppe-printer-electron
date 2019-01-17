@@ -26,7 +26,7 @@
 
 <script>
 export default {
-  props: ['items'],
+  props: ['items', 'filter'],
   data: () => ({
     search: '',
     filteredItems: []
@@ -34,7 +34,7 @@ export default {
   watch: {
     search(val) {
       if (val) {
-        this.filteredItems = this.items.filter(item => item.name.toLowerCase().includes(val.toLowerCase()));
+        this.filteredItems = this.items.filter(item => item[this.filter].toLowerCase().includes(val.toLowerCase()));
       } else {
         this.filteredItems = this.items;
       }

@@ -23,38 +23,7 @@
               v-validate="'required'"
               :messages="errors.collect('labels')"/>
           </VFlex>
-          <VFlex xs6>
-            <DatePicker
-              :disabled="!selectedLabel"
-              @change="handleDate('production', $event)"
-              name="productionDate"
-              label="Fecha de producción"
-              v-model="productionDate"
-              v-validate="'required'"
-              :messages="errors.collect('productionDate')"/>
-          </VFlex>
-          <VFlex xs6>
-            <DatePicker
-              :disabled="!selectedLabel"
-              @change="handleDate('expire', $event)"
-              name="expireDate"
-              label="Fecha de caducidad"
-              v-model="expireDate"
-              v-validate="'required'"
-              :messages="errors.collect('expireDate')"/>
-          </VFlex>
-          <!-- + 90 días -->
-          <VFlex xs4>
-            <VTextField
-              number
-              :disabled="!selectedLabel"
-              outline
-              v-model="copies"
-              label="Copias"
-              v-validate="'required|min_value:1'"
-              data-vv-name="copies"
-              :error-messages="errors.collect('copies')"/>
-          </VFlex>
+
           <!-- <VFlex xs6>
             <VTextField
               :disabled="!selectedLabel"
@@ -76,57 +45,8 @@
               v-model="weight"
               label="Peso neto" />
           </VFlex> -->
-          <VFlex xs12>
-            <span class="subheading">Nomenclatura</span>
-          </VFlex>
-
-          <VFlex xs3>
-            <VTextField
-              number
-              :disabled="!selectedLabel"
-              outline
-              @change="handleChange"
-              v-validate="'required|min_value:1'"
-              data-vv-name="line"
-              :error-messages="errors.collect('line')"
-              v-model="line"
-              label="Línea" />
-          </VFlex>
-          <VFlex xs3>
-            <VTextField
-              number
-              :disabled="!selectedLabel"
-              outline
-              @change="handleChange"
-              v-validate="'required|min_value:1'"
-              data-vv-name="turn"
-              :error-messages="errors.collect('turn')"
-              v-model="turn"
-              label="Turno" />
-          </VFlex>
-          <VFlex xs3>
-            <VTextField
-              outline
-              :disabled="!selectedLabel"
-              v-model="group"
-              @change="handleChange"
-              v-validate="'required'"
-              data-vv-name="group"
-              :error-messages="errors.collect('group')"
-              label="Grupo" />
-          </VFlex>
-          <VFlex xs3>
-            <VTextField
-              outline
-              :disabled="!selectedLabel"
-              v-model="sequential"
-              @change="handleChange"
-              v-validate="'required'"
-              data-vv-name="sequential"
-              :error-messages="errors.collect('sequential')"
-              label="Consecutivo" />
-          </VFlex>
         </VLayout>
+        <NymForm />
         <!-- <span>{{ description }}</span> -->
         <VLayout justify-end>
           <VBtn>
@@ -135,7 +55,7 @@
           </VBtn>
           <VBtn
             @click="validate"
-            :disabled="errors.any()"
+            :disabled="errors.items.length > 0"
             color="primary"
           >
             Imprimir
@@ -150,38 +70,27 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { ipcRenderer } from 'electron';
 import { mapState, mapMutations } from 'vuex';
-
-const today = new Date();
-
-const addDays = (date, days) => {
-  const result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result;
-};
+import { nymVars } from '@/api/constants';
 
 export default {
   $_veeValidate: { validator: 'new' },
   components: {
     LabelAutocomplete: () => import('@/components/Printer/LabelAutocomplete'),
-    DatePicker: () => import('@/components/Printer/DatePicker')
+    NymForm: () => import('@/components/Printer/Forms/NymForm')
   },
   data() {
     return {
       printer: 'Zebra_Technologies_ZTC_110Xi4_203dpi_ZPL',
       printers: [],
       place: 'TX',
-      copies: 1,
-      productionDate: new Date().toISOString().substr(0, 10),
-      expireDate: addDays(today, 90).toISOString().substr(0, 10),
       weight: 1,
-      line: 4,
-      turn: 2,
-      group: 'C',
-      sequential: '001',
-      zpl: ''
+      zpl: '',
+      nymVars
     };
   },
   mounted() {
+    this.setVariables(this.nymVars);
+
     ipcRenderer.send('get-printers');
     ipcRenderer.on('printers-fetched', (e, printers) => {
       this.printers = printers;
@@ -197,22 +106,13 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('printer', ['setPreviewLoader']),
-    handleDate(picker, value) {
-      console.log(value);
-      if (picker === 'production') {
-        this.productionDate = value;
-      } else {
-        this.expireDate = value;
-      }
-      this.handleChange();
-    },
+    ...mapMutations('printer', ['setPreviewLoader', 'setVariables']),
     handleChange() {
       if (this.selectedLabel) {
         const data = {
-          description: this.description,
-          expireDate: this.expireDate,
-          productionDate: this.productionDate
+          description: '',
+          expireDate: '',
+          productionDate: ''
         };
 
         this.setPreviewLoader(true);

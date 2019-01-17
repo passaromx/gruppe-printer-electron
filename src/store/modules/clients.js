@@ -8,14 +8,14 @@ import userMutations from './users/mutations';
 const actions = {
   ...factoryActions,
   ...userActions,
-  fetch({ commit }) {
+  fetch({ commit, state }) {
     commit('setFetching', true);
     return new Promise((resolve, reject) => {
       axios.get('clients')
         .then(res => {
           resolve(res);
           commit('setClients', res.data);
-          if (res.data.length > 0) {
+          if (res.data.length > 0 && !state.selectedClient.name) {
             commit('setSelectedClient', res.data[0]);
             commit('labels/setClient', res.data[0]._id, { root: true });
           }

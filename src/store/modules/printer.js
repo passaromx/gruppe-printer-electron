@@ -1,11 +1,15 @@
 import { set } from '@/utils';
 
+const setValue = () => (state, payload) => { state.variables[payload.name].value = payload.value; };
+
 const mutations = {
   setLabels: set('labels'),
   setSelectedLabel: set('selectedLabel'),
   setIsSyncing: set('isSyncing'),
   setLabel: set('label'),
-  setPreviewLoader: set('previewLoader')
+  setPreviewLoader: set('previewLoader'),
+  setVariables: set('variables'),
+  setVariableValue: setValue()
 };
 
 const getters = {
@@ -23,7 +27,8 @@ const state = {
   labels: [],
   selectedLabel: null,
   syncing: false,
-  previewLoader: false
+  previewLoader: false,
+  variables: {}
 };
 
 export default {

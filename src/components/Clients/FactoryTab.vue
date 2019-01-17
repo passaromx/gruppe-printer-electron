@@ -16,7 +16,8 @@ export default {
       settings: {
         form: 'factory',
         module: 'clients/factories',
-        deleteMethod: 'deleteFactory'
+        deleteMethod: 'deleteFactory',
+        filter: 'name'
       }
     };
   },
