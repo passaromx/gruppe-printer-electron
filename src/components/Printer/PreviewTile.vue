@@ -9,12 +9,12 @@
           </VarDisplay>
         </div>
       </div>
-      <VImg
+      <!-- <VImg
         v-if="selectedLabel && user"
         alt="label"
         :src="require(`../../data/${user.client._id}${selectedLabel.labelPng.url}`)"
         contain
-        class="preview-img"/>
+        class="preview-img"/> -->
       <VLayout
         v-if="selectedLabel && previewLoader"
         class="loader-bg"

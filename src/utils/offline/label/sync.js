@@ -33,7 +33,7 @@ module.exports = client => new Promise((resolve, reject) => {
 
   const lastSync = config.lastSync || 0;
   request(`${apiURL}labels/sync?client=${id}&updatedAt_gte=${lastSync}`, { json: true }, (err, response, body) => {
-    if (err || !body.labels) {
+    if (err || !body.allLabels) {
       resolve({
         err: err || new Error('no labels'),
         labels,
@@ -43,13 +43,14 @@ module.exports = client => new Promise((resolve, reject) => {
     }
     config.lastSync = body.lastSync;
     config.client = client;
-    if (body.labels.length > 0) labels = [...labels, ...body.labels];
+    labels = labels.filter(label => body.allLabels.some(item => item.toString() === label._id.toString()));
+
+    if (body.labels.length > 0) labels = [...labels || [], ...body.labels];
     const labelsJson = [...labels];
     const configJson = { ...config };
     labels = JSON.stringify(labels);
     config = JSON.stringify(config);
     body.uploads.forEach(upload => {
-      console.log(upload.url);
       request(`${apiURL}${upload.url}`, { encoding: null }, (error, resp, download) => {
         if (error) reject(error);
         const filename = upload.url;

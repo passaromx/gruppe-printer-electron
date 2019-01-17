@@ -52,7 +52,6 @@ ipcMain.on('get-printers', e => {
 ipcMain.on('sync', (e, client, button) => {
   sync(client)
     .then(data => {
-      console.log(data.err);
       e.sender.send('synced', data);
       if (data.err && button) e.sender.send('errorSync', data.err);
     })
