@@ -133,14 +133,11 @@ export default {
     },
     sync() {
       this.$eventHub.$emit('sync');
-      console.log('sync pressed');
     }
   },
   watch: {
     isReady(val) {
       if (val && this.isLoggedIn) {
-        // this.setIsSyncing(true);
-        // if (this.user.client) ipcRenderer.send('sync', this.user.client._id);
         this.$router.push({ name: this.isAdmin ? 'Labels' : 'Printer' });
       }
     }

@@ -5,11 +5,34 @@ const fs = require('fs');
 const { apiURL } = require('../../../api/constants');
 
 module.exports = client => new Promise((resolve, reject) => {
-  let config = JSON.parse(fs.readFileSync('src/data/config.json', 'utf8'));
-  let labels = JSON.parse(fs.readFileSync('src/data/labels.json', 'utf8'));
+  const id = client._id;
+  const clientExists = fs.existsSync(`src/data/${id}`);
+  if (!clientExists) {
+    fs.mkdirSync(`src/data/${id}`, { recursive: true });
+    fs.mkdirSync(`src/data/${id}/uploads`, { recursive: true });
+  }
 
-  const { lastSync } = config;
-  request(`${apiURL}labels/sync?client=${client}&updatedAt_gte=${lastSync}`, { json: true }, (err, response, body) => {
+
+  let config = fs.existsSync(`src/data/${id}/config.json`);
+  if (config) {
+    config = JSON.parse(fs.readFileSync(`src/data/${id}/config.json`, 'utf8'));
+  } else {
+    fs.writeFileSync(`src/data/${id}/config.json`, '{}');
+    config = {};
+  }
+
+
+  let labels = fs.existsSync(`src/data/${id}/labels.json`);
+  if (labels) {
+    labels = JSON.parse(fs.readFileSync(`src/data/${id}/labels.json`, 'utf8'));
+  } else {
+    fs.writeFileSync(`src/data/${id}/labels.json`, '[]');
+    labels = [];
+  }
+
+
+  const lastSync = config.lastSync || 0;
+  request(`${apiURL}labels/sync?client=${id}&updatedAt_gte=${lastSync}`, { json: true }, (err, response, body) => {
     if (err || !body.labels) {
       resolve({
         err: err || new Error('no labels'),
@@ -19,7 +42,7 @@ module.exports = client => new Promise((resolve, reject) => {
       return;
     }
     config.lastSync = body.lastSync;
-
+    config.client = client;
     if (body.labels.length > 0) labels = [...labels, ...body.labels];
     const labelsJson = [...labels];
     const configJson = { ...config };
@@ -30,7 +53,7 @@ module.exports = client => new Promise((resolve, reject) => {
       request(`${apiURL}${upload.url}`, { encoding: null }, (error, resp, download) => {
         if (error) reject(error);
         const filename = upload.url;
-        fs.writeFileSync(`src/data${filename}`, download, e => {
+        fs.writeFileSync(`src/data/${id}${filename}`, download, e => {
           if (e) {
             console.log(e);
             reject(e);
@@ -39,8 +62,8 @@ module.exports = client => new Promise((resolve, reject) => {
         });
       });
     });
-    fs.writeFileSync('src/data/config.json', config);
-    fs.writeFileSync('src/data/labels.json', labels);
+    fs.writeFileSync(`src/data/${id}/config.json`, config);
+    fs.writeFileSync(`src/data/${id}/labels.json`, labels);
 
 
     resolve({
