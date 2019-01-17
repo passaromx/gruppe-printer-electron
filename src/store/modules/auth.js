@@ -1,7 +1,7 @@
 import axios, { authAxios } from '@/plugins/axios';
 import { apiURL, roles } from '@/api/constants';
 import { set, handleError } from '@/utils';
-import router from '@/router';
+// import router from '@/router';
 
 const getters = {
   isLoggedIn: store => store.session && store.session.jwt,
@@ -31,14 +31,17 @@ const actions = {
           // console.log(res.data);
         })
         .catch(err => {
+          const user = JSON.parse(localStorage.getItem('USER'));
+          commit('setUser', user);
+          commit('setSession', { jwt: token });
           reject(err);
-          if (localStorage) localStorage.removeItem('token');
-          router.push({ name: 'Login' });
+          // router.push({ name: 'Login' });
           // console.log(err.response);
         });
     });
   },
   signInUser({ commit }, data) {
+    console.log(data);
     return new Promise((resolve, reject) => {
       delete authAxios.defaults.headers.common.Authorization;
       authAxios.post(`${apiURL}auth/local`, data)
