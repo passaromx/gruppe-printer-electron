@@ -96,7 +96,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { ipcRenderer } from 'electron';
 import menu from '@/api/menu';
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
 
 export default {
   name: 'App',
@@ -121,19 +121,25 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['signOut']),
+    ...mapMutations('printer', ['setIsSyncing']),
     logout() {
       this.signOut().then(() => {
         this.$router.push({ name: 'Login' });
       });
     },
     sync() {
-      ipcRenderer.send('sync', this.user.client._id);
+      console.log('user', this.user);
+      ipcRenderer.send('sync', this.user.client._id, true);
       console.log('sync pressed');
     }
   },
   watch: {
     isReady(val) {
-      if (val && this.isLoggedIn) this.$router.push({ name: 'Printer' });
+      if (val && this.isLoggedIn) {
+        this.setIsSyncing(true);
+        ipcRenderer.send('sync', this.user.client._id);
+        this.$router.push({ name: 'Printer' });
+      }
     }
   },
   mounted() {

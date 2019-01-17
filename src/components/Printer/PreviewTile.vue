@@ -1,12 +1,12 @@
 <template>
   <BaseCard flat :isFullHeight="true" color="grey lighten-2">
     <VLayout fill-height align-center>
-      <VImg
-        v-if="selectedLabel && label"
+      <!-- <VImg
+        v-if="selectedLabel"
         alt="label"
-        :src="label"
+        :src="require(`../../data${selectedLabel.labelPng.url}`)"
         contain
-        class="preview-img"/>
+        class="preview-img"/> -->
       <VLayout
         v-if="selectedLabel && previewLoader"
         class="loader-bg"
@@ -34,7 +34,6 @@
 </style>
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
-import { ipcRenderer } from 'electron';
 import { mapState, mapMutations } from 'vuex';
 
 export default {
@@ -43,10 +42,7 @@ export default {
   },
   computed: { ...mapState('printer', ['selectedLabel', 'previewLoader']) },
   mounted() {
-    ipcRenderer.on('label', (e, label) => {
-      this.label = label;
-      this.setPreviewLoader(false);
-    });
+    this.setPreviewLoader(false);
   },
   methods: { ...mapMutations('printer', ['setPreviewLoader']) }
 };

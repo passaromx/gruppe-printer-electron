@@ -55,10 +55,12 @@
 </template>
 
 <script>
+/* eslint-disable import/no-extraneous-dependencies */
 import { mapActions, mapMutations, mapState } from 'vuex';
 
 export default {
   $_veeValidate: { validator: 'new' },
+
   data() {
     return {
       show: false,
@@ -90,14 +92,9 @@ export default {
           //   type: 'success',
           //   msg: `Successfully signed in user ${this.email}`
           // });
-
           this.$router.push({ name: 'Printer' });
         })
         .catch(() => {
-          this.setSnackbar({
-            type: 'error',
-            msg: 'Credenciales inválidas'
-          });
         })
         .finally(() => {
           this.setIsLoading(false);

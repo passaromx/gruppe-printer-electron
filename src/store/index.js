@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { set } from '@/utils';
+import { set, handleError } from '@/utils';
+
 import auth from './modules/auth';
 import clients from './modules/clients';
 import printer from './modules/printer';
@@ -15,6 +16,11 @@ const store = new Vuex.Store({
     isReady: false,
     toDelete: null,
     snackbar: {}
+  },
+  actions: {
+    sendError: ({ commit }, data) => {
+      handleError(data.error, commit, data.type);
+    }
   },
   mutations: {
     setIsReady: set('isReady'),
@@ -32,6 +38,10 @@ const store = new Vuex.Store({
 });
 
 store.dispatch('auth/fetchSession')
-  .finally(() => store.commit('setIsReady', true));
+  .then(() => store.commit('setIsReady', true))
+  .catch(() => {
+    console.log('err fetchsession');
+    store.commit('setIsReady', true);
+  });
 
 export default store;

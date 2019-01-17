@@ -2,6 +2,7 @@ import { set } from '@/utils';
 
 const mutations = {
   setLabels: set('labels'),
+  setConfig: set('config'),
   setSelectedLabel: set('selectedLabel'),
   setIsSyncing: set('isSyncing'),
   setLabel: set('label'),
@@ -21,6 +22,7 @@ const getters = {
 
 const state = {
   labels: [],
+  config: {},
   selectedLabel: null,
   syncing: false,
   previewLoader: false
