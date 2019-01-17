@@ -2,6 +2,7 @@
 import { app, protocol, BrowserWindow, ipcMain } from 'electron';
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
 
+const fs = require('fs');
 const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
 const { login } = require('./utils/offline/session');
@@ -99,6 +100,12 @@ ipcMain.on('print', (e, printer, label, data) => {
         .then(printed => console.log(printed))
         .catch(err => console.log(err));
     });
+});
+
+ipcMain.on('print', (e, printer, data) => {
+  printLabel(printer, data)
+    .then(printed => console.log(printed))
+    .catch(err => console.log(err));
 });
 
 // Quit when all windows are closed.
