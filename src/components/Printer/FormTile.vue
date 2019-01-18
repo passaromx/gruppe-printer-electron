@@ -108,7 +108,7 @@ export default {
   },
   methods: {
     ...mapActions('printer', ['updateSysInfo']),
-    ...mapMutations('printer', ['setPreviewLoader', 'setVariables']),
+    ...mapMutations('printer', ['setPreviewLoader', 'setVariables', 'setSelectedLabel']),
     handleChange() {
       if (this.selectedLabel) {
         const data = {
@@ -127,11 +127,15 @@ export default {
       });
       const data = {
         ...variables,
-        copies: this.copies
+        copies: this.copies,
       };
 
-      console.log(data);
-      // ipcRenderer.send('print', this.printer, this.selectedLabel, data);
+      const printData = {
+        ...data,
+        client: this.user.client._id
+      };
+
+      ipcRenderer.send('print', this.printer, this.selectedLabel, printData);
       // update sys info
       const systemInfo = JSON.parse(localStorage.getItem('systemInfo'));
       systemInfo.printerName = this.printer;
@@ -144,6 +148,9 @@ export default {
       console.log(systemInfo);
       this.updateSysInfo(systemInfo);
     }
+  },
+  beforeDestroy() {
+    this.setSelectedLabel(null);
   }
 };
 </script>

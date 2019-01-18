@@ -15,11 +15,11 @@
         </VLayout>
         <form class="mx-5 mt-5">
           <VTextField
-            label="Correo"
+            label="Correo o usuario"
             v-model="email"
             append-icon="alternate_email"
             data-vv-name="email"
-            v-validate="'required|email'"
+            v-validate="'required'"
             :error-messages="errors.collect('email')"
           />
           <VTextField
