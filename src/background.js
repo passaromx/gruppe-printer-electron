@@ -2,10 +2,10 @@
 import { app, protocol, BrowserWindow, ipcMain } from 'electron';
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
 
+const os = require('os');
 const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
 const { login } = require('./utils/offline/session');
-
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -35,6 +35,7 @@ function createWindow() {
     win.loadURL('app://./index.html#login');
   }
 
+  // console.log(os.networkInterfaces());
   // win.webContents.on('did-finish-load', () => {
   //   console.log('loaded', win.webContents.getPrinters());
   // });
@@ -43,6 +44,36 @@ function createWindow() {
     win = null;
   });
 }
+
+const hostname = os.hostname();
+const networkIfaces = os.networkInterfaces();
+
+ipcMain.on('get-system-info', e => {
+  let result = Object.keys(networkIfaces).map(key => ({
+    key,
+    info: networkIfaces[key].filter(iface => (iface.mac !== '00:00:00:00:00:00'
+      && iface.mac !== 'ff:ff:ff:ff:ff')
+      && iface.family !== 'IPv6')
+  }));
+  result = result.filter(item => item.info.length);
+  result = {
+    hostname,
+    mac: result[0].info[0].mac,
+    network: result[0].key,
+    // info: result[0].info[0]
+  };
+  e.sender.send('system-info-fetched', result);
+});
+
+ipcMain.on('check-mac', (e, info) => {
+  let checks = false;
+  const { mac, network } = info;
+  if (networkIfaces[network]) {
+    checks = networkIfaces[network].some(item => item.mac === mac);
+  }
+
+  e.sender.send('mac-checked', checks);
+});
 
 ipcMain.on('get-printers', e => {
   const printers = win.webContents.getPrinters();
