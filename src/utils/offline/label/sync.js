@@ -30,7 +30,6 @@ module.exports = client => new Promise((resolve, reject) => {
     labels = [];
   }
 
-
   const lastSync = config.lastSync || 0;
   request(`${apiURL}labels/sync?client=${id}&updatedAt_gte=${lastSync}`, { json: true }, (err, response, body) => {
     if (err || !body.allLabels) {
