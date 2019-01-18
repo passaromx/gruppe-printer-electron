@@ -43,7 +43,10 @@ export default {
     FormTile,
     PreviewTile
   },
-  data: () => ({ dialog: false }),
+  data: () => ({
+    dialog: false,
+    systemInfo: null
+  }),
   mounted() {
     console.log('printer mounted');
     this.$eventHub.$emit('closeDrawer');
@@ -59,6 +62,22 @@ export default {
       setTimeout(() => { this.dialog = false; }, 300);
     });
 
+    ipcRenderer.on('mac-checked', (e, checks) => {
+      console.log('mac-checked', checks);
+      if (checks) {
+        this.updateSysInfo(this.systemInfo);
+      } else {
+        ipcRenderer.send('get-system-info');
+      }
+    });
+
+    ipcRenderer.on('system-info-fetched', (e, info) => {
+      console.log(info);
+      if (localStorage) localStorage.setItem('systemInfo', JSON.stringify(info));
+      info.client = this.user.client._id;
+      this.updateSysInfo(info);
+    });
+
     ipcRenderer.on('errorSync', (e, error) => {
       console.log('errorsync');
       setTimeout(() => { this.dialog = false; }, 300);
@@ -70,7 +89,16 @@ export default {
   },
   watch: {
     isLoggedIn(val) {
-      if (val && !this.dialog) this.sync();
+      if (val && !this.dialog) {
+        this.sync();
+        this.systemInfo = JSON.parse(localStorage.getItem('systemInfo'));
+        console.log('checking sys info');
+        if (this.systemInfo) {
+          ipcRenderer.send('check-mac', this.systemInfo);
+        } else {
+          ipcRenderer.send('get-system-info');
+        }
+      }
     }
   },
   computed: {
@@ -80,6 +108,7 @@ export default {
   },
   methods: {
     ...mapMutations('printer', ['setIsSyncing', 'setLabels', 'setConfig']),
+    ...mapActions('printer', ['updateSysInfo']),
     ...mapActions(['sendError']),
     sync(fromNavigation) {
       this.dialog = true;

@@ -25,6 +25,7 @@
       <VTextField
         number
         :disabled="!selectedLabel"
+        @input="handleCopies"
         outline
         v-model="copies"
         label="Copias"
@@ -139,7 +140,7 @@ export default {
     this.$eventHub.$off('validate');
   },
   methods: {
-    ...mapMutations('printer', ['setVariableValue']),
+    ...mapMutations('printer', ['setVariableValue', 'setCopies']),
     handleDate(picker, value) {
       console.log(value);
       if (picker === 'production') {
@@ -156,6 +157,9 @@ export default {
         });
       }
       // this.handleChange();
+    },
+    handleCopies(val) {
+      this.setCopies(val);
     },
     handleInput() {
       this.setVariableValue({

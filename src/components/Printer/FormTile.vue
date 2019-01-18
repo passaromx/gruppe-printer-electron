@@ -69,7 +69,7 @@
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
 import { ipcRenderer } from 'electron';
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 import { nymVars } from '@/api/constants';
 
 export default {
@@ -100,12 +100,14 @@ export default {
     });
   },
   computed: {
-    ...mapState('printer', ['selectedLabel']),
+    ...mapState('auth', ['user']),
+    ...mapState('printer', ['selectedLabel', 'variables', 'copies']),
     description() {
       return `${this.line}-${this.turn}-${this.group}-${this.sequential}`;
     }
   },
   methods: {
+    ...mapActions('printer', ['updateSysInfo']),
     ...mapMutations('printer', ['setPreviewLoader', 'setVariables']),
     handleChange() {
       if (this.selectedLabel) {
@@ -119,12 +121,28 @@ export default {
       }
     },
     validate() {
+      const variables = { ...this.variables };
+      Object.keys(variables).forEach(key => {
+        variables[key] = variables[key].value;
+      });
       const data = {
-        description: this.description,
-        expireDate: this.expireDate,
-        productionDate: this.productionDate
+        ...variables,
+        copies: this.copies
       };
-      ipcRenderer.send('print', this.printer, this.selectedLabel, data);
+
+      console.log(data);
+      // ipcRenderer.send('print', this.printer, this.selectedLabel, data);
+      // update sys info
+      const systemInfo = JSON.parse(localStorage.getItem('systemInfo'));
+      systemInfo.printerName = this.printer;
+      systemInfo.print = {
+        date: new Date().toISOString(),
+        label: this.selectedLabel._id,
+        data,
+        user: this.user._id
+      };
+      console.log(systemInfo);
+      this.updateSysInfo(systemInfo);
     }
   }
 };
