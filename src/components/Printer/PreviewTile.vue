@@ -41,14 +41,14 @@ export default {
   },
   watch: {
     selectedLabel(val) {
-      console.log('watch', val);
+      console.log('watch', val, this.variables);
     }
   },
   computed: {
     ...mapState('printer', ['selectedLabel', 'previewLoader', 'variables']),
     ...mapState('auth', ['user']),
     keys() {
-      return Object.keys(this.variables);
+      return Object.keys(this.variables).filter(variable => (!!this.variables[variable].styles));
     }
   },
   mounted() {
