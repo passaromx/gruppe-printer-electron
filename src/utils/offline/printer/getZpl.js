@@ -12,7 +12,9 @@ module.exports = async (filePath, data = {
   copies: 1
 }) => new Promise(async (resolve, reject) => {
   try {
-    const { description, expireDate, productionDate, copies } = data;
+    const {
+      description, expireDate, productionDate, copies, client
+    } = data;
     const start = `^XA
       ^MMC
       ^PW768
@@ -24,7 +26,7 @@ module.exports = async (filePath, data = {
 
     const end = `^PQ${copies},1,1,Y^XZ`;
 
-    let zpl = await fs.readFileSync(`src/data${filePath}`, 'utf8');
+    let zpl = await fs.readFileSync(`public/data/${client}${filePath}`, 'utf8');
 
     zpl = (zpl.split(startTrail))[1];
 
