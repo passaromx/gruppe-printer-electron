@@ -12,7 +12,7 @@
             <ClientSelect />
           </VFlex>
           <VFlex xs1 class="text-xs-right">
-            <VIcon @click="fetch">refresh</VIcon>
+            <VIcon @click="refreshLabels">refresh</VIcon>
           </VFlex>
         </VLayout>
       </VCardTitle>
@@ -155,6 +155,9 @@ export default {
       this.editedItem = Object.assign({}, item);
       console.log(this.editedItem);
       this.dialog = true;
+    },
+    refreshLabels() {
+      this.fetch(this.fromClient);
     },
     previewFile(file) {
       let pdfWindow = new remote.BrowserWindow({

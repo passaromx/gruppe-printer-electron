@@ -17,11 +17,11 @@ const mutations = {
 
 const actions = {
   updateSysInfo(ctx, info) {
-    console.log('updating sys info', info);
+    // console.log('updating sys info', info);
     const { mac } = info;
     axios.put(`licenses/${mac}`, info)
       .then(res => {
-        console.log(res);
+        console.log('api call', res);
       })
       .catch(err => {
         console.log(err.response);

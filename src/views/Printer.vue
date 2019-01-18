@@ -48,23 +48,27 @@ export default {
     systemInfo: null
   }),
   mounted() {
-    console.log('printer mounted');
     this.$eventHub.$emit('closeDrawer');
-
-    if (this.user && this.user.client) this.sync();
+    // console.log('printer mounted');
+    if (this.user && this.user.client) {
+      // console.log('from mounted');
+      this.sync();
+      this.updateSystemInfo();
+    }
 
     this.$eventHub.$on('sync', () => this.sync(true));
 
     ipcRenderer.on('synced', (e, data) => {
-      console.log('synced', data);
+      // console.log('synced', data);
       this.setLabels(data.labels);
       this.setConfig(data.config);
       setTimeout(() => { this.dialog = false; }, 300);
     });
 
     ipcRenderer.on('mac-checked', (e, checks) => {
-      console.log('mac-checked', checks);
+      // console.log('mac-checked', checks);
       if (checks) {
+        this.systemInfo.client = this.user.client._id;
         this.updateSysInfo(this.systemInfo);
       } else {
         ipcRenderer.send('get-system-info');
@@ -72,14 +76,14 @@ export default {
     });
 
     ipcRenderer.on('system-info-fetched', (e, info) => {
-      console.log(info);
+      // console.log(info);
       if (localStorage) localStorage.setItem('systemInfo', JSON.stringify(info));
       info.client = this.user.client._id;
       this.updateSysInfo(info);
     });
 
     ipcRenderer.on('errorSync', (e, error) => {
-      console.log('errorsync');
+      // console.log('errorsync');
       setTimeout(() => { this.dialog = false; }, 300);
       this.sendError({
         error,
@@ -90,14 +94,9 @@ export default {
   watch: {
     isLoggedIn(val) {
       if (val && !this.dialog) {
+        console.log('from watch');
         this.sync();
-        this.systemInfo = JSON.parse(localStorage.getItem('systemInfo'));
-        console.log('checking sys info');
-        if (this.systemInfo) {
-          ipcRenderer.send('check-mac', this.systemInfo);
-        } else {
-          ipcRenderer.send('get-system-info');
-        }
+        this.updateSystemInfo();
       }
     }
   },
@@ -114,12 +113,27 @@ export default {
       this.dialog = true;
       console.log('syncing');
       ipcRenderer.send('sync', this.user.client, fromNavigation);
+    },
+    updateSystemInfo() {
+      this.systemInfo = JSON.parse(localStorage.getItem('systemInfo'));
+      // console.log('checking sys info');
+      if (this.systemInfo) {
+        // console.log('checking mac');
+        ipcRenderer.send('check-mac', this.systemInfo);
+      } else {
+        // console.log('fetching sys info');
+        ipcRenderer.send('get-system-info');
+      }
     }
   },
-  destroyed() {
+  beforeDestroy() {
+    // console.log('before destroy', ipcRenderer);
     this.$eventHub.$off('sync');
-    ipcRenderer.removeListener('synced', () => {});
-    ipcRenderer.removeListener('error-sync', () => {});
+    ipcRenderer.removeAllListeners('mac-checked');
+    ipcRenderer.removeAllListeners('error-sync');
+    ipcRenderer.removeAllListeners('system-info-fetched');
+    ipcRenderer.removeAllListeners('synced');
+    // console.log('after destroy', ipcRenderer);
   }
 };
 </script>

@@ -96,6 +96,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import menu from '@/api/menu';
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
+// import appMenu from '@/api/desktop-menu';
 
 export default {
   name: 'App',
@@ -104,6 +105,7 @@ export default {
     Snackbar: () => import('@/components/Snackbar')
   },
   mounted() {
+    // appMenu(this);
     this.$eventHub.$on('closeDrawer', () => {
       this.mini = true;
     });
@@ -144,7 +146,7 @@ export default {
       }
     }
   },
-  destroyed() {
+  beforeDestroy() {
     this.$eventHub.$off('closeDrawer');
   }
 };
