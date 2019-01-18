@@ -46,7 +46,10 @@
               label="Peso neto" />
           </VFlex> -->
         </VLayout>
-        <NymForm />
+        <Form
+          v-if="this.user"
+          :client="this.user.client._id"
+        />
         <!-- <span>{{ description }}</span> -->
         <VLayout justify-end>
           <VBtn>
@@ -76,7 +79,7 @@ export default {
   $_veeValidate: { validator: 'new' },
   components: {
     LabelAutocomplete: () => import('@/components/Printer/LabelAutocomplete'),
-    NymForm: () => import('@/components/Printer/Forms/NymForm')
+    Form: () => import('@/components/Printer/Forms/Form')
   },
   data() {
     return {
@@ -89,7 +92,8 @@ export default {
     };
   },
   mounted() {
-    this.setVariables(this.nymVars);
+    this.setVariables(this.nymVars.fields);
+    this.setDescriptionFormat(this.nymVars.descriptionFormat);
 
     ipcRenderer.send('get-printers');
     ipcRenderer.on('printers-fetched', (e, printers) => {
@@ -108,7 +112,7 @@ export default {
   },
   methods: {
     ...mapActions('printer', ['updateSysInfo']),
-    ...mapMutations('printer', ['setPreviewLoader', 'setVariables', 'setSelectedLabel']),
+    ...mapMutations('printer', ['setPreviewLoader', 'setVariables', 'setDescriptionFormat', 'setSelectedLabel']),
     handleChange() {
       if (this.selectedLabel) {
         const data = {
@@ -121,7 +125,7 @@ export default {
       }
     },
     validate() {
-      const variables = { ...this.variables };
+      const variables = { ...this.variables.fields };
       Object.keys(variables).forEach(key => {
         variables[key] = variables[key].value;
       });

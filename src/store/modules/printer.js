@@ -1,7 +1,9 @@
 import axios from '@/plugins/axios';
 import { set } from '@/utils';
 
-const setValue = () => (state, payload) => { state.variables[payload.name].value = payload.value; };
+const setValue = () => (state, payload) => {
+  state.variables[payload.name].value = payload.value;
+};
 
 const mutations = {
   setLabels: set('labels'),
@@ -11,6 +13,7 @@ const mutations = {
   setLabel: set('label'),
   setPreviewLoader: set('previewLoader'),
   setVariables: set('variables'),
+  setDescriptionFormat: set('descriptionFormat'),
   setCopies: set('copies'),
   setVariableValue: setValue()
 };
@@ -46,6 +49,7 @@ const state = {
   selectedLabel: null,
   previewLoader: false,
   variables: {},
+  descriptionFormat: '',
   copies: 1
 };
 

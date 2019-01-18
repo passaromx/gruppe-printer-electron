@@ -15,30 +15,79 @@ export const clients = {
 };
 
 export const nymVars = {
-  description: {
-    value: null,
-    styles: {
-      top: 49,
-      left: 68,
-      weight: 500
-    }
+  fields: {
+    productionDate: {
+      type: 'date',
+      label: 'Fecha de producción',
+      value: null,
+      styles: {
+        top: 35,
+        left: 68,
+        weight: 500
+      }
+    },
+    expireDate: {
+      type: 'date',
+      label: 'Fecha de caducidad',
+      value: null,
+      styles: {
+        top: 42,
+        left: 68,
+        weight: 500
+      }
+    },
+    copies: {
+      type: 'number',
+      label: 'Copias',
+      validation: 'required|min_value:1',
+      value: null,
+      styles: {}
+    },
+    title: {
+      type: 'title',
+      class: 'xs12',
+      label: 'Lote -consecutivo'
+    },
+    line: {
+      type: 'number',
+      label: 'Líneas',
+      validation: 'required|min_value:1',
+      value: null,
+      styles: {}
+    },
+    turn: {
+      type: 'number',
+      label: 'Turno',
+      validation: 'required|min_value:1',
+      value: null,
+      styles: {}
+    },
+    group: {
+      type: 'text',
+      label: 'Grupo',
+      validation: 'required',
+      value: null,
+      styles: {}
+    },
+    sequential: {
+      type: 'number',
+      label: 'Consecutivo',
+      validation: 'required|min_value:1',
+      value: null,
+      styles: {}
+    },
+    description: {
+      value: null,
+      label: 'Nomenclatura',
+      class: 'xs12',
+      styles: {
+        top: 49,
+        left: 68,
+        weight: 500
+      }
+    },
   },
-  productionDate: {
-    value: null,
-    styles: {
-      top: 35,
-      left: 68,
-      weight: 500
-    }
-  },
-  expireDate: {
-    value: null,
-    styles: {
-      top: 42,
-      left: 68,
-      weight: 500
-    }
-  }
+  descriptionFormat: 'line-turn-group-sequential'
 };
 
 export const labelListHeaders = [
