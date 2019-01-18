@@ -6,10 +6,10 @@
       @searchResults="filteredItems = $event"
       v-if="items.length !== 0"/>
 
-    <NoRecords v-if="items.length === 0"/>
+    <NoRecords v-if="items.length === 0" :from="settings.form"/>
 
     <VuePerfectScrollbar v-else :settings="scrollSettings">
-      <VList style="max-height: 500px">
+      <VList :two-line="lines === 2" :three-line="lines === 3" style="max-height: 500px">
         <VListTile
           v-for="(item, i) in filteredItems"
           :key="i"
@@ -17,7 +17,7 @@
         >
           <slot v-bind:item="item"/>
 
-          <VListTileAction>
+          <VListTileAction v-if="actions">
             <VMenu bottom left>
               <VBtn
                 flat
@@ -59,7 +59,15 @@ export default {
       type: Array,
       default: () => []
     },
-    settings: Object
+    settings: Object,
+    actions: {
+      type: Boolean,
+      default: true
+    },
+    lines: {
+      type: Number,
+      default: 1
+    }
   },
   components: {
     NoRecords: () => import('@/components/Clients/NoRecords'),
