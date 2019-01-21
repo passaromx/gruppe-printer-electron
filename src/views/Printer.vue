@@ -59,10 +59,11 @@ export default {
     this.$eventHub.$on('sync', () => this.sync(true));
 
     ipcRenderer.on('synced', (e, data) => {
-      // console.log('synced', data);
+      console.log('synced', data);
       this.setLabels(data.labels);
       this.setConfig(data.config);
       setTimeout(() => { this.dialog = false; }, 300);
+      // this.dialog = false;
     });
 
     ipcRenderer.on('mac-checked', (e, checks) => {
@@ -83,7 +84,7 @@ export default {
     });
 
     ipcRenderer.on('errorSync', (e, error) => {
-      // console.log('errorsync');
+      console.log('errorsync', error);
       setTimeout(() => { this.dialog = false; }, 300);
       this.sendError({
         error,

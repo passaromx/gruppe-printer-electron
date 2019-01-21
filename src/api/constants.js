@@ -1,7 +1,7 @@
 
 // export const apiURL = 'http://192.168.86.172:1337/';
-// export const apiURL = 'http://localhost:1337/';
-export const filesURL = 'http://192.168.1.245:1337';
+export const filesURL = 'http://localhost:1337';
+// export const filesURL = 'http://192.168.1.245:1337';
 export const apiURL = `${filesURL}/`;
 
 export const roles = {
@@ -46,7 +46,7 @@ export const nymVars = {
     title: {
       type: 'title',
       class: 'xs12',
-      label: 'Lote -consecutivo'
+      label: 'Lote - Consecutivo'
     },
     line: {
       type: 'number',
