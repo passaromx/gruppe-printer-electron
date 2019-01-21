@@ -74,6 +74,7 @@ export default {
     renderFields() {
       const fields = { ...this.variables };
       delete fields.description;
+      delete fields.sideDescription;
       return fields;
     }
   },

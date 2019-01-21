@@ -11,7 +11,79 @@ export const roles = {
 
 export const clients = {
   nym: '5c40b928a5888531a0076cbd',
-  thyssen: ''
+  thyssen: '5c38cb394903e5fc92396909'
+};
+
+export const thyssenVars = {
+  fields: {
+    title: {
+      type: 'title',
+      class: 'xs12',
+      label: 'Variables'
+    },
+    date: {
+      type: 'date',
+      label: 'Fecha',
+      value: null,
+      styles: {
+        top: 35,
+        left: 68,
+        weight: 500,
+        rotation: 90
+      }
+    },
+    factory: {
+      type: 'text',
+      label: 'Planta',
+      validation: 'required',
+      value: null,
+    },
+    line: {
+      type: 'text',
+      label: 'Línea',
+      validation: 'required',
+      value: null
+    },
+    shift: {
+      type: 'text',
+      label: 'Turno',
+      validation: 'required',
+      value: null
+    },
+    group: {
+      type: 'text',
+      label: 'Grupo',
+      validation: 'required',
+      value: null
+    },
+    // sequential: {
+    //   type: 'number',
+    //   label: 'Consecutivo',
+    //   validation: 'required|min_value:1',
+    //   value: null
+    // },
+    description: {
+      value: null,
+      class: 'xs12',
+      styles: {
+        top: 49,
+        left: 68,
+        weight: 500,
+        rotation: -90
+      }
+    },
+    sideDescription: {
+      value: null,
+      class: 'xs12',
+      styles: {
+        top: 49,
+        left: 68,
+        weight: 500,
+        rotation: -90
+      }
+    },
+  },
+  descriptionFormat: 'factory-date-line-shift-group'
 };
 
 export const nymVars = {
@@ -31,42 +103,6 @@ export const nymVars = {
         weight: 500
       }
     },
-    // expireDate: {
-    //   type: 'date',
-    //   label: 'Fecha de caducidad',
-    //   value: null,
-    //   styles: {
-    //     top: 42,
-    //     left: 68,
-    //     weight: 500
-    //   }
-    // },
-    // copies: {
-    //   type: 'number',
-    //   label: 'Copias',
-    //   validation: 'required|min_value:1',
-    //   value: null,
-    //   styles: null
-    // },
-    // title: {
-    //   type: 'title',
-    //   class: 'xs12',
-    //   label: 'Lote - Consecutivo'
-    // },
-    // line: {
-    //   type: 'number',
-    //   label: 'Líneas',
-    //   validation: 'required|min_value:1',
-    //   value: null,
-    //   styles: {}
-    // },
-    // turn: {
-    //   type: 'number',
-    //   label: 'Turno',
-    //   validation: 'required|min_value:1',
-    //   value: null,
-    //   styles: {}
-    // },
     batch: {
       type: 'text',
       label: 'Lote',
