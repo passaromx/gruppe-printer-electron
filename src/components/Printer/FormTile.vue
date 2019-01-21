@@ -9,6 +9,7 @@
         <VLayout row wrap>
           <VFlex xs12>
             <VSelect
+              hide-details
               :items="printers"
               v-model="printer"
               label="Impresora"

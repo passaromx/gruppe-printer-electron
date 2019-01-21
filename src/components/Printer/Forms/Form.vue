@@ -16,11 +16,11 @@
         :messages="errors.collect(index)"
       />
       <VTextField
-        v-if="field.type != 'date' && field.type != 'title'"
+        v-if="field.type != 'date' && field.type != 'title' && !field.hidden"
         :number="field.type === 'number'"
         :disabled="!selectedLabel"
         @input="handleInput(index)"
-        outline
+
         v-model="formData[index]"
         :label="field.label"
         v-validate="field.validation"
@@ -85,7 +85,7 @@ export default {
         value: this.formData[key]
       });
     });
-    this.setDescription();
+    // this.setDescription();
 
     this.$eventHub.$on('validate', () => {
       this.$validator.validate().then(res => {
@@ -123,7 +123,7 @@ export default {
       });
     },
     fieldClass(field) {
-      return field.type === 'date' ? 'xs12' : 'xs6';
+      return field.type === 'date' ? 'xs6' : 'xs3';
     }
   }
 };

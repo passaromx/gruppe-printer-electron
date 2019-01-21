@@ -22,6 +22,7 @@
       :error-messages="messages"
       required
       readonly
+      hide-details
     ></VTextField>
     <VDatePicker
       @change="handleChange"
