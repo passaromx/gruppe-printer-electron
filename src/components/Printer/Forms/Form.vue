@@ -1,7 +1,7 @@
 <template>
   <VLayout row wrap>
     <VFlex
-      v-for="(field, index) in variables"
+      v-for="(field, index) in renderFields"
       :key="index"
       :class="field.class || fieldClass(field)"
     >
@@ -16,7 +16,7 @@
         :messages="errors.collect(index)"
       />
       <VTextField
-        v-if="field.type != 'date' && field.type != 'title' && !field.hidden"
+        v-if="field.type != 'date' && field.type != 'title'"
         :number="field.type === 'number'"
         :disabled="!selectedLabel"
         @input="handleInput(index)"
@@ -32,11 +32,6 @@
         class="subheading"
       >{{field.label}}</span>
     </VFlex>
-    <!-- + 90 días -->
-    <VFlex xs4>
-
-    </VFlex>
-
   </VLayout>
 </template>
 
@@ -75,6 +70,11 @@ export default {
         .split('-')
         .reduce((format, variable, i) => `${format}${i === 0 ? '' : '-'}${this.formData[variable]}`, '');
       return formatted;
+    },
+    renderFields() {
+      const fields = { ...this.variables };
+      delete fields.description;
+      return fields;
     }
   },
   mounted() {
@@ -85,7 +85,7 @@ export default {
         value: this.formData[key]
       });
     });
-    // this.setDescription();
+    this.setDescription();
 
     this.$eventHub.$on('validate', () => {
       this.$validator.validate().then(res => {

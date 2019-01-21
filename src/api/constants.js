@@ -77,7 +77,6 @@ export const nymVars = {
       styles: {}
     },
     description: {
-      hidden: true,
       value: null,
       label: 'Nomenclatura',
       class: 'xs12',
