@@ -14,6 +14,9 @@ const dictionary = {
       min_value(e, n) {
         return `El valor del campo debe ser ${n[0]} o superior.`;
       },
+      max_value(e, n) {
+        return `El valor del campo debe ser menor o igual a ${n[0]}.`;
+      },
       email() {
         return 'Introduce un email válido.';
       }
