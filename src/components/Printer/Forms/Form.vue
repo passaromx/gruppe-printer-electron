@@ -79,7 +79,7 @@ export default {
   },
   mounted() {
     Object.keys(this.variables).forEach(key => {
-      console.log(key);
+      // console.log(key);
       this.setVariableValue({
         name: key,
         value: this.formData[key]
