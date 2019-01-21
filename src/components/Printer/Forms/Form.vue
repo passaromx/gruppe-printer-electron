@@ -1,7 +1,7 @@
 <template>
   <VLayout row wrap>
     <VFlex
-      v-for="(field, index) in variables"
+      v-for="(field, index) in renderFields"
       :key="index"
       :class="field.class || fieldClass(field)"
     >
@@ -70,6 +70,11 @@ export default {
         .split('-')
         .reduce((format, variable, i) => `${format}${i === 0 ? '' : '-'}${this.formData[variable]}`, '');
       return formatted;
+    },
+    renderFields() {
+      const fields = { ...this.variables };
+      delete fields.description;
+      return fields;
     }
   },
   mounted() {
@@ -80,7 +85,7 @@ export default {
         value: this.formData[key]
       });
     });
-    // this.setDescription();
+    this.setDescription();
 
     this.$eventHub.$on('validate', () => {
       this.$validator.validate().then(res => {

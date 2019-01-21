@@ -14,7 +14,8 @@
               label="Impresora"
               outline
               hide-details
-              item-text="name"
+              ref="displayName"
+              item-text="displayName"
               item-value="name"/>
           </VFlex>
           <VFlex xs12>
@@ -95,16 +96,18 @@ export default {
       place: 'TX',
       weight: 1,
       zpl: '',
-      nymVars
+      nymVars,
+      resize: false,
+      timeout: null
     };
   },
   mounted() {
     this.setVariables(this.nymVars.fields);
     this.setDescriptionFormat(this.nymVars.descriptionFormat);
-
     ipcRenderer.send('get-printers');
     ipcRenderer.on('printers-fetched', (e, printers) => {
       this.printers = printers;
+      this.formatDisplayPrinters();
     });
     ipcRenderer.on('zplReady', (e, zpl) => {
       this.zpl = zpl;
@@ -115,11 +118,28 @@ export default {
     ...mapState('printer', ['selectedLabel', 'variables', 'copies']),
     description() {
       return `${this.line}-${this.turn}-${this.group}-${this.sequential}`;
+    },
+    displayPrinters() {
+      if (this.$refs.displayName) {
+        let displayNameLength = this.$refs.displayName.$el.clientWidth;
+        displayNameLength = (displayNameLength / 11) - (350 / displayNameLength);
+        return this.printers.map(printer => {
+          printer.displayName = `${printer.name.substr(0, displayNameLength)}...`;
+          return printer;
+        });
+      }
+      return this.printers;
     }
   },
   methods: {
     ...mapActions('printer', ['updateSysInfo']),
     ...mapMutations('printer', ['setPreviewLoader', 'setVariables', 'setDescriptionFormat', 'setSelectedLabel']),
+    formatDisplayPrinters() {
+      this.timeout = setTimeout(() => { this.printers = this.displayPrinters; }, 500);
+      window.addEventListener('resize', () => {
+        this.printers = this.displayPrinters;
+      });
+    },
     handleChange() {
       if (this.selectedLabel) {
         const data = {
@@ -156,11 +176,13 @@ export default {
         data,
         user: this.user._id
       };
-      console.log(systemInfo);
       this.updateSysInfo(systemInfo);
     }
   },
   beforeDestroy() {
+    window.removeEventListener('resize', console.log('removed'));
+    ipcRenderer.removeAllListeners('printers-fetched');
+    ipcRenderer.removeAllListeners('zplReady');
     this.setSelectedLabel(null);
   }
 };

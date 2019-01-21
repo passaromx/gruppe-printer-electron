@@ -77,6 +77,7 @@ ipcMain.on('check-mac', (e, info) => {
 
 ipcMain.on('get-printers', e => {
   const printers = win.webContents.getPrinters();
+
   e.sender.send('printers-fetched', printers);
 });
 
