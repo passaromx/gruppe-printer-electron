@@ -166,7 +166,7 @@ export default {
         client: this.user.client._id
       };
 
-      ipcRenderer.send('print', this.printer, this.selectedLabel, printData);
+      ipcRenderer.send('print', this.printer, this.selectedLabel, printData, this.user.client.settings.format);
       // update sys info
       const systemInfo = JSON.parse(localStorage.getItem('systemInfo'));
       systemInfo.printerName = this.printer;

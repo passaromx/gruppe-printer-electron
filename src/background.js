@@ -122,10 +122,10 @@ ipcMain.on('login', (e, user, password, client, authenticate) => {
 //     .catch(err => console.log(err));
 // });
 
-ipcMain.on('print', (e, printer, label, data) => {
+ipcMain.on('print', (e, printer, label, data, format) => {
   const { getZpl } = require('./utils/offline/printer');
   console.log(label, data);
-  getZpl(label.label.url, data)
+  getZpl(label.label.url, format, data)
     .then(zpl => {
       console.log(zpl);
       printLabel(printer, zpl)
