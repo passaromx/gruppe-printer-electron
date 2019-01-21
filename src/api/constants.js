@@ -81,17 +81,17 @@ export const nymVars = {
       value: null,
       styles: null
     },
-    // description: {
-    //   hidden: true,
-    //   value: null,
-    //   label: 'Nomenclatura',
-    //   class: 'xs12',
-    //   styles: {
-    //     top: 49,
-    //     left: 68,
-    //     weight: 500
-    //   }
-    // },
+    description: {
+      hidden: true,
+      value: null,
+      label: 'Nomenclatura',
+      class: 'xs12',
+      styles: {
+        top: 49,
+        left: 68,
+        weight: 500
+      }
+    },
   },
   descriptionFormat: 'batch-sequential'
 };
