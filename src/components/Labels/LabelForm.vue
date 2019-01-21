@@ -28,7 +28,7 @@
         hint="Toca para seleccionar archivo"
         persistent-hint
         @click="pickFile('label')"
-        @click:clear="label = { name: null }"
+        @click:clear="clearFile('label')"
         readonly
         :error-messages="errors.collect('label')"
       />
@@ -37,7 +37,7 @@
         ref="label"
         style="display: none"
         type="file"
-        accept="*"
+        accept=".prn"
         @change="onFilePicked">
 
       <VTextField
@@ -49,7 +49,7 @@
         hint="Toca para seleccionar archivo"
         persistent-hint
         @click="pickFile('auth')"
-        @click:clear="auth = null"
+        @click:clear="clearFile('auth')"
         clearable
         readonly
         :error-messages="errors.collect('auth')"
@@ -59,7 +59,7 @@
         ref="auth"
         style="display: none"
         type="file"
-        accept="*"
+        accept=".pdf,image/*"
         @change="onFilePicked">
 
         <VExpandTransition v-if="auth || label">
@@ -136,13 +136,12 @@ export default {
   methods: {
     ...mapActions('labels', ['store', 'update']),
     pickFile(input) {
-      console.log(input);
       this.$refs[input].click();
     },
     onFilePicked(e) {
       const { id } = e.target;
       const files = e.target.files || e.dataTransfer.files;
-      console.log('files', files);
+      // console.log('files', files);
 
       if (files[0] !== undefined) {
         const filename = files[0].name;
@@ -156,10 +155,16 @@ export default {
         } else {
           [this.auth] = files;
         }
+        this.$validator.reset();
       }
     },
+    clearFile(val) {
+      this.$refs[val].value = '';
+      this[val] = null;
+      this.editedItem[val] = null;
+    },
     validate() {
-      this.$validator.validate().then(valid => {
+      this.$validator.validateAll().then(valid => {
         if (valid) {
           this.submit();
         }
@@ -178,12 +183,13 @@ export default {
         this.update(data).then(() => { this.close(); });
       } else {
         data.client = this.fromClient;
-        console.log(data);
         this.store(data).then(() => { this.close(); });
       }
     },
     close() {
       this.$emit('closeDialog');
+      this.$refs.label.value = '';
+      this.$refs.auth.value = '';
       this.label = null;
       this.auth = null;
       this.$validator.reset();
