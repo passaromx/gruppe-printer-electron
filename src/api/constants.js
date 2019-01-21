@@ -46,7 +46,7 @@ export const nymVars = {
     title: {
       type: 'title',
       class: 'xs12',
-      label: 'Lote -consecutivo'
+      label: 'Lote - Consecutivo'
     },
     line: {
       type: 'number',

@@ -63,6 +63,7 @@ export default {
       this.setLabels(data.labels);
       this.setConfig(data.config);
       setTimeout(() => { this.dialog = false; }, 300);
+      // this.dialog = false;
     });
 
     ipcRenderer.on('mac-checked', (e, checks) => {

@@ -54,7 +54,7 @@
         <VCardText>
           <FactoryTab v-if="item === 'Plantas'"/>
           <UsersTab v-else-if="item === 'Usuarios'"/>
-          <!-- <PrintersTab v-else /> -->
+          <PrintersTab v-else />
         </VCardText>
       </VTabItem>
     </VTabsItems>
@@ -67,7 +67,8 @@ import { mapState } from 'vuex';
 export default {
   components: {
     FactoryTab: () => import('@/components/Clients/FactoryTab'),
-    UsersTab: () => import('@/components/Clients/UsersTab')
+    UsersTab: () => import('@/components/Clients/UsersTab'),
+    PrintersTab: () => import('@/components/Clients/PrintersTab')
   },
   data() {
     return {
