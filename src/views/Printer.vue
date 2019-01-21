@@ -20,10 +20,10 @@
       </VCard>
     </VDialog>
     <VLayout row wrap>
-      <VFlex xs12 sm4>
+      <VFlex xs12 sm5>
         <FormTile />
       </VFlex>
-      <VFlex xs12 sm8>
+      <VFlex xs12 sm7>
         <PreviewTile />
       </VFlex>
     </VLayout>
@@ -59,7 +59,7 @@ export default {
     this.$eventHub.$on('sync', () => this.sync(true));
 
     ipcRenderer.on('synced', (e, data) => {
-      // console.log('synced', data);
+      console.log('synced', data);
       this.setLabels(data.labels);
       this.setConfig(data.config);
       setTimeout(() => { this.dialog = false; }, 300);
@@ -83,7 +83,7 @@ export default {
     });
 
     ipcRenderer.on('errorSync', (e, error) => {
-      // console.log('errorsync');
+      console.log('errorsync', error);
       setTimeout(() => { this.dialog = false; }, 300);
       this.sendError({
         error,
