@@ -20,10 +20,10 @@
       </VCard>
     </VDialog>
     <VLayout row wrap>
-      <VFlex xs12 sm5>
+      <VFlex xs12 sm4>
         <FormTile />
       </VFlex>
-      <VFlex xs12 sm7>
+      <VFlex xs12 sm8>
         <PreviewTile />
       </VFlex>
     </VLayout>

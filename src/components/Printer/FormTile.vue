@@ -5,15 +5,15 @@
     </VCardTitle>
     <!-- <VDivider /> -->
     <VCardText>
-      <VContainer class="pa-0" grid-list-md>
+      <VContainer class="pa-0" grid-list-lg>
         <VLayout row wrap>
           <VFlex xs12>
             <VSelect
-              hide-details
               :items="printers"
               v-model="printer"
               label="Impresora"
               outline
+              hide-details
               item-text="name"
               item-value="name"/>
           </VFlex>
@@ -49,9 +49,15 @@
         </VLayout>
         <Form
           v-if="this.user"
-          :client="this.user.client._id"
-        />
-        <!-- <span>{{ description }}</span> -->
+          :client="this.user.client._id" />
+        <VLayout row justify-end>
+          <VFlex xs4>
+            <VTextField
+              outline
+              label="Copias"
+              :value="1"></VTextField>
+          </VFlex>
+        </VLayout>
         <VLayout justify-end>
           <VBtn>
             <VIcon class="mr-2">cloud_download</VIcon>

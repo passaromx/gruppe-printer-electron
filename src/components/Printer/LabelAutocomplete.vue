@@ -10,6 +10,7 @@
     :search-input.sync="search"
     clearable
     :readonly="selectedLabel != null"
+    :hide-details="!messages.length"
     :items="formattedLabels"
     item-text="description"
     item-value="_id"
