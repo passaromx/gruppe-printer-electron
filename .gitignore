@@ -2,7 +2,7 @@
 node_modules
 /dist
 /src/data/uploads
-
+/public/data/*/config.json
 # local env files
 .env.local
 .env.*.local
