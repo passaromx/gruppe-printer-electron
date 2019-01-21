@@ -20,7 +20,7 @@
         :number="field.type === 'number'"
         :disabled="!selectedLabel"
         @input="handleInput(index)"
-
+        outline
         v-model="formData[index]"
         :label="field.label"
         v-validate="field.validation"
@@ -38,13 +38,13 @@
 <script>
 import { mapState, mapMutations } from 'vuex';
 
-const today = new Date();
+// const today = new Date();
 
-const addDays = (date, days) => {
-  const result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result;
-};
+// const addDays = (date, days) => {
+//   const result = new Date(date);
+//   result.setDate(result.getDate() + days);
+//   return result;
+// };
 
 export default {
   // $_veeValidate: { validator: 'new' },
@@ -54,10 +54,10 @@ export default {
     return {
       formData: {
         productionDate: new Date().toISOString().substr(0, 10),
-        expireDate: addDays(today, 90).toISOString().substr(0, 10),
+        // expireDate: addDays(today, 90).toISOString().substr(0, 10),
         line: 1,
         turn: 1,
-        group: 'A',
+        batch: 'A',
         sequential: '001',
         copies: 1
       }
@@ -123,7 +123,7 @@ export default {
       });
     },
     fieldClass(field) {
-      return field.type === 'date' ? 'xs6' : 'xs3';
+      return field.type === 'date' ? 'xs12' : 'xs6';
     }
   }
 };

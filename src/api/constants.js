@@ -16,6 +16,11 @@ export const clients = {
 
 export const nymVars = {
   fields: {
+    title: {
+      type: 'title',
+      class: 'xs12',
+      label: 'Variables'
+    },
     productionDate: {
       type: 'date',
       label: 'Fecha de producción',
@@ -26,55 +31,55 @@ export const nymVars = {
         weight: 500
       }
     },
-    expireDate: {
-      type: 'date',
-      label: 'Fecha de caducidad',
-      value: null,
-      styles: {
-        top: 42,
-        left: 68,
-        weight: 500
-      }
-    },
-    copies: {
-      type: 'number',
-      label: 'Copias',
-      validation: 'required|min_value:1',
-      value: null,
-      styles: {}
-    },
-    title: {
-      type: 'title',
-      class: 'xs12',
-      label: 'Lote - Consecutivo'
-    },
-    line: {
-      type: 'number',
-      label: 'Líneas',
-      validation: 'required|min_value:1',
-      value: null,
-      styles: {}
-    },
-    turn: {
-      type: 'number',
-      label: 'Turno',
-      validation: 'required|min_value:1',
-      value: null,
-      styles: {}
-    },
-    group: {
+    // expireDate: {
+    //   type: 'date',
+    //   label: 'Fecha de caducidad',
+    //   value: null,
+    //   styles: {
+    //     top: 42,
+    //     left: 68,
+    //     weight: 500
+    //   }
+    // },
+    // copies: {
+    //   type: 'number',
+    //   label: 'Copias',
+    //   validation: 'required|min_value:1',
+    //   value: null,
+    //   styles: null
+    // },
+    // title: {
+    //   type: 'title',
+    //   class: 'xs12',
+    //   label: 'Lote - Consecutivo'
+    // },
+    // line: {
+    //   type: 'number',
+    //   label: 'Líneas',
+    //   validation: 'required|min_value:1',
+    //   value: null,
+    //   styles: {}
+    // },
+    // turn: {
+    //   type: 'number',
+    //   label: 'Turno',
+    //   validation: 'required|min_value:1',
+    //   value: null,
+    //   styles: {}
+    // },
+    batch: {
       type: 'text',
-      label: 'Grupo',
+      label: 'Lote',
       validation: 'required',
       value: null,
-      styles: {}
+      styles: null
     },
     sequential: {
       type: 'number',
       label: 'Consecutivo',
       validation: 'required|min_value:1',
       value: null,
-      styles: {}
+      styles: null
     },
     description: {
       value: null,
@@ -87,7 +92,7 @@ export const nymVars = {
       }
     },
   },
-  descriptionFormat: 'line-turn-group-sequential'
+  descriptionFormat: 'batch-sequential'
 };
 
 export const labelListHeaders = [
