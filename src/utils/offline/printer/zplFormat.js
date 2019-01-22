@@ -13,16 +13,15 @@ module.exports = (format, params) => {
       ^FT301,680^A0I,31,31^FH\^FD${expireDate || ''}^FS
       ^FT301,765^A0I,31,31^FH\^FD${productionDate || ''}^FS^LS0`;
   } else if (format === 2) {
-    const { nomenclature, date } = params;
+    const { description, date } = params;
     start = `^XA
       ^MMC
       ^PW831
       ^LL1574
       ^LS0
-      ^FT365,1520^A0I,31,31^FH\^FD${nomenclature}^FS
+      ^FT365,1520^A0I,31,31^FH\^FD${description}^FS
       ^FT8,311^A0R,20,21^FH\^FD${date}^FS
-      ^FT810,165^A0R,15,15^FPH\^FD${nomenclature}^FS^LS0`;
+      ^FT810,165^A0R,15,15^FPH\^FD${description}^FS^LS0`;
   }
-
   return start;
 };
