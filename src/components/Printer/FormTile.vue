@@ -40,7 +40,7 @@
         <Form
           v-if="this.user"
           :client="this.user.client._id" />
-        <VLayout row justify-start>
+        <VLayout row justify-start class="mt-3">
           <VFlex xs6>
             <VTextField
               outline
@@ -74,7 +74,7 @@
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
 import { ipcRenderer } from 'electron';
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
 import { nymVars, thyssenVars } from '@/api/constants';
 
 export default {
@@ -97,8 +97,12 @@ export default {
     };
   },
   mounted() {
-    this.setVariables(this.thyssenVars.fields);
-    this.setDescriptionFormat(this.thyssenVars.descriptionFormat);
+    // const vars = this.user.client._id === '5c40b928a5888531a0076cbd'
+    //   ? this.nymVars
+    //   : this.thyssenVars;
+    // this.setVariables(vars);
+
+    // this.setDescriptionFormat(this.thyssenVars.descriptionFormat);
     ipcRenderer.send('get-printers');
     ipcRenderer.on('printers-fetched', (e, printers) => {
       this.printers = printers;
@@ -108,7 +112,18 @@ export default {
       this.zpl = zpl;
     });
   },
+  watch: {
+    isLoggedIn(val) {
+      if (val) {
+        const vars = this.user.client._id === '5c40b928a5888531a0076cbd'
+          ? this.nymVars
+          : this.thyssenVars;
+        this.setVariables(vars);
+      }
+    }
+  },
   computed: {
+    ...mapGetters('auth', ['isLoggedIn']),
     ...mapState('auth', ['user']),
     ...mapState('printer', ['selectedLabel', 'variables', 'copies']),
     description() {
