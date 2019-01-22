@@ -81,7 +81,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { ipcRenderer } from 'electron';
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
-import { nymVars, thyssenVars } from '@/api/constants';
+import { nymVars, maltaVars } from '@/api/constants';
 
 export default {
   $_veeValidate: { validator: 'new' },
@@ -97,6 +97,7 @@ export default {
       weight: 1,
       zpl: '',
       nymVars,
+      maltaVars,
       resize: false,
       timeout: null
     };
@@ -110,14 +111,13 @@ export default {
     ipcRenderer.on('zplReady', (e, zpl) => {
       this.zpl = zpl;
     });
+
+    if (this.user && this.user.client) this.setClientVariables();
   },
   watch: {
     isLoggedIn(val) {
       if (val) {
-        const vars = this.user.client._id === '5c40b928a5888531a0076cbd'
-          ? this.nymVars
-          : this.thyssenVars;
-        this.setVariables(vars);
+        this.setClientVariables();
       }
     }
   },
@@ -148,6 +148,12 @@ export default {
       window.addEventListener('resize', () => {
         this.printers = this.displayPrinters;
       });
+    },
+    setClientVariables() {
+      const vars = this.user.client._id === '5c40b928a5888531a0076cbd'
+        ? this.nymVars
+        : this.maltaVars;
+      this.setVariables(vars);
     },
     handleChange() {
       if (this.selectedLabel) {

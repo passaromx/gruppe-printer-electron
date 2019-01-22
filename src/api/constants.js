@@ -10,10 +10,10 @@ export const roles = {
 
 export const clients = {
   nym: '5c40b928a5888531a0076cbd',
-  thyssen: '5c38cb394903e5fc92396909'
+  malta: '5c38cb394903e5fc92396909'
 };
 
-export const thyssenVars = {
+export const maltaVars = {
   fields: {
     title: {
       type: 'title',
@@ -24,13 +24,13 @@ export const thyssenVars = {
       type: 'date',
       label: 'Fecha',
       value: new Date().toISOString().substr(0, 10),
-      styles: {
+      styles: [{
         top: 75,
         left: 82,
         weight: 500,
         rotation: -90,
         fontSize: 10
-      }
+      }]
     },
     factory: {
       type: 'text',
@@ -50,38 +50,44 @@ export const thyssenVars = {
       validation: 'required',
       value: 1
     },
+    weight: {
+      type: 'text',
+      label: 'Peso neto',
+      validation: 'required',
+      value: 40,
+      styles: [{
+        top: 1.5,
+        left: 78,
+        weight: 500,
+        rotation: 0,
+        fontSize: 10
+      }]
+    },
     group: {
       type: 'text',
       label: 'Grupo',
       validation: 'required',
-      value: 'A',
+      value: 'A001',
     },
-    // sequential: {
-    //   type: 'number',
-    //   label: 'Consecutivo',
-    //   validation: 'required|min_value:1',
-    //   value: null
-    // },
     description: {
       value: null,
       class: 'xs12',
-      styles: {
-        top: 49,
-        left: 68,
-        weight: 500,
-        rotation: -90
-      }
-    },
-    sideDescription: {
-      value: null,
-      class: 'xs12',
-      styles: {
-        top: 49,
-        left: 68,
-        weight: 500,
-        rotation: -90
-      }
-    },
+      styles: [
+        {
+          top: 3.5,
+          left: 50,
+          weight: 500,
+          rotation: 0
+        },
+        {
+          top: 86,
+          left: 0,
+          weight: 500,
+          fontSize: 10,
+          rotation: 90
+        }
+      ]
+    }
   },
   descriptionFormat: 'factory-date-line-shift-group'
 };
@@ -97,11 +103,11 @@ export const nymVars = {
       type: 'date',
       label: 'Fecha de producción',
       value: new Date().toISOString().substr(0, 10),
-      styles: {
+      styles: [{
         top: 35,
         left: 68,
         weight: 500
-      }
+      }]
     },
     batch: {
       type: 'text',
@@ -119,11 +125,11 @@ export const nymVars = {
       value: null,
       label: 'Nomenclatura',
       class: 'xs12',
-      styles: {
+      styles: [{
         top: 49,
         left: 68,
         weight: 500
-      }
+      }]
     },
   },
   descriptionFormat: 'batch-sequential'

@@ -51,19 +51,6 @@ export default {
   // $_veeValidate: { validator: 'new' },
   inject: ['$validator'],
   components: { DatePicker: () => import('@/components/Printer/DatePicker') },
-  // data() {
-  //   return {
-  //     formData: {
-  //       productionDate: new Date().toISOString().substr(0, 10),
-  //       // expireDate: addDays(today, 90).toISOString().substr(0, 10),
-  //       line: 1,
-  //       turn: 1,
-  //       batch: 'A',
-  //       sequential: '001',
-  //       copies: 1
-  //     }
-  //   };
-  // },
   computed: {
     ...mapState('printer', ['selectedLabel', 'variables', 'descriptionFormat']),
     description() {
@@ -74,12 +61,10 @@ export default {
     },
     formData() {
       const fields = { ...this.variables.fields };
-      console.log(fields);
       const data = {};
       Object.keys(fields).forEach(key => {
         data[key] = fields[key].value;
       });
-      console.log('formData', data);
       return data;
     },
     renderFields() {
@@ -112,8 +97,10 @@ export default {
         name: picker,
         value
       });
+      this.setDescription();
     },
     handleInput(field) {
+      console.log(field);
       this.setVariableValue({
         name: field,
         value: this.formData[field]
@@ -122,7 +109,7 @@ export default {
     },
     setDescription() {
       this.formData.description = this.description;
-      console.log(this.description);
+      // console.log(this.description);
       this.setVariableValue({
         name: 'description',
         value: this.description
