@@ -16,6 +16,7 @@ export default {
         top: `${this.data.top}%`,
         left: `${this.data.left}%`,
         fontWeight: this.data.weight,
+        fontSize: `${this.data.fontSize || 14}px`,
         '-webkit-transform': `rotate(${this.data.rotation || 0}deg)`
       };
     }

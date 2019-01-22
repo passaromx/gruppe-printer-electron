@@ -1,7 +1,6 @@
 
-// export const apiURL = 'http://192.168.86.172:1337/';
-// export const apiURL = 'http://localhost:1337/';
-export const filesURL = 'http://localhost:1337';
+export const filesURL = 'http://192.168.86.189:1337';
+// export const filesURL = 'http://localhost:1337';
 export const apiURL = `${filesURL}/`;
 
 export const roles = {
@@ -24,12 +23,13 @@ export const thyssenVars = {
     date: {
       type: 'date',
       label: 'Fecha',
-      value: null,
+      value: new Date().toISOString().substr(0, 10),
       styles: {
-        top: 35,
-        left: 68,
+        top: 75,
+        left: 82,
         weight: 500,
-        rotation: 90
+        rotation: -90,
+        fontSize: 10
       }
     },
     factory: {
@@ -42,19 +42,19 @@ export const thyssenVars = {
       type: 'text',
       label: 'Línea',
       validation: 'required',
-      value: null
+      value: 1
     },
     shift: {
       type: 'text',
       label: 'Turno',
       validation: 'required',
-      value: null
+      value: 1
     },
     group: {
       type: 'text',
       label: 'Grupo',
       validation: 'required',
-      value: null
+      value: 'A',
     },
     // sequential: {
     //   type: 'number',
@@ -96,7 +96,7 @@ export const nymVars = {
     productionDate: {
       type: 'date',
       label: 'Fecha de producción',
-      value: null,
+      value: new Date().toISOString().substr(0, 10),
       styles: {
         top: 35,
         left: 68,
@@ -107,15 +107,13 @@ export const nymVars = {
       type: 'text',
       label: 'Lote',
       validation: 'required',
-      value: null,
-      styles: null
+      value: 'A',
     },
     sequential: {
       type: 'number',
       label: 'Consecutivo',
       validation: 'required|min_value:1',
-      value: null,
-      styles: null
+      value: '001',
     },
     description: {
       value: null,
