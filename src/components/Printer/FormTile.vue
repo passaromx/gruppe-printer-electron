@@ -25,6 +25,17 @@
               v-validate="'required'"
               :messages="errors.collect('labels')"/>
           </VFlex>
+
+          <!-- <VFlex xs6>
+            <VTextField
+              :disabled="!selectedLabel"
+              outline
+              v-validate="'required'"
+              data-vv-name="place"
+              :error-messages="errors.collect('place')"
+              v-model="place"
+              label="Planta" />
+          </VFlex> -->
           <!-- <VFlex xs3>
             <VTextField
               number
@@ -40,27 +51,22 @@
         <Form
           v-if="this.user"
           :client="this.user.client._id" />
-        <VLayout row justify-start>
-          <VFlex xs6>
+        <VLayout row justify-end>
+          <VFlex xs4>
             <VTextField
               outline
-              type="number"
               label="Copias"
-              :disabled="!selectedLabel"
-              v-validate="'required|min_value:1|max_value:5000'"
-              data-vv-name="copies"
-              :error-messages="errors.collect('copies')"
-              :value="1" />
+              :value="1"></VTextField>
           </VFlex>
         </VLayout>
         <VLayout justify-end>
-          <VBtn :disabled="!selectedLabel">
-            <!-- <VIcon class="mr-2">picture_as_pdf</VIcon> -->
-            Ver PDF
+          <VBtn>
+            <VIcon class="mr-2">cloud_download</VIcon>
+            PDF
           </VBtn>
           <VBtn
             @click="validate"
-            :disabled="errors.items.length > 0 || !selectedLabel"
+            :disabled="errors.items.length > 0"
             color="primary"
           >
             Imprimir
@@ -75,7 +81,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { ipcRenderer } from 'electron';
 import { mapState, mapMutations, mapActions } from 'vuex';
-import { nymVars, thyssenVars } from '@/api/constants';
+import { nymVars } from '@/api/constants';
 
 export default {
   $_veeValidate: { validator: 'new' },
@@ -91,14 +97,13 @@ export default {
       weight: 1,
       zpl: '',
       nymVars,
-      thyssenVars,
       resize: false,
       timeout: null
     };
   },
   mounted() {
-    this.setVariables(this.thyssenVars.fields);
-    this.setDescriptionFormat(this.thyssenVars.descriptionFormat);
+    this.setVariables(this.nymVars.fields);
+    this.setDescriptionFormat(this.nymVars.descriptionFormat);
     ipcRenderer.send('get-printers');
     ipcRenderer.on('printers-fetched', (e, printers) => {
       this.printers = printers;
@@ -161,7 +166,7 @@ export default {
         client: this.user.client._id
       };
 
-      ipcRenderer.send('print', this.printer, this.selectedLabel, printData, this.user.client.settings.format);
+      ipcRenderer.send('print', this.printer, this.selectedLabel, printData, this.user.client.settings);
       // update sys info
       const systemInfo = JSON.parse(localStorage.getItem('systemInfo'));
       systemInfo.printerName = this.printer;
