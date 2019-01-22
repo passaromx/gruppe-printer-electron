@@ -2,11 +2,14 @@
   <BaseCard flat :isFullHeight="true" color="grey lighten-2">
 
     <VLayout fill-height align-center justify-center>
-      <div class="variable-wrapper" v-if="selectedLabel">
+      <div class="variable-wrapper" v-bind:style="{width: '58vh'}" v-if="selectedLabel">
         <div v-for="(key, index) in keys" :key="index">
-          <VarDisplay :name="key" :data="variables.fields[key].styles">
-            {{ variables.fields[key].value }}
-          </VarDisplay>
+          <div v-for="(style, j) in variables.fields[key].styles" :key="index + j">
+            <VarDisplay :name="key" :data="style">
+              {{ variables.fields[key].value }} {{ key === 'weight' ? 'Kg' : '' }}
+            </VarDisplay>
+          </div>
+
         </div>
       </div>
       <VImg
@@ -71,7 +74,7 @@ export default {
 }
 
 .variable-wrapper {
-  width: 58vh;
+  /* width: 58vh; */
   height: 87vh;
   position: absolute;
   z-index: 2;
