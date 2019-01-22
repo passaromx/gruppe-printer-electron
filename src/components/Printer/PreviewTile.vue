@@ -4,8 +4,8 @@
     <VLayout fill-height align-center justify-center>
       <div class="variable-wrapper" v-if="selectedLabel">
         <div v-for="(key, index) in keys" :key="index">
-          <VarDisplay :name="key" :data="variables[key].styles">
-            {{ variables[key].value }}
+          <VarDisplay :name="key" :data="variables.fields[key].styles">
+            {{ variables.fields[key].value }}
           </VarDisplay>
         </div>
       </div>
@@ -48,7 +48,7 @@ export default {
     ...mapState('printer', ['selectedLabel', 'previewLoader', 'variables']),
     ...mapState('auth', ['user']),
     keys() {
-      return Object.keys(this.variables).filter(variable => (!!this.variables[variable].styles));
+      return Object.keys(this.variables.fields).filter(variable => (!!this.variables.fields[variable].styles));
     }
   },
   mounted() {

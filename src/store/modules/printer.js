@@ -2,7 +2,7 @@ import axios from '@/plugins/axios';
 import { set } from '@/utils';
 
 const setValue = () => (state, payload) => {
-  state.variables[payload.name].value = payload.value;
+  state.variables.fields[payload.name].value = payload.value;
 };
 
 const mutations = {

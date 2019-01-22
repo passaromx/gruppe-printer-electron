@@ -21,6 +21,7 @@
         :disabled="!selectedLabel"
         @input="handleInput(index)"
         outline
+        hide-details
         v-model="formData[index]"
         :label="field.label"
         v-validate="field.validation"
@@ -50,42 +51,45 @@ export default {
   // $_veeValidate: { validator: 'new' },
   inject: ['$validator'],
   components: { DatePicker: () => import('@/components/Printer/DatePicker') },
-  data() {
-    return {
-      formData: {
-        productionDate: new Date().toISOString().substr(0, 10),
-        // expireDate: addDays(today, 90).toISOString().substr(0, 10),
-        line: 1,
-        turn: 1,
-        batch: 'A',
-        sequential: '001',
-        copies: 1
-      }
-    };
-  },
+  // data() {
+  //   return {
+  //     formData: {
+  //       productionDate: new Date().toISOString().substr(0, 10),
+  //       // expireDate: addDays(today, 90).toISOString().substr(0, 10),
+  //       line: 1,
+  //       turn: 1,
+  //       batch: 'A',
+  //       sequential: '001',
+  //       copies: 1
+  //     }
+  //   };
+  // },
   computed: {
     ...mapState('printer', ['selectedLabel', 'variables', 'descriptionFormat']),
     description() {
-      const formatted = this.descriptionFormat
+      const formatted = this.variables.descriptionFormat
         .split('-')
         .reduce((format, variable, i) => `${format}${i === 0 ? '' : '-'}${this.formData[variable]}`, '');
       return formatted;
     },
+    formData() {
+      const fields = { ...this.variables.fields };
+      console.log(fields);
+      const data = {};
+      Object.keys(fields).forEach(key => {
+        data[key] = fields[key].value;
+      });
+      console.log('formData', data);
+      return data;
+    },
     renderFields() {
-      const fields = { ...this.variables };
+      const fields = { ...this.variables.fields };
       delete fields.description;
       delete fields.sideDescription;
       return fields;
     }
   },
   mounted() {
-    Object.keys(this.variables).forEach(key => {
-      // console.log(key);
-      this.setVariableValue({
-        name: key,
-        value: this.formData[key]
-      });
-    });
     this.setDescription();
 
     this.$eventHub.$on('validate', () => {
@@ -118,6 +122,7 @@ export default {
     },
     setDescription() {
       this.formData.description = this.description;
+      console.log(this.description);
       this.setVariableValue({
         name: 'description',
         value: this.description
