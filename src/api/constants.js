@@ -27,6 +27,7 @@ export const maltaVars = {
     date: {
       type: 'date',
       label: 'Fecha',
+      dateFormat: 'D/M/YY',
       value: new Date().toISOString().substr(0, 10),
       styles: [{
         top: 81,
@@ -34,7 +35,7 @@ export const maltaVars = {
         width: 100,
         weight: 600,
         rotation: -90,
-        fontSize: 10
+        fontSize: 9
       }]
     },
     factory: {
@@ -82,6 +83,7 @@ export const maltaVars = {
     description: {
       value: null,
       class: 'xs12',
+      dateFormat: 'DDMMMYYYY',
       styles: [
         {
           top: 3.5,
@@ -112,6 +114,7 @@ export const mynVars = {
     productionDate: {
       type: 'date',
       label: 'Fecha de producción',
+      dateFormat: 'DD-MM-YYYY',
       value: new Date().toISOString().substr(0, 10),
       styles: [{
         top: 35,

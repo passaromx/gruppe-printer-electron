@@ -6,7 +6,7 @@
         <div v-for="(key, index) in keys" :key="index">
           <div v-for="(style, j) in variables.fields[key].styles" :key="index + j">
             <VarDisplay :name="key" :data="style">
-              {{ variables.fields[key].value }} {{ key === 'weight' ? 'Kg' : '' }}
+              {{ formatValue(key) }}
             </VarDisplay>
           </div>
 
@@ -35,19 +35,13 @@
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
 import { mapState, mapMutations } from 'vuex';
-// import { mynVars } from '@/api/constants';
+import moment from 'moment';
 
 export default {
   components: { VarDisplay: () => import('@/components/Printer/VarDisplay') },
   data() {
     return { label: null, };
   },
-  // watch: {
-  //   selectedLabel(val) {
-  //     console.log('watch', val, this.variables);
-  //     this.width = `${87 / this.user.client.settings.ratio} vh`;
-  //   }
-  // },
   computed: {
     ...mapState('printer', ['selectedLabel', 'previewLoader', 'variables']),
     ...mapState('auth', ['user']),
@@ -64,7 +58,17 @@ export default {
   mounted() {
     this.setPreviewLoader(false);
   },
-  methods: { ...mapMutations('printer', ['setPreviewLoader', 'setVariableValue']) }
+  methods: {
+    ...mapMutations('printer', ['setPreviewLoader', 'setVariableValue']),
+    formatValue(key) {
+      const field = this.variables.fields[key];
+      let formattedValue = field.value;
+      if (this.variables.fields[key].type === 'date') {
+        formattedValue = moment(formattedValue).format(field.dateFormat);
+      }
+      return `${formattedValue}${key === 'weight' ? 'Kg' : ''}`;
+    }
+  }
 };
 
 </script>
