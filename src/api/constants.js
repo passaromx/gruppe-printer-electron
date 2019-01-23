@@ -1,6 +1,6 @@
 
-export const filesURL = 'http://192.168.86.189:1337';
-// export const filesURL = 'http://localhost:1337';
+// export const filesURL = 'http://192.168.86.189:1337';
+export const filesURL = 'http://localhost:1337';
 export const apiURL = `${filesURL}/`;
 
 export const roles = {
@@ -9,7 +9,7 @@ export const roles = {
 };
 
 export const clients = {
-  nym: '5c40b928a5888531a0076cbd',
+  myn: '5c40b928a5888531a0076cbd',
   malta: '5c38cb394903e5fc92396909'
 };
 
@@ -92,7 +92,7 @@ export const maltaVars = {
   descriptionFormat: 'factory-date-line-shift-group'
 };
 
-export const nymVars = {
+export const mynVars = {
   fields: {
     title: {
       type: 'title',

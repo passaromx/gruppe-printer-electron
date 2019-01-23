@@ -2,7 +2,7 @@
   <BaseCard flat :isFullHeight="true" color="grey lighten-2">
 
     <VLayout fill-height align-center justify-center>
-      <div class="variable-wrapper" v-bind:style="{width: '58vh'}" v-if="selectedLabel">
+      <div class="variable-wrapper" v-bind:style="{width}" v-if="selectedLabel">
         <div v-for="(key, index) in keys" :key="index">
           <div v-for="(style, j) in variables.fields[key].styles" :key="index + j">
             <VarDisplay :name="key" :data="style">
@@ -35,21 +35,28 @@
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
 import { mapState, mapMutations } from 'vuex';
-// import { nymVars } from '@/api/constants';
+// import { mynVars } from '@/api/constants';
 
 export default {
   components: { VarDisplay: () => import('@/components/Printer/VarDisplay') },
   data() {
-    return { label: null };
+    return { label: null, };
   },
-  watch: {
-    selectedLabel(val) {
-      console.log('watch', val, this.variables);
-    }
-  },
+  // watch: {
+  //   selectedLabel(val) {
+  //     console.log('watch', val, this.variables);
+  //     this.width = `${87 / this.user.client.settings.ratio} vh`;
+  //   }
+  // },
   computed: {
     ...mapState('printer', ['selectedLabel', 'previewLoader', 'variables']),
     ...mapState('auth', ['user']),
+    width() {
+      if (this.user.client) {
+        return `${87 / this.user.client.settings.ratio}vh`;
+      }
+      return 0;
+    },
     keys() {
       return Object.keys(this.variables.fields).filter(variable => (!!this.variables.fields[variable].styles));
     }

@@ -81,7 +81,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { ipcRenderer } from 'electron';
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
-import { nymVars, maltaVars } from '@/api/constants';
+import { mynVars, maltaVars, clients } from '@/api/constants';
 
 export default {
   $_veeValidate: { validator: 'new' },
@@ -96,7 +96,7 @@ export default {
       place: 'TX',
       weight: 1,
       zpl: '',
-      nymVars,
+      mynVars,
       maltaVars,
       resize: false,
       timeout: null
@@ -150,8 +150,8 @@ export default {
       });
     },
     setClientVariables() {
-      const vars = this.user.client._id === '5c40b928a5888531a0076cbd'
-        ? this.nymVars
+      const vars = this.user.client._id === clients.myn
+        ? this.mynVars
         : this.maltaVars;
       this.setVariables(vars);
     },
@@ -181,7 +181,7 @@ export default {
         client: this.user.client._id
       };
 
-      ipcRenderer.send('print', this.printer, this.selectedLabel, printData, this.user.client.settings);
+      ipcRenderer.send('print', this.printer, this.selectedLabel, printData, this.user.client.settings.format);
       // update sys info
       const systemInfo = JSON.parse(localStorage.getItem('systemInfo'));
       systemInfo.printerName = this.printer;
