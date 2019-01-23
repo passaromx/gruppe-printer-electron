@@ -6,6 +6,7 @@ const os = require('os');
 const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
 const { login } = require('./utils/offline/session');
+const { arial, arialbold } = require('./utils/offline/printer/fonts');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -130,6 +131,13 @@ ipcMain.on('print', (e, printer, label, data, format) => {
         .then(printed => console.log(printed))
         .catch(err => console.log(err));
     });
+});
+
+ipcMain.on('sendFonts', (e, printer) => {
+  const fonts = arial + arialbold;
+  printLabel(printer, fonts)
+    .then(printed => console.log(printed))
+    .catch(err => console.log(err));
 });
 
 // Quit when all windows are closed.
