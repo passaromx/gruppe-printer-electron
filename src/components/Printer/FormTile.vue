@@ -3,57 +3,64 @@
     <VCardTitle>
       <h5 class="headline">Imprimir</h5>
     </VCardTitle>
-    <!-- <VDivider /> -->
-    <VCardText>
-      <VContainer class="pa-0" grid-list-lg>
-        <VLayout row wrap>
-          <VFlex xs12>
-            <VSelect
-              :items="printers"
-              v-model="printer"
-              label="Impresora"
-              outline
-              hide-details
-              ref="displayName"
-              item-text="displayName"
-              item-value="name"/>
-          </VFlex>
-          <VFlex xs12>
-            <LabelAutocomplete
-              name="labels"
-              v-validate="'required'"
-              :messages="errors.collect('labels')"/>
-          </VFlex>
-        </VLayout>
-        <Form
-          v-if="this.user"
-          :client="this.user.client._id" />
-        <VLayout row justify-start class="mt-3">
-          <VFlex xs6>
-            <VTextField
-              outline
-              data-vv-name="copies"
-              v-validate="'required|min_value:1|max_value:5000'"
-              :error-messages="errors.collect('copies')"
-              label="Copias"
-              :value="1" />
-          </VFlex>
-        </VLayout>
-        <VLayout justify-end>
-          <VBtn>
-            <VIcon class="mr-2">cloud_download</VIcon>
-            PDF
-          </VBtn>
-          <VBtn
-            @click="validate"
-            :disabled="errors.items.length > 0"
-            color="primary"
-          >
-            Imprimir
-          </VBtn>
-        </VLayout>
-      </VContainer>
-    </VCardText>
+    <VDivider class="elevation-1" v-show="divider"/>
+    <VuePerfectScrollbar
+      :settings="scrollSettings"
+      @ps-scroll-down="handleScroll"
+      @ps-y-reach-start="handleScroll"
+    >
+      <VCardText style="max-height: 87vh">
+        <VContainer class="pa-0" grid-list-lg>
+          <VLayout row wrap>
+            <VFlex xs12>
+              <VSelect
+                :items="printers"
+                v-model="printer"
+                label="Impresora"
+                outline
+                hide-details
+                ref="displayName"
+                item-text="displayName"
+                item-value="name"/>
+            </VFlex>
+            <VFlex xs12>
+              <LabelAutocomplete
+                name="labels"
+                v-validate="'required'"
+                :messages="errors.collect('labels')"/>
+            </VFlex>
+          </VLayout>
+          <Form
+            v-if="this.user"
+            :client="this.user.client._id" />
+          <VLayout row justify-start class="mt-3">
+            <VFlex xs6>
+              <VTextField
+                outline
+                data-vv-name="copies"
+                v-validate="'required|min_value:1|max_value:5000'"
+                :error-messages="errors.collect('copies')"
+                label="Copias"
+                :value="1" />
+            </VFlex>
+          </VLayout>
+          <VLayout justify-end>
+            <VBtn :disabled="!selectedLabel">
+              <!-- <VIcon class="mr-2">cloud_download</VIcon> -->
+              Ver PDF
+            </VBtn>
+            <VBtn
+              @click="print"
+              :disabled="errors.items.length > 0 || !selectedLabel"
+              color="primary"
+            >
+              Imprimir
+            </VBtn>
+          </VLayout>
+        </VContainer>
+      </VCardText>
+    </VuePerfectScrollbar>
+
   </BaseCard>
 </template>
 
@@ -67,10 +74,12 @@ export default {
   $_veeValidate: { validator: 'new' },
   components: {
     LabelAutocomplete: () => import('@/components/Printer/LabelAutocomplete'),
-    Form: () => import('@/components/Printer/Forms/Form')
+    Form: () => import('@/components/Printer/Forms/Form'),
+    VuePerfectScrollbar: () => import('vue-perfect-scrollbar')
   },
   data() {
     return {
+      scrollSettings: { maxScrollbarLength: 160 },
       printer: 'Zebra_Technologies_ZTC_110Xi4_203dpi_ZPL',
       printers: [],
       place: 'TX',
@@ -79,7 +88,8 @@ export default {
       mynVars,
       maltaVars,
       resize: false,
-      timeout: null
+      timeout: null,
+      divider: false
     };
   },
   mounted() {
@@ -135,7 +145,10 @@ export default {
         : this.maltaVars;
       this.setVariables(vars);
     },
-    validate() {
+    handleScroll(e) {
+      this.divider = e.type === 'ps-scroll-down';
+    },
+    print() {
       const variables = { ...this.variables.fields };
       Object.keys(variables).forEach(key => {
         variables[key] = variables[key].value;
