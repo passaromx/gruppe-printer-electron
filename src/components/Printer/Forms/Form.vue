@@ -12,7 +12,6 @@
         :disabled="!selectedLabel"
         :label="field.label"
         outline
-        hide-details
         @change="handleSelect(index, $event)"
       />
       <DatePicker
@@ -26,12 +25,13 @@
         :messages="errors.collect(index)"
       />
       <VTextField
-        v-if="field.type === 'text' && field.type != 'title'"
-        :number="field.type === 'number'"
+        :maxlength="field.maxlength || 20"
+        v-if="field.type === 'text' || field.type === 'number' "
+        :type="field.type"
         :disabled="!selectedLabel"
         @input="handleInput(index)"
         outline
-        hide-details
+        :hide-details="!errors.collect(index).length"
         v-model="formData[index]"
         :label="field.label"
         v-validate="field.validation"
