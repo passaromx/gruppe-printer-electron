@@ -1,11 +1,14 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-useless-escape */
+/* eslint-disable import/no-extraneous-dependencies */
 const fs = require('fs');
+const electron = require('electron');
+const path = require('path');
 const zplFormat = require('./zplFormat');
 
 const startTrail = '^LS0';
 const endTrail = '^PQ';
-
+const userDataPath = (electron.app || electron.remote.app).getPath('userData');
 module.exports = async (filePath, format, params = {
   description: 'Variables',
   expireDate: '2018-01-01',
@@ -13,10 +16,11 @@ module.exports = async (filePath, format, params = {
   copies: 1
 }) => new Promise(async (resolve, reject) => {
   try {
+    const dataPath = path.join(userDataPath, 'data');
     const start = zplFormat(format, params);
     const end = `^PQ${params.copies},1,1,Y^XZ`;
 
-    let zpl = await fs.readFileSync(`public/data/${params.client}${filePath}`, 'utf8');
+    let zpl = await fs.readFileSync(`${dataPath}/${params.client}${filePath}`, 'utf8');
 
     zpl = (zpl.split(startTrail))[1];
 

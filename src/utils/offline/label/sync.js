@@ -1,32 +1,40 @@
-
+/* eslint-disable import/no-extraneous-dependencies */
 const request = require('request');
+const electron = require('electron');
+const path = require('path');
 
 const fs = require('fs');
 const { apiURL } = require('../../../api/constants');
 
+const userDataPath = (electron.app || electron.remote.app).getPath('userData');
+
 module.exports = client => new Promise((resolve, reject) => {
   const id = client._id;
-  const clientExists = fs.existsSync(`public/data/${id}`);
+  const dataPath = path.join(userDataPath, 'data');
+  const dataPathExists = fs.existsSync(`${dataPath}`);
+  if (!dataPathExists) {
+    fs.mkdirSync(path.join(userDataPath, 'data'), { recursive: true });
+  }
+  const clientExists = fs.existsSync(`${dataPath}/${id}`);
   if (!clientExists) {
-    fs.mkdirSync(`public/data/${id}`, { recursive: true });
-    fs.mkdirSync(`public/data/${id}/uploads`, { recursive: true });
+    fs.mkdirSync(`${dataPath}/${id}`, { recursive: true });
+    fs.mkdirSync(`${dataPath}/${id}/uploads`, { recursive: true });
   }
 
-
-  let config = fs.existsSync(`public/data/${id}/config.json`);
+  let config = fs.existsSync(`${dataPath}/${id}/config.json`);
   if (config) {
-    config = JSON.parse(fs.readFileSync(`public/data/${id}/config.json`, 'utf8'));
+    config = JSON.parse(fs.readFileSync(`${dataPath}/${id}/config.json`, 'utf8'));
   } else {
-    fs.writeFileSync(`public/data/${id}/config.json`, '{}');
+    fs.writeFileSync(`${dataPath}/${id}/config.json`, '{}');
     config = {};
   }
 
 
-  let labels = fs.existsSync(`public/data/${id}/labels.json`);
+  let labels = fs.existsSync(`${dataPath}/${id}/labels.json`);
   if (labels) {
-    labels = JSON.parse(fs.readFileSync(`public/data/${id}/labels.json`, 'utf8'));
+    labels = JSON.parse(fs.readFileSync(`${dataPath}/${id}/labels.json`, 'utf8'));
   } else {
-    fs.writeFileSync(`public/data/${id}/labels.json`, '[]');
+    fs.writeFileSync(`${dataPath}/${id}/labels.json`, '[]');
     labels = [];
   }
 
@@ -35,7 +43,6 @@ module.exports = client => new Promise((resolve, reject) => {
     json: true,
     timeout: 3500
   }, (err, response, body) => {
-    // console.log('response', body);
     if (err || !body.allLabels) {
       resolve({
         err: err || new Error('no labels'),
@@ -57,7 +64,7 @@ module.exports = client => new Promise((resolve, reject) => {
       request(`${apiURL}${upload.url}`, { encoding: null }, (error, resp, download) => {
         if (error) reject(error);
         const filename = upload.url;
-        fs.writeFileSync(`public/data/${id}${filename}`, download, e => {
+        fs.writeFileSync(`${dataPath}/${id}${filename}`, download, e => {
           if (e) {
             console.log(e);
             reject(e);
@@ -66,8 +73,8 @@ module.exports = client => new Promise((resolve, reject) => {
         });
       });
     });
-    fs.writeFileSync(`public/data/${id}/config.json`, config);
-    fs.writeFileSync(`public/data/${id}/labels.json`, labels);
+    fs.writeFileSync(`${dataPath}/${id}/config.json`, config);
+    fs.writeFileSync(`${dataPath}/${id}/labels.json`, labels);
 
 
     resolve({

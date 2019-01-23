@@ -1,0 +1,15 @@
+appId: com.passaro.gruppeprinter
+publish:
+    provider: github
+    token: f47509656b25bf79ff7130ab6601871d5f5e025a
+"files": [
+      "dist_electron/**/*",
+      "package.json"
+    ]
+"extends": null
+"directories": {
+  "buildResources": "."
+}
+"mac": {
+  "category": "public.app-category.productivity"
+}

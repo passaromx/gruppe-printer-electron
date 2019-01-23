@@ -1,12 +1,21 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { app, protocol, BrowserWindow, ipcMain } from 'electron';
+import {
+  app, protocol, BrowserWindow, ipcMain, dialog
+} from 'electron';
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
 
 const os = require('os');
+const { autoUpdater } = require('electron-updater');
 const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
 const { login } = require('./utils/offline/session');
 const { arial, arialbold } = require('./utils/offline/printer/fonts');
+autoUpdater.logger = require('electron-log');
+
+autoUpdater.autoDownload = false;
+// const log = require('electron-log');
+
+autoUpdater.logger.transports.file.level = 'info';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -48,7 +57,6 @@ function createWindow() {
 
 const hostname = os.hostname();
 const networkIfaces = os.networkInterfaces();
-
 ipcMain.on('get-system-info', e => {
   let result = Object.keys(networkIfaces).map(key => ({
     key,
@@ -133,7 +141,7 @@ ipcMain.on('print', (e, printer, label, data, format) => {
     });
 });
 
-ipcMain.on('sendFonts', (e, printer) => {
+ipcMain.on('update-fonts', (e, printer) => {
   const fonts = arial + arialbold;
   printLabel(printer, fonts)
     .then(printed => console.log(printed))
@@ -161,11 +169,43 @@ app.on('activate', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
+  // log.info('app is ready!')
+  createWindow();
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
     await installVueDevtools();
+  } else {
+    setTimeout(autoUpdater.checkForUpdates(), 2000);
   }
-  createWindow();
+});
+
+autoUpdater.on('update-available', () => {
+  // Prompt user to update
+  dialog.showMessageBox({
+    type: 'info',
+    title: 'Update Available',
+    message: 'A new version of Readit is available. Do you want to update now?',
+    buttons: ['Update', 'No']
+  }, buttonIndex => {
+    // If not 'Update' button, return
+    if (buttonIndex !== 0) return;
+
+    // Else start download and show download progress in new window
+    autoUpdater.downloadUpdate();
+
+    autoUpdater.on('update-downloaded', () => {
+      // Prompt user to quit and install update
+      dialog.showMessageBox({
+        type: 'info',
+        title: 'Update Ready',
+        message: 'A new version of Readit is ready. Quit and install now?',
+        buttons: ['Yes', 'Later']
+      }, buttonIndexx => {
+        // Update if 'Yes'
+        if (buttonIndexx === 0) autoUpdater.quitAndInstall();
+      });
+    });
+  });
 });
 
 // Exit cleanly on request from parent process in development mode.
