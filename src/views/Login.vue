@@ -13,7 +13,7 @@
             height="150"
             width="60%" />
         </VLayout>
-        <form class="mx-5 mt-5">
+        <VForm class="mx-5 mt-5" @keyup.native.enter="validate">
           <VTextField
             label="Correo o usuario"
             v-model="email"
@@ -42,7 +42,7 @@
               Iniciar Sesión
             </VBtn>
           </VLayout>
-        </form>
+        </VForm>
       </VContainer>
 
     </VFlex>
