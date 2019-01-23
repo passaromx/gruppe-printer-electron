@@ -48,6 +48,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex';
+import moment from 'moment';
 
 // const today = new Date();
 
@@ -66,7 +67,14 @@ export default {
     description() {
       const formatted = this.variables.descriptionFormat
         .split('-')
-        .reduce((format, variable, i) => `${format}${i === 0 ? '' : '-'}${this.formData[variable] || ''}`, '');
+        .reduce((format, variable, i) => {
+          let value = this.formData[variable];
+          if (this.variables.fields[variable].type === 'date') {
+            const { dateFormat } = this.variables.fields.description;
+            value = moment(this.formData[variable]).format(dateFormat);
+          }
+          return `${format}${i === 0 ? '' : '-'}${value || ''}`;
+        }, '');
       return formatted;
     },
     formData() {

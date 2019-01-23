@@ -29,6 +29,7 @@
       v-model="date"
       no-title
       scrollable
+       locale="es"
       @input="handleInput">
       <!-- <v-spacer></v-spacer>
       <v-btn flat color="primary" @click="expiresMenu = false">Cancelar</v-btn>
