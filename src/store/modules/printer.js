@@ -13,7 +13,6 @@ const mutations = {
   setLabel: set('label'),
   setPreviewLoader: set('previewLoader'),
   setVariables: set('variables'),
-  setDescriptionFormat: set('descriptionFormat'),
   setCopies: set('copies'),
   setVariableValue: setValue()
 };
@@ -49,7 +48,6 @@ const state = {
   selectedLabel: null,
   previewLoader: false,
   variables: {},
-  descriptionFormat: '',
   copies: 1
 };
 

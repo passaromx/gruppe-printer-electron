@@ -21,32 +21,9 @@
           <VFlex xs12>
             <LabelAutocomplete
               name="labels"
-              @change="handleChange"
               v-validate="'required'"
               :messages="errors.collect('labels')"/>
           </VFlex>
-
-          <!-- <VFlex xs6>
-            <VTextField
-              :disabled="!selectedLabel"
-              outline
-              v-validate="'required'"
-              data-vv-name="place"
-              :error-messages="errors.collect('place')"
-              v-model="place"
-              label="Planta" />
-          </VFlex> -->
-          <!-- <VFlex xs3>
-            <VTextField
-              number
-              :disabled="!selectedLabel"
-              outline
-              v-validate="'required|min_value:1'"
-              data-vv-name="weight"
-              :error-messages="errors.collect('weight')"
-              v-model="weight"
-              label="Peso neto" />
-          </VFlex> -->
         </VLayout>
         <Form
           v-if="this.user"
@@ -55,8 +32,11 @@
           <VFlex xs6>
             <VTextField
               outline
+              data-vv-name="copies"
+              v-validate="'required|min_value:1|max_value:5000'"
+              :error-messages="errors.collect('copies')"
               label="Copias"
-              :value="1"></VTextField>
+              :value="1" />
           </VFlex>
         </VLayout>
         <VLayout justify-end>
@@ -154,17 +134,6 @@ export default {
         ? this.mynVars
         : this.maltaVars;
       this.setVariables(vars);
-    },
-    handleChange() {
-      if (this.selectedLabel) {
-        const data = {
-          description: '',
-          expireDate: '',
-          productionDate: ''
-        };
-        console.log(data);
-        // this.setPreviewLoader(true);
-      }
     },
     validate() {
       const variables = { ...this.variables.fields };

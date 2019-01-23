@@ -56,7 +56,7 @@ export default {
     description() {
       const formatted = this.variables.descriptionFormat
         .split('-')
-        .reduce((format, variable, i) => `${format}${i === 0 ? '' : '-'}${this.formData[variable]}`, '');
+        .reduce((format, variable, i) => `${format}${i === 0 ? '' : '-'}${this.formData[variable] || 'n/a'}`, '');
       return formatted;
     },
     formData() {
