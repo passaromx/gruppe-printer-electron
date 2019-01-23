@@ -13,11 +13,15 @@ export default {
   computed: {
     styles() {
       return {
+        width: `${this.data.width}px`,
         top: `${this.data.top}%`,
+        bottom: `${this.data.bottom}%`,
         left: `${this.data.left}%`,
+        right: `${this.data.right}%`,
         fontWeight: this.data.weight,
         fontSize: `${this.data.fontSize || 14}px`,
-        '-webkit-transform': `rotate(${this.data.rotation || 0}deg)`
+        '-webkit-transform': `rotate(${this.data.rotation || 0}deg)`,
+        'transform-origin': '0% 0%'
       };
     }
   }

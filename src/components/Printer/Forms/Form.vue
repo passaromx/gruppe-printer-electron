@@ -5,6 +5,16 @@
       :key="index"
       :class="field.class || fieldClass(field)"
     >
+      <VSelect
+        v-if="field.type === 'select'"
+        :items="field.items"
+        v-model="formData[index]"
+        :disabled="!selectedLabel"
+        :label="field.label"
+        outline
+        hide-details
+        @change="handleSelect(index, $event)"
+      />
       <DatePicker
         v-if="field.type === 'date'"
         :disabled="!selectedLabel"
@@ -16,7 +26,7 @@
         :messages="errors.collect(index)"
       />
       <VTextField
-        v-if="field.type != 'date' && field.type != 'title'"
+        v-if="field.type === 'text' && field.type != 'title'"
         :number="field.type === 'number'"
         :disabled="!selectedLabel"
         @input="handleInput(index)"
@@ -56,7 +66,7 @@ export default {
     description() {
       const formatted = this.variables.descriptionFormat
         .split('-')
-        .reduce((format, variable, i) => `${format}${i === 0 ? '' : '-'}${this.formData[variable] || 'n/a'}`, '');
+        .reduce((format, variable, i) => `${format}${i === 0 ? '' : '-'}${this.formData[variable] || ''}`, '');
       return formatted;
     },
     formData() {
@@ -104,6 +114,13 @@ export default {
       this.setVariableValue({
         name: field,
         value: this.formData[field]
+      });
+      this.setDescription();
+    },
+    handleSelect(name, value) {
+      this.setVariableValue({
+        name,
+        value
       });
       this.setDescription();
     },

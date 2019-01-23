@@ -13,6 +13,10 @@ export const clients = {
   malta: '5c38cb394903e5fc92396909'
 };
 
+const maltaFactories = [
+  'BAJ', 'CLN', 'GDL', 'MER', 'MOR', 'MTY', 'STJ', 'TEP', 'TLX'
+];
+
 export const maltaVars = {
   fields: {
     title: {
@@ -25,18 +29,20 @@ export const maltaVars = {
       label: 'Fecha',
       value: new Date().toISOString().substr(0, 10),
       styles: [{
-        top: 75,
-        left: 82,
-        weight: 500,
+        top: 81,
+        left: 93.5,
+        width: 100,
+        weight: 600,
         rotation: -90,
         fontSize: 10
       }]
     },
     factory: {
-      type: 'text',
+      type: 'select',
       label: 'Planta',
       validation: 'required',
-      value: null,
+      items: maltaFactories,
+      value: maltaFactories[0]
     },
     line: {
       type: 'text',
@@ -56,9 +62,9 @@ export const maltaVars = {
       validation: 'required',
       value: 40,
       styles: [{
-        top: 1.5,
-        left: 78,
-        weight: 500,
+        top: 1.3,
+        left: 84,
+        weight: 600,
         rotation: 0,
         fontSize: 10
       }]
@@ -75,14 +81,14 @@ export const maltaVars = {
       styles: [
         {
           top: 3.5,
-          left: 50,
+          right: 7,
           weight: 500,
           rotation: 0
         },
         {
-          top: 86,
-          left: 0,
-          weight: 500,
+          bottom: 20,
+          left: 7,
+          weight: 600,
           fontSize: 10,
           rotation: 90
         }
