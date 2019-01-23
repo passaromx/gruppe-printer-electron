@@ -3,48 +3,49 @@ import { remote } from 'electron';
 // import bus from './event';
 
 export default app => {
+  console.log(app.$store.getters['auth/isAdmin']);
   const template = [
-    {
-      label: 'Productos',
-      submenu: [
-        {
-          label: 'Nuevo',
-          accelerator: 'CmdOrCtrl+N',
-          // click() { bus.$emit('newItem'); }
-        },
-        {
-          label: 'Borrar',
-          accelerator: 'CmdOrCtrl+Backspace',
-          // click() { window.deleteItem(-1); }
-        },
-        { type: 'separator' },
-        {
-          label: 'Search Items',
-          accelerator: 'CmdOrCtrl+S',
-          // click() { bus.$emit('search'); }
-        }
-      ]
-    },
-    {
-      label: 'Impresión',
-      submenu: [
-        {
-          label: 'Imprimir',
-          accelerator: 'CmdOrCtrl+P',
-          // click() { bus.$emit('newItem'); }
-        },
-        {
-          label: 'Syncronizar',
-          accelerator: 'CmdOrCtrl+S',
-          click() { app.$eventHub.$emit('sync'); }
-        },
-        {
-          label: 'Abrir PDF',
-          accelerator: 'CmdOrCtrl+Shift+Enter',
-          // click() { bus.$emit('readItem'); }
-        }
-      ]
-    },
+    // {
+    //   label: 'Productos',
+    //   submenu: [
+    //     {
+    //       label: 'Nuevo',
+    //       accelerator: 'CmdOrCtrl+N',
+    //       // click() { bus.$emit('newItem'); }
+    //     },
+    //     {
+    //       label: 'Borrar',
+    //       accelerator: 'CmdOrCtrl+Backspace',
+    //       // click() { window.deleteItem(-1); }
+    //     },
+    //     { type: 'separator' },
+    //     {
+    //       label: 'Search Items',
+    //       accelerator: 'CmdOrCtrl+S',
+    //       // click() { bus.$emit('search'); }
+    //     }
+    //   ]
+    // },
+    // {
+    //   label: 'Impresión',
+    //   submenu: [
+    //     {
+    //       label: 'Imprimir',
+    //       accelerator: 'CmdOrCtrl+P',
+    //       // click() { bus.$emit('newItem'); }
+    //     },
+    //     {
+    //       label: 'Syncronizar',
+    //       accelerator: 'CmdOrCtrl+S',
+    //       click() { app.$eventHub.$emit('sync'); }
+    //     },
+    //     {
+    //       label: 'Abrir PDF',
+    //       accelerator: 'CmdOrCtrl+Shift+Enter',
+    //       // click() { bus.$emit('readItem'); }
+    //     }
+    //   ]
+    // },
     {
       label: 'Edición',
       submenu: [
@@ -60,7 +61,22 @@ export default app => {
       ]
     },
     {
-      role: 'ventana',
+      label: 'Vista',
+      submenu: [
+        { role: 'reload' },
+        { role: 'forcereload' },
+        { role: 'toggledevtools' },
+        { type: 'separator' },
+        { role: 'resetzoom' },
+        { role: 'zoomin' },
+        { role: 'zoomout' },
+        { type: 'separator' },
+        { role: 'togglefullscreen' }
+      ]
+    },
+    {
+      label: 'Ventana',
+      role: 'window',
       submenu: [
         { role: 'minimize' },
         { role: 'close' }

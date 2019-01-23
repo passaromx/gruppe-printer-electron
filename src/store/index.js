@@ -2,25 +2,17 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { set, handleError } from '@/utils';
 
-import moment from 'moment';
 import auth from './modules/auth';
 import clients from './modules/clients';
 import printer from './modules/printer';
 import labels from './modules/labels';
-
-moment.locale('es');
-moment.updateLocale('es', {
-  monthsShort: [
-    'ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL',
-    'AGO', 'SEP', 'OCT', 'NOV', 'DIC'
-  ]
-});
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   getters: { deleteConfirmDialog: state => state.toDelete !== null },
   state: {
+    fontDialog: false,
     isLoading: false,
     isReady: false,
     toDelete: null,
@@ -34,7 +26,7 @@ const store = new Vuex.Store({
   mutations: {
     setIsReady: set('isReady'),
     setIsLoading: set('isLoading'),
-    // setUser: set('user'),
+    setFontDialog: set('fontDialog'),
     setToDelete: set('toDelete'),
     setSnackbar: set('snackbar')
   },
