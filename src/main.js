@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import './plugins/vuetify';
 import './plugins/veeValidate';
+import './plugins/moment';
 import i18n from './plugins/i18n';
 import './components/Shared';
 import App from './App';
