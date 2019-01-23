@@ -12,6 +12,7 @@
         :disabled="!selectedLabel"
         :label="field.label"
         outline
+        :hide-details="!errors.collect(index).length"
         @change="handleSelect(index, $event)"
       />
       <DatePicker
