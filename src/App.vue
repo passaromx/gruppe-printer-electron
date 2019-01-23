@@ -1,5 +1,7 @@
 <template>
   <VApp>
+    <FontUploader />
+
     <VNavigationDrawer
       v-if="isLoggedIn"
       v-model="drawer"
@@ -65,6 +67,19 @@
           </VListTileContent>
         </VListTile>
 
+        <VListTile
+          v-if="isAdmin"
+          @click="setFontDialog(true)"
+        >
+          <VListTileAction>
+            <VIcon>font_download</VIcon>
+          </VListTileAction>
+
+          <VListTileContent>
+            <VListTileTitle>Subir fuentes</VListTileTitle>
+          </VListTileContent>
+        </VListTile>
+
         <VDivider light></VDivider>
 
         <VListTile
@@ -93,19 +108,19 @@
 </template>
 
 <script>
-/* eslint-disable import/no-extraneous-dependencies */
 import menu from '@/api/menu';
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
-// import appMenu from '@/api/desktop-menu';
+import appMenu from '@/api/desktop-menu';
 
 export default {
   name: 'App',
   components: {
     DeleteConfirm: () => import('@/components/DeleteConfirm'),
-    Snackbar: () => import('@/components/Snackbar')
+    Snackbar: () => import('@/components/Snackbar'),
+    FontUploader: () => import('@/components/FontUploader')
   },
   mounted() {
-    // appMenu(this);
+    appMenu(this);
     this.$eventHub.$on('closeDrawer', () => {
       this.mini = true;
     });
@@ -114,7 +129,7 @@ export default {
     return {
       drawer: null,
       menu,
-      mini: false,
+      mini: false
     };
   },
   computed: {
@@ -129,6 +144,7 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['signOut']),
+    ...mapMutations(['setFontDialog']),
     ...mapMutations('printer', ['setIsSyncing', 'setLabels', 'setConfig']),
     logout() {
       this.signOut().then(() => {
