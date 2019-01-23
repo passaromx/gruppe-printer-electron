@@ -8,6 +8,9 @@ const dictionary = {
       required() {
         return 'Campo requerido.';
       },
+      len() {
+        return 'Longitud requerido.';
+      },
       min(e, n) {
         return `Mínimo ${n[0]} caractéres.`;
       },

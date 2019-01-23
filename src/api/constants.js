@@ -48,18 +48,21 @@ export const maltaVars = {
       type: 'text',
       label: 'Línea',
       validation: 'required',
+      maxlength: 2,
       value: 1
     },
     shift: {
       type: 'text',
       label: 'Turno',
       validation: 'required',
+      maxlength: 1,
       value: 1
     },
     weight: {
-      type: 'text',
+      type: 'number',
       label: 'Peso neto',
-      validation: 'required',
+      validation: 'required|min_value:1|max_value:999',
+      maxlength: 3,
       value: 40,
       styles: [{
         top: 1.3,
@@ -72,7 +75,8 @@ export const maltaVars = {
     group: {
       type: 'text',
       label: 'Grupo',
-      validation: 'required',
+      maxlength: 4,
+      validation: 'required|min:4',
       value: 'A001',
     },
     description: {
