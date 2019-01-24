@@ -13,3 +13,7 @@ publish:
 "mac": {
   "category": "public.app-category.productivity"
 }
+win: {
+  certificateFile: "private/gruppe-printer.p12",
+  verifyUpdateCodeSignature: false
+}
