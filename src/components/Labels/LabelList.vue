@@ -167,6 +167,7 @@ export default {
       });
 
       const url = `${filesURL}${file.url}`;
+      console.log(url);
       pdfWindow.loadURL(url);
       pdfWindow.setMenu(null);
       pdfWindow.on('closed', () => {
