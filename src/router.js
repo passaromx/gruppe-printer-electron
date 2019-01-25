@@ -49,6 +49,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+  console.log(to, from);
   const user = JSON.parse(localStorage.getItem('USER'));
   if (to.matched.some(record => record.meta.isAdmin)) {
     if (user.role._id === roles.admin) {

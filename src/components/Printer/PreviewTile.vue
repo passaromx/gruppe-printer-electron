@@ -50,7 +50,7 @@ export default {
     ...mapState('printer', ['selectedLabel', 'previewLoader', 'variables']),
     ...mapState('auth', ['user']),
     width() {
-      if (this.user.client) {
+      if (this.user && this.user.client) {
         return `${87 / this.user.client.settings.ratio}vh`;
       }
       return 0;

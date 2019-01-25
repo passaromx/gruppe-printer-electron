@@ -6,6 +6,7 @@ import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-buil
 
 const os = require('os');
 const fs = require('fs');
+// const PDFWindow = require('electron-pdf-window');
 const { autoUpdater } = require('electron-updater');
 const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
@@ -120,6 +121,15 @@ ipcMain.on('login', (e, user, password, client, authenticate) => {
       e.sender.send('wrongCredentials', err);
     });
 });
+
+// ipcMain.on('open-pdf', (e, url) => {
+//   const pdfWindow = new BrowserWindow({
+//     width: 500,
+//     height: 800
+//   });
+//   pdfWindow.loadURL(`'app://./index.html#pdf-viewer?'${url}`);
+//   // we
+// });
 
 // ipcMain.on('getZpl', (e, label, data) => {
 //   const { getZpl, getPreview } = require('./utils/offline/printer');
