@@ -13,9 +13,9 @@
         </div>
       </div>
       <VImg
-        v-if="selectedLabel && user"
+        v-if="selectedLabel && user && imgPath"
         alt="label"
-        :src="`/data/${this.user.client._id}${this.selectedLabel.labelPng.url}`"
+        :src="imgPath"
         contain
         class="preview-img"/>
       <VLayout
@@ -36,11 +36,15 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { mapState, mapMutations } from 'vuex';
 import moment from 'moment';
+import { ipcRenderer } from 'electron';
 
 export default {
   components: { VarDisplay: () => import('@/components/Printer/VarDisplay') },
   data() {
-    return { label: null, };
+    return {
+      label: null,
+      imgPath: null
+    };
   },
   computed: {
     ...mapState('printer', ['selectedLabel', 'previewLoader', 'variables']),
@@ -57,6 +61,9 @@ export default {
   },
   mounted() {
     this.setPreviewLoader(false);
+    ipcRenderer.on('image-ready', (e, label) => {
+      this.imgPath = label;
+    });
   },
   methods: {
     ...mapMutations('printer', ['setPreviewLoader', 'setVariableValue']),

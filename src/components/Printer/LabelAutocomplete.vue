@@ -21,7 +21,10 @@
 </template>
 
 <script>
+/* eslint-disable import/no-extraneous-dependencies */
+
 import { createNamespacedHelpers } from 'vuex';
+import { ipcRenderer } from 'electron';
 
 const { mapState, mapGetters, mapMutations } = createNamespacedHelpers('printer');
 
@@ -66,6 +69,7 @@ export default {
     },
     handleChange(value) {
       this.setSelectedLabel(value);
+      ipcRenderer.send('selected-label', this.client, value.labelPng.url);
     }
   }
 };
