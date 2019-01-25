@@ -43,6 +43,7 @@ module.exports = client => new Promise((resolve, reject) => {
     json: true,
     timeout: 3500
   }, (err, response, body) => {
+    console.log(body);
     if (err || !body.allLabels) {
       resolve({
         err: err || new Error('no labels'),
