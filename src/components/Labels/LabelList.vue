@@ -163,7 +163,6 @@ export default {
 
 
       const url = `${filesURL}${file.url}`;
-      console.log(url);
       if (url.includes('.pdf')) {
         shell.openExternal(url);
       } else {
