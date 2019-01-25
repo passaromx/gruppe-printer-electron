@@ -69,7 +69,7 @@ export default {
     },
     handleChange(value) {
       this.setSelectedLabel(value);
-      ipcRenderer.send('selected-label', this.client, value.labelPng.url);
+      if (value) ipcRenderer.send('selected-label', this.client, value.labelPng.url);
     }
   }
 };

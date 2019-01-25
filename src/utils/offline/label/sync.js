@@ -9,14 +9,17 @@ const { apiURL } = require('../../../api/constants');
 const userDataPath = (electron.app || electron.remote.app).getPath('userData');
 
 module.exports = client => new Promise((resolve, reject) => {
+  let forceSync = false;
   const id = client._id;
   const dataPath = path.join(userDataPath, 'data');
   const dataPathExists = fs.existsSync(`${dataPath}`);
   if (!dataPathExists) {
+    forceSync = true;
     fs.mkdirSync(path.join(userDataPath, 'data'), { recursive: true });
   }
   const clientExists = fs.existsSync(`${dataPath}/${id}`);
   if (!clientExists) {
+    forceSync = true;
     fs.mkdirSync(`${dataPath}/${id}`, { recursive: true });
     fs.mkdirSync(`${dataPath}/${id}/uploads`, { recursive: true });
   }
@@ -25,6 +28,7 @@ module.exports = client => new Promise((resolve, reject) => {
   if (config) {
     config = JSON.parse(fs.readFileSync(`${dataPath}/${id}/config.json`, 'utf8'));
   } else {
+    forceSync = true;
     fs.writeFileSync(`${dataPath}/${id}/config.json`, '{}');
     config = {};
   }
@@ -34,16 +38,16 @@ module.exports = client => new Promise((resolve, reject) => {
   if (labels) {
     labels = JSON.parse(fs.readFileSync(`${dataPath}/${id}/labels.json`, 'utf8'));
   } else {
+    forceSync = true;
     fs.writeFileSync(`${dataPath}/${id}/labels.json`, '[]');
     labels = [];
   }
+  const lastSync = forceSync ? 0 : config.lastSync || 0;
 
-  const lastSync = config.lastSync || 0;
   request(`${apiURL}labels/sync?client=${id}&updatedAt_gte=${lastSync}`, {
     json: true,
     timeout: 3500
   }, (err, response, body) => {
-    console.log(body);
     if (err || !body.allLabels) {
       resolve({
         err: err || new Error('no labels'),
@@ -55,8 +59,14 @@ module.exports = client => new Promise((resolve, reject) => {
     config.lastSync = body.lastSync;
     config.client = client;
     labels = labels.filter(label => body.allLabels.some(item => item.toString() === label._id.toString()));
+    if (body.labels.length > 0) {
+      body.labels.forEach(label => {
+        const index = labels.findIndex(i => i._id === label._id.toString());
+        if (index !== -1) labels.splice(index, 1);
+      });
 
-    if (body.labels.length > 0) labels = [...labels || [], ...body.labels];
+      labels = [...labels || [], ...body.labels];
+    }
     const labelsJson = [...labels];
     const configJson = { ...config };
     labels = JSON.stringify(labels);
