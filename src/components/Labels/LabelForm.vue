@@ -4,8 +4,8 @@
       {{ isEditMode ? `Editar Etiqueta: ${editedItem.sku}` : 'Nueva Etiqueta'}}
     </BaseFormTitle>
     <VCardText>
-      <!-- sku, name, label file, auth file, pdf & png -->
-      <VTextField
+      <VForm @keyup.native.enter="validate">
+        <VTextField
         label="Nombre"
         v-model="editedItem.name"
         data-vv-name="name"
@@ -73,6 +73,8 @@
               :indeterminate="uploadProgress === 100"/>
           </div>
         </VExpandTransition>
+      </VForm>
+
     </VCardText>
 
     <VCardActions>
@@ -88,7 +90,7 @@
         flat
         color="success"
         @click="validate"
-        :disabled="loading"
+        :disabled="loading || errors.any()"
         :loading="loading"
       >
         Guardar

@@ -101,8 +101,7 @@
 
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
-import { remote } from 'electron';
-
+import { shell, remote } from 'electron';
 import { labelListHeaders, filesURL } from '@/api/constants';
 import { mapActions, mapState } from 'vuex';
 
@@ -160,19 +159,25 @@ export default {
       this.fetch(this.fromClient);
     },
     previewFile(file) {
-      let pdfWindow = new remote.BrowserWindow({
-        width: 500,
-        height: 800,
-        webPreferences: { plugins: true }
-      });
+      // console.log(file);
+
 
       const url = `${filesURL}${file.url}`;
-      pdfWindow.loadURL(url);
-      pdfWindow.setMenu(null);
-      pdfWindow.on('closed', () => {
-        pdfWindow = null;
-      });
-      // window.open(url, file.name);
+      console.log(url);
+      if (url.includes('.pdf')) {
+        shell.openExternal(url);
+      } else {
+        let win = new remote.BrowserWindow({
+          width: 500,
+          height: 800,
+          webPreferences: { plugins: true }
+        });
+        win.loadURL(url);
+        win.setMenu(null);
+        win.on('closed', () => {
+          win = null;
+        });
+      }
     },
     clearForm() {
       this.dialog = false;
