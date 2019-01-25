@@ -14,8 +14,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build -m",
+    "electron:build": "vue-cli-service electron:build -w",
     "electron:serve": "vue-cli-service electron:serve",
+    "createCert": "vue-cli-service electron:create-self-signed-cert",
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {

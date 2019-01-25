@@ -5,6 +5,7 @@ import {
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
 
 const os = require('os');
+const fs = require('fs');
 const { autoUpdater } = require('electron-updater');
 const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
@@ -84,6 +85,13 @@ ipcMain.on('check-mac', (e, info) => {
   e.sender.send('mac-checked', checks);
 });
 
+ipcMain.on('selected-label', (e, client, label) => {
+  const userDataPath = app.getPath('userData');
+  const labelPng = fs.readFileSync(`${userDataPath}/data/${client}/${label}`, { encoding: 'base64' });
+
+  e.sender.send('image-ready', `data:image/jpeg;base64,${labelPng}`);
+});
+
 ipcMain.on('get-printers', e => {
   const printers = win.webContents.getPrinters();
 
@@ -123,7 +131,7 @@ ipcMain.on('login', (e, user, password, client, authenticate) => {
 //           e.sender.send('label', renderLabel);
 //         })
 //         .catch(err => {
-//           const renderLabel = fs.readFileSync(`src/data${label.labelPng.url}`, { encoding: 'base64' });
+//           const renderLabel =
 //           e.sender.send('label', `data:image/jpeg;base64,${renderLabel}`);
 //           console.log(err);
 //         });
