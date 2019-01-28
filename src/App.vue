@@ -129,7 +129,7 @@ export default {
     return {
       drawer: null,
       menu,
-      mini: false
+      mini: true
     };
   },
   computed: {

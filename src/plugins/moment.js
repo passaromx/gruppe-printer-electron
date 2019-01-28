@@ -1,4 +1,5 @@
 import moment from 'moment';
+import Vue from 'vue';
 
 moment.locale('es');
 moment.updateLocale('es', {
@@ -7,3 +8,6 @@ moment.updateLocale('es', {
     'AGO', 'SEP', 'OCT', 'NOV', 'DIC'
   ]
 });
+
+// Helpers
+Vue.filter('prettyDate', val => moment(val).format('L'));

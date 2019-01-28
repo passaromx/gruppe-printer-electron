@@ -3,15 +3,16 @@
     <BaseCard>
       <BaseFormTitle>Actualización de Fuentes</BaseFormTitle>
       <VCardText>
-        <VSelect
-          :items="printers"
-          v-model="selectedPrinter"
-          v-validate="'required'"
-          data-vv-name="printer"
-          :error-messages="errors.collect('printer')"
-          label="Selecciona la impresora a actualizar"
-          item-text="description"
-          item-value="name"/>
+        <VForm @keyup.native.enter="validate">
+          <VSelect
+            :items="printers"
+            v-model="selectedPrinter"
+            v-validate="'required'"
+            data-vv-name="printer"
+            :error-messages="errors.collect('printer')"
+            label="Selecciona la impresora a actualizar"
+            item-text="description"
+            item-value="name"/>
 
           <VExpandTransition>
             <div class="mt-4" v-if="loading">
@@ -19,6 +20,7 @@
               <VProgressLinear indeterminate />
             </div>
           </VExpandTransition>
+        </VForm>
       </VCardText>
 
       <VCardActions>

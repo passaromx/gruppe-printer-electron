@@ -59,13 +59,14 @@ const actions = {
         .finally(() => { commit('setLoading', false); });
     });
   },
-  delete({ commit }, items) {
+  delete({ commit, state }, items) {
     const id = items[0];
     return new Promise((resolve, reject) => {
       axios.delete(`clients/${id}`)
         .then(res => {
           commit('deleteItem', id);
           resolve(res);
+          commit('setSelectedClient', state.clients.length ? state.clients[0] : null);
           showSuccessAlert('Cliente eliminado exitosamente', commit);
         })
         .catch(err => {
