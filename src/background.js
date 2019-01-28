@@ -10,7 +10,7 @@ const fs = require('fs');
 const { autoUpdater } = require('electron-updater');
 const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
-const { login } = require('./utils/offline/session');
+// const { login } = require('./utils/offline/session');
 const { arial, arialbold } = require('./utils/offline/printer/fonts');
 autoUpdater.logger = require('electron-log');
 
@@ -111,16 +111,16 @@ ipcMain.on('sync', (e, client, button) => {
     });
 });
 
-ipcMain.on('login', (e, user, password, client, authenticate) => {
-  login(user, password, client, authenticate)
-    .then(data => {
-      e.sender.send('logged', data);
-    })
-    .catch(err => {
-      console.log('err', err);
-      e.sender.send('wrongCredentials', err);
-    });
-});
+// ipcMain.on('login', (e, user, password, client, authenticate) => {
+//   login(user, password, client, authenticate)
+//     .then(data => {
+//       e.sender.send('logged', data);
+//     })
+//     .catch(err => {
+//       console.log('err', err);
+//       e.sender.send('wrongCredentials', err);
+//     });
+// });
 
 // ipcMain.on('open-pdf', (e, url) => {
 //   const pdfWindow = new BrowserWindow({
