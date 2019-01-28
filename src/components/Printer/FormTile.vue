@@ -19,6 +19,7 @@
                 label="Impresora"
                 outline
                 hide-details
+                return-object
                 ref="displayName"
                 item-text="displayName"
                 item-value="name"/>
@@ -80,7 +81,7 @@ export default {
   data() {
     return {
       scrollSettings: { maxScrollbarLength: 160 },
-      printer: 'Zebra_Technologies_ZTC_110Xi4_203dpi_ZPL',
+      printer: {},
       printers: [],
       place: 'TX',
       weight: 1,
@@ -123,7 +124,7 @@ export default {
         let displayNameLength = this.$refs.displayName.$el.clientWidth;
         displayNameLength = (displayNameLength / 11) - (350 / displayNameLength);
         return this.printers.map(printer => {
-          printer.displayName = `${printer.name.substr(0, displayNameLength)}...`;
+          printer.displayName = `${printer.description.substr(0, displayNameLength)}...`;
           return printer;
         });
       }
@@ -149,6 +150,7 @@ export default {
       this.divider = e.type === 'ps-scroll-down';
     },
     print() {
+      console.log(this.printer);
       const variables = { ...this.variables.fields };
       Object.keys(variables).forEach(key => {
         variables[key] = variables[key].value;
@@ -163,10 +165,10 @@ export default {
         client: this.user.client._id
       };
 
-      ipcRenderer.send('print', this.printer, this.selectedLabel, printData, this.user.client.settings.format);
+      ipcRenderer.send('print', this.printer.name, this.selectedLabel, printData, this.user.client.settings.format);
       // update sys info
       const systemInfo = JSON.parse(localStorage.getItem('systemInfo'));
-      systemInfo.printerName = this.printer;
+      systemInfo.printerName = this.printer.description;
       systemInfo.print = {
         date: new Date().toISOString(),
         label: this.selectedLabel._id,
