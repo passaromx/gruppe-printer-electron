@@ -110,7 +110,7 @@
 <script>
 import menu from '@/api/menu';
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
-import appMenu from '@/api/desktop-menu';
+// import appMenu from '@/api/desktop-menu';
 
 export default {
   name: 'App',
@@ -120,7 +120,7 @@ export default {
     FontUploader: () => import('@/components/FontUploader')
   },
   mounted() {
-    appMenu(this);
+    // appMenu(this);
     this.$eventHub.$on('closeDrawer', () => {
       this.mini = true;
     });

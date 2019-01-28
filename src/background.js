@@ -31,9 +31,9 @@ function createWindow() {
   // console.log(process.versions);
   // Create the browser window.
   win = new BrowserWindow({
-    height: 700,
+    height: 600,
     width: 1000,
-    minHeight: 700,
+    minHeight: 600,
     minWidth: 1000
   });
 
