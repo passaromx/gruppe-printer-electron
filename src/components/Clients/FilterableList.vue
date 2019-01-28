@@ -29,9 +29,9 @@
               </VBtn>
 
               <VList>
-                <VListTile @click="showDetail(item)">
+                <!-- <VListTile @click="showDetail(item)">
                   <VListTileTitle><VIcon small class="mr-3">file_copy</VIcon>Ver detalle</VListTileTitle>
-                </VListTile>
+                </VListTile> -->
                 <VListTile @click="editItem(item)">
                   <VListTileTitle><VIcon small class="mr-3">edit</VIcon>Editar</VListTileTitle>
                 </VListTile>

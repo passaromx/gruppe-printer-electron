@@ -13,24 +13,26 @@
     <VWindow v-model="step">
       <VWindowItem :value="1">
         <VCardText>
-          <VTextField
-            label="Nombre"
-            v-model="editedItem.name"
-            data-vv-name="name"
-            v-validate="'required'"
-            :error-messages="errors.collect('name')"
-            required/>
-          <span class="caption grey--text text--darken-1">
-            Este nombre se usará para identificar etiquetas, plantas y usuarios
-          </span>
+          <VForm @keyup.native.enter="validate">
+            <VTextField
+              label="Nombre"
+              v-model="editedItem.name"
+              data-vv-name="name"
+              v-validate="'required'"
+              :error-messages="errors.collect('name')"
+              required/>
+            <span class="caption grey--text text--darken-1">
+              Este nombre se usará para identificar etiquetas, plantas y usuarios
+            </span>
+          </VForm>
         </VCardText>
       </VWindowItem>
 
-      <VWindowItem :value="2">
+      <!-- <VWindowItem :value="2">
         <VCardText>
-          <!-- <span class="caption grey--text text--darken-1">
+          <span class="caption grey--text text--darken-1">
             Selecciona los campos de impresión a mostrar
-          </span> -->
+          </span>
           <VContainer class="pa-0" grid-list-lg>
             <VLayout row wrap>
               <VFlex xs6>
@@ -64,19 +66,19 @@
             </VLayout>
           </VContainer>
         </VCardText>
-      </VWindowItem>
+      </VWindowItem> -->
     </VWindow>
 
     <VDivider></VDivider>
 
     <VCardActions>
-      <VBtn
+      <!-- <VBtn
         :disabled="step === 1 || loading"
         flat
         @click="step--"
       >
         Atras
-      </VBtn>
+      </VBtn> -->
       <VSpacer />
       <VBtn
         :disabled="loading"
@@ -110,7 +112,7 @@ export default {
       return this.editedItem ? !!this.editedItem._id : false;
     },
     buttonText() {
-      if (this.step === 2) {
+      if (this.step === 1) {
         const text = this.isEditMode ? 'Actualizar' : 'Crear';
         return text;
       }
@@ -122,7 +124,8 @@ export default {
     validate() {
       if (this.step === 1) {
         this.$validator.validate().then(res => {
-          if (res) this.step++;
+          // if (res) this.step++;
+          if (res) this.submit();
         });
       } else {
         this.submit();

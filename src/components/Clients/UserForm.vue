@@ -4,7 +4,7 @@
       {{ isEditMode ? 'Editar Usuario' : 'Nuevo Usuario'}}
     </BaseFormTitle>
     <VCardText>
-
+      <VForm @keyup.native.enter="validate">
         <VLayout column>
           <VFlex xs12>
             <VTextField
@@ -24,7 +24,7 @@
               :error-messages="errors.collect('password')"/>
           </VFlex>
         </VLayout>
-
+      </VForm>
     </VCardText>
     <VCardActions>
       <VSpacer></VSpacer>

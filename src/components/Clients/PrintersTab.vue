@@ -7,8 +7,8 @@
   >
     <VListTileContent slot-scope="props">
       <VListTileTitle>{{ props.item.printerName || 'Sin impresora registrada' }}</VListTileTitle>
-      <VListTileSubTitle>{{ props.item.hostname }}</VListTileSubTitle>
-      <VListTileSubTitle>Última impresión: 01/01/2019</VListTileSubTitle>
+      <VListTileSubTitle>{{ props.item.hostname }}: {{ props.item.updatedAt|prettyDate }}</VListTileSubTitle>
+      <VListTileSubTitle>Última impresión: {{ props.item.print.updatedAt|prettyDate }}</VListTileSubTitle>
     </VListTileContent>
   </FilterableList>
 </template>

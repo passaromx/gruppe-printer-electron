@@ -53,6 +53,13 @@ export default {
       }
     }
   },
+  mounted() {
+    window.addEventListener('keyup', e => {
+      if (e.key === 'Enter' && this.deleteConfirmDialog && this.toDelete) {
+        this.confirmDelete();
+      }
+    });
+  },
   methods: {
     ...mapMutations(['setToDelete']),
     confirmDelete() {
