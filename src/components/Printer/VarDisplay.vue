@@ -19,7 +19,7 @@ export default {
         left: `${this.data.left}%`,
         right: `${this.data.right}%`,
         fontWeight: this.data.weight,
-        fontSize: `${this.data.fontSize || 14}px`,
+        fontSize: `${this.data.fontSize || '1vh'}`,
         '-webkit-transform': `rotate(${this.data.rotation || 0}deg)`,
         'transform-origin': '0% 0%'
       };

@@ -31,11 +31,11 @@ export const maltaVars = {
       value: new Date().toISOString().substr(0, 10),
       styles: [{
         top: 81,
-        left: 93.5,
+        left: 93.3,
         width: 100,
         weight: 600,
         rotation: -90,
-        fontSize: 9
+        fontSize: '1.2vh'
       }]
     },
     factory: {
@@ -70,7 +70,7 @@ export const maltaVars = {
         left: 84,
         weight: 600,
         rotation: 0,
-        fontSize: 10
+        fontSize: '1.4vh'
       }]
     },
     group: {
@@ -86,16 +86,17 @@ export const maltaVars = {
       dateFormat: 'DDMMMYYYY',
       styles: [
         {
-          top: 3.5,
+          top: 3.3,
           right: 7,
           weight: 500,
-          rotation: 0
+          rotation: 0,
+          fontSize: '1.8vh'
         },
         {
           bottom: 20,
           left: 7,
           weight: 600,
-          fontSize: 10,
+          fontSize: '1.4vh',
           rotation: 90
         }
       ]
@@ -117,9 +118,10 @@ export const mynVars = {
       dateFormat: 'DD-MM-YYYY',
       value: new Date().toISOString().substr(0, 10),
       styles: [{
-        top: 35,
+        top: 34.8,
         left: 68,
-        weight: 500
+        weight: 500,
+        fontSize: '1.8vh'
       }]
     },
     batch: {
@@ -139,9 +141,10 @@ export const mynVars = {
       label: 'Nomenclatura',
       class: 'xs12',
       styles: [{
-        top: 49,
+        top: 48.8,
         left: 68,
-        weight: 500
+        weight: 500,
+        fontSize: '1.8vh'
       }]
     },
   },

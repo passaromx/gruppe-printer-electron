@@ -159,9 +159,6 @@ export default {
       this.fetch(this.fromClient);
     },
     previewFile(file) {
-      // console.log(file);
-
-
       const url = `${filesURL}${file.url}`;
       if (url.includes('.pdf')) {
         shell.openExternal(url);
