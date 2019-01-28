@@ -76,6 +76,7 @@ export default {
           }
           return `${format}${i === 0 ? '' : '-'}${value || ''}`;
         }, '');
+      console.log('computing desc', formatted);
       return formatted;
     },
     formData() {
@@ -95,19 +96,22 @@ export default {
   },
   mounted() {
     this.setDescription();
-
-    this.$eventHub.$on('validate', () => {
-      this.$validator.validate().then(res => {
-        if (res) {
-          console.log('valid');
-        } else {
-          console.log('invalid');
-        }
-      });
+    this.$eventHub.$on('compute-desc', () => {
+      this.setDescription();
     });
+
+    // this.$eventHub.$on('validate', () => {
+    //   this.$validator.validate().then(res => {
+    //     if (res) {
+    //       console.log('valid');
+    //     } else {
+    //       console.log('invalid');
+    //     }
+    //   });
+    // });
   },
   beforeDestroy() {
-    this.$eventHub.$off('validate');
+    this.$eventHub.$off('compute-desc');
   },
   methods: {
     ...mapMutations('printer', ['setVariableValue', 'setCopies']),
@@ -135,7 +139,7 @@ export default {
     },
     setDescription() {
       this.formData.description = this.description;
-      // console.log(this.description);
+      console.log('setting desc', this.description);
       this.setVariableValue({
         name: 'description',
         value: this.description
