@@ -11,7 +11,7 @@
             data-vv-name="printer"
             :error-messages="errors.collect('printer')"
             label="Selecciona la impresora a actualizar"
-            item-text="description"
+            item-text="name"
             item-value="name"/>
 
           <VExpandTransition>
@@ -73,7 +73,11 @@ export default {
     uploadFonts() {
       console.log('sending fonts');
       this.loading = true;
+      // setInterval(() => {
+      //   ipcRenderer.send('get-printers');
+      // }, 500);
       ipcRenderer.send('update-fonts', this.selectedPrinter);
+
       setTimeout(() => {
         this.loading = false;
         this.setFontDialog(false);
