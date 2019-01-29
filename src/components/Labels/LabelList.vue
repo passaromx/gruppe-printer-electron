@@ -48,7 +48,7 @@
           </td>
           <td>
             <VLayout row justify-center>
-              <VTooltip bottom>
+              <!-- <VTooltip bottom>
                 <VBtn
                   slot="activator"
                   flat
@@ -59,7 +59,7 @@
                   <VIcon>image</VIcon>
                 </VBtn>
                 <span>Ver imagen</span>
-              </VTooltip>
+              </VTooltip> -->
               <VTooltip bottom>
                 <VBtn
                   slot="activator"
@@ -79,7 +79,7 @@
               {{ props.item.labelPng.name || 'n/a' }}
             </a> -->
           </td>
-          <td>
+          <td class="text-xs-center">
             <VTooltip bottom>
               <VBtn
                 slot="activator"

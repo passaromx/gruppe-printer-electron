@@ -124,7 +124,8 @@ export default {
         let displayNameLength = this.$refs.displayName.$el.clientWidth;
         displayNameLength = (displayNameLength / 11) - (350 / displayNameLength);
         return this.printers.map(printer => {
-          printer.displayName = `${printer.description.substr(0, displayNameLength)}...`;
+          const name = printer.description.length ? printer.description : printer.name;
+          printer.displayName = `${name.substr(0, displayNameLength)}...`;
           return printer;
         });
       }
@@ -168,7 +169,7 @@ export default {
       ipcRenderer.send('print', this.printer.name, this.selectedLabel, printData, this.user.client.settings.format);
       // update sys info
       const systemInfo = JSON.parse(localStorage.getItem('systemInfo'));
-      systemInfo.printerName = this.printer.description;
+      systemInfo.printerName = this.printer.description.length ? this.printer.description : this.printer.name;
       systemInfo.print = {
         date: new Date().toISOString(),
         label: this.selectedLabel._id,

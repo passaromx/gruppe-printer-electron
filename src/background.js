@@ -95,7 +95,7 @@ ipcMain.on('selected-label', (e, client, label) => {
 
 ipcMain.on('get-printers', e => {
   const printers = win.webContents.getPrinters();
-
+  // console.log(printers);
   e.sender.send('printers-fetched', printers);
 });
 
