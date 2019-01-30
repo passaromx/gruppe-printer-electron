@@ -17,7 +17,7 @@
     hide-selected
     return-object
     :error-messages="messages"
-    placeholder="Escribe para buscar en lista"/>
+    placeholder="Escribe para buscar..."/>
 </template>
 
 <script>

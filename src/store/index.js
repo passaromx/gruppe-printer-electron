@@ -15,6 +15,7 @@ const store = new Vuex.Store({
     fontDialog: false,
     isLoading: false,
     isReady: false,
+    isOnline: true,
     toDelete: null,
     snackbar: {}
   },
@@ -27,6 +28,7 @@ const store = new Vuex.Store({
     setIsReady: set('isReady'),
     setIsLoading: set('isLoading'),
     setFontDialog: set('fontDialog'),
+    setIsOnline: set('isOnline'),
     setToDelete: set('toDelete'),
     setSnackbar: set('snackbar')
   },
@@ -41,7 +43,7 @@ const store = new Vuex.Store({
 store.dispatch('auth/fetchSession')
   .then(() => store.commit('setIsReady', true))
   .catch(() => {
-    console.log('err fetchsession');
+    // console.log('err fetchsession');
     store.commit('setIsReady', true);
   });
 
