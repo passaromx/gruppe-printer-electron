@@ -21,13 +21,13 @@ const actions = {
   updateSysInfo(ctx, info) {
     // console.log('updating sys info', info);
     const { mac } = info;
-    axios.put(`licenses/${mac}`, info)
-      .then(res => {
-        console.log('api call', res);
-      })
-      .catch(err => {
-        console.log(err.response);
-      });
+    axios.put(`licenses/${mac}`, info);
+    // .then(res => {
+    //   console.log('api call', res);
+    // })
+    // .catch(err => {
+    //   console.log(err.response);
+    // });
   }
 };
 

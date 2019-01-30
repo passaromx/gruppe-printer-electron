@@ -15,15 +15,28 @@
             <VFlex xs12>
               <VSelect
                 :items="printers"
+                :loading="fetchingPrinters"
                 v-model="printer"
                 label="Impresora"
                 outline
                 hide-details
                 return-object
-                ref="displayName"
+                ref="printers"
                 item-text="displayName"
                 item-value="name"/>
             </VFlex>
+            <VFlex xs12 class="pt-0">
+              <span>
+                Si no encuentras la impresora que buscas haz
+                <span
+                  class="blue--text text--darken-3 printer-refresh font-weight-medium"
+                  @click="getPrinters"
+                >
+                  click aquí
+                </span>
+              </span>
+            </VFlex>
+
             <VFlex xs12>
               <LabelAutocomplete
                 name="labels"
@@ -38,6 +51,7 @@
             <VFlex xs6>
               <VTextField
                 outline
+                @input="handleCopies"
                 data-vv-name="copies"
                 v-validate="'required|min_value:1|max_value:5000'"
                 :error-messages="errors.collect('copies')"
@@ -52,7 +66,7 @@
             </VBtn>
             <VBtn
               @click="print"
-              :disabled="errors.items.length > 0 || !selectedLabel"
+              :disabled="errors.items.length > 0 || !selectedLabel || !printer.name"
               color="primary"
             >
               Imprimir
@@ -81,6 +95,8 @@ export default {
   data() {
     return {
       scrollSettings: { maxScrollbarLength: 160 },
+      firstFetch: true,
+      fetchingPrinters: false,
       printer: {},
       printers: [],
       place: 'TX',
@@ -93,8 +109,16 @@ export default {
     };
   },
   mounted() {
-    ipcRenderer.send('get-printers');
+    this.getPrinters();
     ipcRenderer.on('printers-fetched', (e, printers) => {
+      setTimeout(() => {
+        if (!this.firstFetch) {
+          this.$refs.printers.focus();
+          this.$refs.printers.activateMenu();
+        }
+        if (this.firstFetch) this.firstFetch = false;
+        this.fetchingPrinters = false;
+      }, 500);
       this.printers = printers;
       this.formatDisplayPrinters();
     });
@@ -116,12 +140,12 @@ export default {
       return `${this.line}-${this.turn}-${this.group}-${this.sequential}`;
     },
     displayPrinters() {
-      if (this.$refs.displayName) {
-        let displayNameLength = this.$refs.displayName.$el.clientWidth;
+      if (this.$refs.printers) {
+        let displayNameLength = this.$refs.printers.$el.clientWidth;
         displayNameLength = (displayNameLength / 11) - (350 / displayNameLength);
         return this.printers.map(printer => {
           const name = printer.description.length ? printer.description : printer.name;
-          printer.displayName = `${name.substr(0, displayNameLength)}...`;
+          printer.displayName = `${name.substr(0, displayNameLength)} ${name.length > displayNameLength ? '...' : ''}`;
           return printer;
         });
       }
@@ -130,12 +154,22 @@ export default {
   },
   methods: {
     ...mapActions('printer', ['updateSysInfo']),
-    ...mapMutations('printer', ['setPreviewLoader', 'setVariables', 'setDescriptionFormat', 'setSelectedLabel']),
+    ...mapMutations('printer', [
+      'setPreviewLoader',
+      'setVariables',
+      'setDescriptionFormat',
+      'setSelectedLabel',
+      'setCopies'
+    ]),
     formatDisplayPrinters() {
       this.timeout = setTimeout(() => { this.printers = this.displayPrinters; }, 500);
       window.addEventListener('resize', () => {
         this.printers = this.displayPrinters;
       });
+    },
+    getPrinters() {
+      this.fetchingPrinters = true;
+      ipcRenderer.send('get-printers');
     },
     setClientVariables() {
       const vars = this.user.client._id === clients.myn
@@ -146,15 +180,17 @@ export default {
     handleScroll(e) {
       this.divider = e.type === 'ps-scroll-down';
     },
+    handleCopies(val) {
+      this.setCopies(val);
+    },
     print() {
-      console.log(this.printer);
       const variables = { ...this.variables.fields };
       Object.keys(variables).forEach(key => {
         variables[key] = variables[key].value;
       });
       const data = {
         ...variables,
-        copies: this.copies,
+        copies: +this.copies,
       };
 
       const printData = {
@@ -176,9 +212,15 @@ export default {
     }
   },
   beforeDestroy() {
-    window.removeEventListener('resize', console.log('removed'));
+    // window.removeEventListener('resize', console.log('removed'));
     ipcRenderer.removeAllListeners('printers-fetched');
     this.setSelectedLabel(null);
   }
 };
 </script>
+
+<style scoped>
+  .printer-refresh:hover {
+    cursor: pointer;
+  }
+</style>

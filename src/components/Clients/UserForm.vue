@@ -81,7 +81,7 @@ export default {
         // this.editedItem.role = '5c2f94bdf80d6665bf53b9d8';
         // client role
         this.editedItem.role = '5c2f94bdf80d6665bf53b9d9';
-        console.log(this.editedItem);
+        // console.log(this.editedItem);
         this.storeUser(this.editedItem)
           .then(() => {
             this.$eventHub.$emit('closeFormDialog');

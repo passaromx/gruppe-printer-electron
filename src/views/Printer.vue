@@ -59,9 +59,10 @@ export default {
     this.$eventHub.$on('sync', () => this.sync(true));
 
     ipcRenderer.on('synced', (e, data) => {
-      console.log('synced', data);
+      // console.log('synced', data);
       this.setLabels(data.labels);
       this.setConfig(data.config);
+      this.setIsOnline(true);
       setTimeout(() => { this.dialog = false; }, 300);
       // this.dialog = false;
     });
@@ -85,7 +86,10 @@ export default {
 
     ipcRenderer.on('errorSync', (e, error) => {
       console.log('errorsync', error);
-      setTimeout(() => { this.dialog = false; }, 300);
+      setTimeout(() => {
+        if (error.code === 'ENETUNREACH' || error.code === 'ESOCKETTIMEDOUT') this.setIsOnline(false);
+        this.dialog = false;
+      }, 300);
       this.sendError({
         error,
         type: 'warning'
@@ -95,7 +99,7 @@ export default {
   watch: {
     isLoggedIn(val) {
       if (val && !this.dialog) {
-        console.log('from watch');
+        // console.log('from watch');
         this.sync();
         this.updateSystemInfo();
       }
@@ -108,11 +112,12 @@ export default {
   },
   methods: {
     ...mapMutations('printer', ['setIsSyncing', 'setLabels', 'setConfig']),
+    ...mapMutations(['setIsOnline']),
     ...mapActions('printer', ['updateSysInfo']),
     ...mapActions(['sendError']),
     sync(fromNavigation) {
       this.dialog = true;
-      console.log('syncing');
+      // console.log('syncing');
       ipcRenderer.send('sync', this.user.client, fromNavigation);
     },
     updateSystemInfo() {
