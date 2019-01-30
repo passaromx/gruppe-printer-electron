@@ -10,7 +10,6 @@ const actions = {
         .then(res => {
           resolve(res.data);
           commit('setLabels', res.data);
-          console.log(res.data);
         })
         .catch(err => {
           reject();
@@ -56,7 +55,6 @@ const actions = {
     });
   },
   update({ commit }, data) {
-    console.log(data);
     const formData = new FormData();
     const { name, sku, label, auth } = data;
     formData.append('name', name);

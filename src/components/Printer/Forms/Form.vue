@@ -123,7 +123,6 @@ export default {
       this.setDescription();
     },
     handleInput(field) {
-      console.log(field);
       this.setVariableValue({
         name: field,
         value: this.formData[field]
@@ -139,7 +138,7 @@ export default {
     },
     setDescription() {
       this.formData.description = this.description;
-      console.log('setting desc', this.description);
+      // console.log('setting desc', this.description);
       this.setVariableValue({
         name: 'description',
         value: this.description

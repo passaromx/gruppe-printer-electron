@@ -144,7 +144,6 @@ export default {
   computed: { ...mapState('labels', ['fetching', 'labels', 'fromClient']) },
   watch: {
     fromClient(val) {
-      console.log(val);
       this.fetch(val);
     }
   },
@@ -152,7 +151,6 @@ export default {
     ...mapActions('labels', ['fetch']),
     editItem(item) {
       this.editedItem = Object.assign({}, item);
-      console.log(this.editedItem);
       this.dialog = true;
     },
     refreshLabels() {

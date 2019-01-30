@@ -59,7 +59,7 @@ export default {
     this.$eventHub.$on('sync', () => this.sync(true));
 
     ipcRenderer.on('synced', (e, data) => {
-      console.log('synced', data);
+      // console.log('synced', data);
       this.setLabels(data.labels);
       this.setConfig(data.config);
       setTimeout(() => { this.dialog = false; }, 300);
@@ -84,7 +84,7 @@ export default {
     });
 
     ipcRenderer.on('errorSync', (e, error) => {
-      console.log('errorsync', error);
+      // console.log('errorsync', error);
       setTimeout(() => { this.dialog = false; }, 300);
       this.sendError({
         error,
@@ -95,7 +95,7 @@ export default {
   watch: {
     isLoggedIn(val) {
       if (val && !this.dialog) {
-        console.log('from watch');
+        // console.log('from watch');
         this.sync();
         this.updateSystemInfo();
       }
@@ -112,7 +112,7 @@ export default {
     ...mapActions(['sendError']),
     sync(fromNavigation) {
       this.dialog = true;
-      console.log('syncing');
+      // console.log('syncing');
       ipcRenderer.send('sync', this.user.client, fromNavigation);
     },
     updateSystemInfo() {

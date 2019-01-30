@@ -51,6 +51,7 @@
             <VFlex xs6>
               <VTextField
                 outline
+                @input="handleCopies"
                 data-vv-name="copies"
                 v-validate="'required|min_value:1|max_value:5000'"
                 :error-messages="errors.collect('copies')"
@@ -148,7 +149,7 @@ export default {
         displayNameLength = (displayNameLength / 11) - (350 / displayNameLength);
         return this.printers.map(printer => {
           const name = printer.description.length ? printer.description : printer.name;
-          printer.displayName = `${name.substr(0, displayNameLength)}...`;
+          printer.displayName = `${name.substr(0, displayNameLength)} ${name.length > displayNameLength ? '...' : ''}`;
           return printer;
         });
       }
@@ -157,7 +158,13 @@ export default {
   },
   methods: {
     ...mapActions('printer', ['updateSysInfo']),
-    ...mapMutations('printer', ['setPreviewLoader', 'setVariables', 'setDescriptionFormat', 'setSelectedLabel']),
+    ...mapMutations('printer', [
+      'setPreviewLoader',
+      'setVariables',
+      'setDescriptionFormat',
+      'setSelectedLabel',
+      'setCopies'
+    ]),
     formatDisplayPrinters() {
       this.timeout = setTimeout(() => { this.printers = this.displayPrinters; }, 500);
       window.addEventListener('resize', () => {
@@ -177,6 +184,9 @@ export default {
     handleScroll(e) {
       this.divider = e.type === 'ps-scroll-down';
     },
+    handleCopies(val) {
+      this.setCopies(val);
+    },
     print() {
       const variables = { ...this.variables.fields };
       Object.keys(variables).forEach(key => {
@@ -184,7 +194,7 @@ export default {
       });
       const data = {
         ...variables,
-        copies: this.copies,
+        copies: +this.copies,
       };
 
       const printData = {
@@ -206,7 +216,7 @@ export default {
     }
   },
   beforeDestroy() {
-    window.removeEventListener('resize', console.log('removed'));
+    // window.removeEventListener('resize', console.log('removed'));
     ipcRenderer.removeAllListeners('printers-fetched');
     ipcRenderer.removeAllListeners('zplReady');
     this.setSelectedLabel(null);

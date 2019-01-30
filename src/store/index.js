@@ -41,7 +41,7 @@ const store = new Vuex.Store({
 store.dispatch('auth/fetchSession')
   .then(() => store.commit('setIsReady', true))
   .catch(() => {
-    console.log('err fetchsession');
+    // console.log('err fetchsession');
     store.commit('setIsReady', true);
   });
 
