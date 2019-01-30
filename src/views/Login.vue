@@ -57,6 +57,9 @@
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
 import { mapActions, mapMutations, mapState, mapGetters } from 'vuex';
+import { ipcRenderer } from 'electron';
+import { handleError } from '@/utils';
+
 
 export default {
   $_veeValidate: { validator: 'new' },
@@ -68,6 +71,28 @@ export default {
       password: null
     };
   },
+  mounted() {
+    ipcRenderer.on('logged', (e, data) => {
+      const { session, admin } = data;
+      if (!admin) {
+        const { user, jwt } = session;
+        this.setUser(user);
+        this.setSession({ jwt });
+        if (localStorage) {
+          localStorage.setItem('token', jwt);
+          localStorage.setItem('USER', JSON.stringify(user));
+        }
+      }
+      this.$router.push({ name: this.isAdmin ? 'Labels' : 'Printer' });
+    });
+    ipcRenderer.on('wrongCredentials', (e, err) => {
+      const msg = handleError(err);
+      this.setSnackbar({
+        type: 'error',
+        msg
+      });
+    });
+  },
   computed: {
     ...mapState(['isLoading']),
     ...mapGetters('auth', ['isAdmin'])
@@ -77,6 +102,10 @@ export default {
     ...mapMutations([
       'setIsLoading',
       'setSnackbar'
+    ]),
+    ...mapMutations('auth', [
+      'setUser',
+      'setSession'
     ]),
     validate() {
       this.$validator.validate().then(res => {
@@ -90,10 +119,15 @@ export default {
         identifier: this.email,
         password: this.password
       })
-        .then(() => {
-          this.$router.push({ name: this.isAdmin ? 'Labels' : 'Printer' });
+        .then(data => {
+          const { user, jwt } = data;
+          ipcRenderer.send('login', this.email, this.password, user, jwt);
         })
-        .catch(() => {
+        .catch(err => {
+          const status = err.response ? err.response.status : 0;
+          if (status !== 401 && status !== 403) {
+            ipcRenderer.send('login', this.email, this.password, null, null, true);
+          }
         })
         .finally(() => {
           this.setIsLoading(false);

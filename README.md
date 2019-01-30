@@ -1,4 +1,4 @@
-# vuetify-cognito-electron
+# gruppe-printer-electron
 
 ## Project setup
 ```

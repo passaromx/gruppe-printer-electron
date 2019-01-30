@@ -8,8 +8,9 @@ export const showSuccessAlert = (msg, commit) => {
 };
 
 export const handleError = (err, commit, type = 'error') => {
+  console.log('handlerrro', err);
   const status = err.response ? err.response.status : 505;
-
+  console.log(status);
   let message = '';
   switch (status) {
     case 400:
@@ -40,8 +41,14 @@ export const handleError = (err, commit, type = 'error') => {
       message = 'Error de comunicación, intenta más tarde';
       break;
   }
-  commit('setSnackbar', {
-    type,
-    msg: message
-  }, { root: true });
+  console.log(message);
+  if (commit) {
+    commit('setSnackbar', {
+      type,
+      msg: message
+    }, { root: true });
+  } else {
+    console.log('return message');
+    return message;
+  }
 };

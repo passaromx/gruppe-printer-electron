@@ -85,7 +85,6 @@ export default {
       printers: [],
       place: 'TX',
       weight: 1,
-      zpl: '',
       mynVars,
       maltaVars,
       resize: false,
@@ -98,9 +97,6 @@ export default {
     ipcRenderer.on('printers-fetched', (e, printers) => {
       this.printers = printers;
       this.formatDisplayPrinters();
-    });
-    ipcRenderer.on('zplReady', (e, zpl) => {
-      this.zpl = zpl;
     });
 
     if (this.user && this.user.client) this.setClientVariables();
@@ -182,7 +178,6 @@ export default {
   beforeDestroy() {
     window.removeEventListener('resize', console.log('removed'));
     ipcRenderer.removeAllListeners('printers-fetched');
-    ipcRenderer.removeAllListeners('zplReady');
     this.setSelectedLabel(null);
   }
 };
