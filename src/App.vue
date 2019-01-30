@@ -1,6 +1,6 @@
 <template>
   <VApp>
-    <FontUploader />
+    <FontUploader v-if="isAdmin"/>
 
     <VNavigationDrawer
       v-if="isLoggedIn"
@@ -102,7 +102,7 @@
       </Transition>
     </VContent>
 
-    <DeleteConfirm />
+    <DeleteConfirm v-if="isAdmin"/>
     <Snackbar />
   </VApp>
 </template>

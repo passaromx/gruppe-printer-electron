@@ -15,15 +15,28 @@
             <VFlex xs12>
               <VSelect
                 :items="printers"
+                :loading="fetchingPrinters"
                 v-model="printer"
                 label="Impresora"
                 outline
                 hide-details
                 return-object
-                ref="displayName"
+                ref="printers"
                 item-text="displayName"
                 item-value="name"/>
             </VFlex>
+            <VFlex xs12 class="pt-0">
+              <span>
+                Si no encuentras la impresora que buscas haz
+                <span
+                  class="blue--text text--darken-3 printer-refresh font-weight-medium"
+                  @click="getPrinters"
+                >
+                  click aquí
+                </span>
+              </span>
+            </VFlex>
+
             <VFlex xs12>
               <LabelAutocomplete
                 name="labels"
@@ -52,7 +65,7 @@
             </VBtn>
             <VBtn
               @click="print"
-              :disabled="errors.items.length > 0 || !selectedLabel"
+              :disabled="errors.items.length > 0 || !selectedLabel || !printer.name"
               color="primary"
             >
               Imprimir
@@ -81,6 +94,8 @@ export default {
   data() {
     return {
       scrollSettings: { maxScrollbarLength: 160 },
+      firstFetch: true,
+      fetchingPrinters: false,
       printer: {},
       printers: [],
       place: 'TX',
@@ -94,8 +109,16 @@ export default {
     };
   },
   mounted() {
-    ipcRenderer.send('get-printers');
+    this.getPrinters();
     ipcRenderer.on('printers-fetched', (e, printers) => {
+      setTimeout(() => {
+        if (!this.firstFetch) {
+          this.$refs.printers.focus();
+          this.$refs.printers.activateMenu();
+        }
+        if (this.firstFetch) this.firstFetch = false;
+        this.fetchingPrinters = false;
+      }, 500);
       this.printers = printers;
       this.formatDisplayPrinters();
     });
@@ -120,8 +143,8 @@ export default {
       return `${this.line}-${this.turn}-${this.group}-${this.sequential}`;
     },
     displayPrinters() {
-      if (this.$refs.displayName) {
-        let displayNameLength = this.$refs.displayName.$el.clientWidth;
+      if (this.$refs.printers) {
+        let displayNameLength = this.$refs.printers.$el.clientWidth;
         displayNameLength = (displayNameLength / 11) - (350 / displayNameLength);
         return this.printers.map(printer => {
           const name = printer.description.length ? printer.description : printer.name;
@@ -141,6 +164,10 @@ export default {
         this.printers = this.displayPrinters;
       });
     },
+    getPrinters() {
+      this.fetchingPrinters = true;
+      ipcRenderer.send('get-printers');
+    },
     setClientVariables() {
       const vars = this.user.client._id === clients.myn
         ? this.mynVars
@@ -151,7 +178,6 @@ export default {
       this.divider = e.type === 'ps-scroll-down';
     },
     print() {
-      console.log(this.printer);
       const variables = { ...this.variables.fields };
       Object.keys(variables).forEach(key => {
         variables[key] = variables[key].value;
@@ -187,3 +213,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  .printer-refresh:hover {
+    cursor: pointer;
+  }
+</style>
