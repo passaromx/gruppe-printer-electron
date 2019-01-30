@@ -83,7 +83,11 @@ export default {
           localStorage.setItem('USER', JSON.stringify(user));
         }
       }
-      this.$router.push({ name: this.isAdmin ? 'Labels' : 'Printer' });
+      if (localStorage) {
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('USER'));
+        if (user && token) this.$router.push({ name: this.isAdmin ? 'Labels' : 'Printer' });
+      }
     });
     ipcRenderer.on('wrongCredentials', (e, err) => {
       const msg = handleError(err);
@@ -124,6 +128,7 @@ export default {
           ipcRenderer.send('login', this.email, this.password, user, jwt);
         })
         .catch(err => {
+          console.log('error login', err);
           const status = err.response ? err.response.status : 0;
           if (status !== 401 && status !== 403) {
             ipcRenderer.send('login', this.email, this.password, null, null, true);
