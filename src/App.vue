@@ -168,7 +168,6 @@ export default {
   watch: {
     isReady(val) {
       if (val && this.isLoggedIn) {
-        // console.log('route', this.$route);
         this.$router.push({ name: this.isAdmin ? 'Labels' : 'Printer' });
       }
     }

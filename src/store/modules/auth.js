@@ -32,8 +32,11 @@ const actions = {
         })
         .catch(err => {
           const user = JSON.parse(localStorage.getItem('USER'));
-          commit('setUser', user);
-          commit('setSession', { jwt: token });
+          if (user && token) {
+            commit('setUser', user);
+            commit('setSession', { jwt: token });
+          }
+
           reject(err);
           // router.push({ name: 'Login' });
           // console.log(err.response);
@@ -46,7 +49,7 @@ const actions = {
       delete authAxios.defaults.headers.common.Authorization;
       authAxios.post(`${apiURL}auth/local`, data)
         .then(res => {
-          resolve(res);
+          resolve(res.data);
           const { user, jwt } = res.data;
           axios.defaults.headers.common.Authorization = `Bearer ${jwt}`;
           commit('setUser', user);
@@ -58,8 +61,9 @@ const actions = {
           }
         })
         .catch(err => {
-          reject();
-          handleError(err, commit);
+          const status = err.response ? err.response.status : 0;
+          if (status === 401 || status === 403) handleError(err, commit);
+          reject(err);
         });
     });
   },
@@ -71,7 +75,10 @@ const actions = {
       commit('setUser', null);
       commit('setSession', null);
       resolve();
-      if (localStorage) localStorage.removeItem('token');
+      if (localStorage) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('USER');
+      }
     });
   }
 

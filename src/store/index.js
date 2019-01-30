@@ -41,10 +41,16 @@ const store = new Vuex.Store({
 });
 
 store.dispatch('auth/fetchSession')
-  .then(() => store.commit('setIsReady', true))
-  .catch(() => {
-    // console.log('err fetchsession');
+  .then(() => {
     store.commit('setIsReady', true);
+  })
+  .catch(() => {
+    console.log('err fetchsession');
+    if (localStorage) {
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('USER'));
+      if (user && token) store.commit('setIsReady', true);
+    }
   });
 
 export default store;

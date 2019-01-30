@@ -10,7 +10,7 @@ const fs = require('fs');
 const { autoUpdater } = require('electron-updater');
 const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
-// const { login } = require('./utils/offline/session');
+const { login } = require('./utils/offline/session');
 const { arial, arialbold } = require('./utils/offline/printer/fonts');
 autoUpdater.logger = require('electron-log');
 
@@ -108,47 +108,19 @@ ipcMain.on('sync', (e, client) => {
     })
     .catch(err => {
       e.sender.send('errorSync', err);
-      console.log('err', err);
     });
 });
 
-// ipcMain.on('login', (e, user, password, client, authenticate) => {
-//   login(user, password, client, authenticate)
-//     .then(data => {
-//       e.sender.send('logged', data);
-//     })
-//     .catch(err => {
-//       console.log('err', err);
-//       e.sender.send('wrongCredentials', err);
-//     });
-// });
-
-// ipcMain.on('open-pdf', (e, url) => {
-//   const pdfWindow = new BrowserWindow({
-//     width: 500,
-//     height: 800
-//   });
-//   pdfWindow.loadURL(`'app://./index.html#pdf-viewer?'${url}`);
-//   // we
-// });
-
-// ipcMain.on('getZpl', (e, label, data) => {
-//   const { getZpl, getPreview } = require('./utils/offline/printer');
-//   getZpl(label.label.url, data)
-//     .then(zpl => {
-//       e.sender.send('zplReady', zpl);
-//       getPreview(zpl)
-//         .then(renderLabel => {
-//           e.sender.send('label', renderLabel);
-//         })
-//         .catch(err => {
-//           const renderLabel =
-//           e.sender.send('label', `data:image/jpeg;base64,${renderLabel}`);
-//           console.log(err);
-//         });
-//     })
-//     .catch(err => console.log(err));
-// });
+ipcMain.on('login', (e, username, password, user, jwt, authenticate) => {
+  login(username, password, user, jwt, authenticate)
+    .then(data => {
+      e.sender.send('logged', data);
+    })
+    .catch(err => {
+      const error = { response: { status: parseInt(err.message, 10) } };
+      e.sender.send('wrongCredentials', error);
+    });
+});
 
 ipcMain.on('print', (e, printer, label, data, format) => {
   const { getZpl } = require('./utils/offline/printer');
