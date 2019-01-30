@@ -62,7 +62,7 @@ const actions = {
         })
         .catch(err => {
           const status = err.response ? err.response.status : 0;
-          if (status === 401 || status === 403) handleError(err, commit);
+          if (status === 401 || status === 403 || data.identifier.includes('admin')) handleError(err, commit);
           reject(err);
         });
     });
