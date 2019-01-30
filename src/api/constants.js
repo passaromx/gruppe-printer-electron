@@ -1,6 +1,6 @@
 
 // export const filesURL = 'http://192.168.86.189:1337';
-export const filesURL = 'http://localhost:1337';
+export const filesURL = 'http://3.81.203.178:1337';
 export const apiURL = `${filesURL}/`;
 
 export const roles = {

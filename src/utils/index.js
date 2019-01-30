@@ -33,13 +33,19 @@ export const handleError = (err, commit, type = 'error') => {
     case 426:
       message = 'Pendiente de aprobación, contacta a tu administrador';
       break;
-    case 501:
+    case 501 || 503:
       message = 'Algo falló, si error persiste contacta al administrador';
       break;
     default:
       message = 'Error de comunicación, intenta más tarde';
       break;
   }
+
+  // let isOnline = true;
+  // if (status > 503) isOnline = false;
+
+  // commit('setIsOnline', isOnline, { root: true });
+
   commit('setSnackbar', {
     type,
     msg: message

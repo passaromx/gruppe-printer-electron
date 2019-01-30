@@ -99,11 +99,12 @@ ipcMain.on('get-printers', e => {
   e.sender.send('printers-fetched', printers);
 });
 
-ipcMain.on('sync', (e, client, button) => {
+ipcMain.on('sync', (e, client) => {
   sync(client)
     .then(data => {
+      console.log(data);
       e.sender.send('synced', data);
-      if (data.err && button) e.sender.send('errorSync', data.err);
+      if (data.err) e.sender.send('errorSync', data.err);
     })
     .catch(err => {
       e.sender.send('errorSync', err);

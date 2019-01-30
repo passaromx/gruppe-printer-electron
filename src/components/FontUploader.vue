@@ -1,7 +1,11 @@
 <template>
   <VDialog v-model="fontDialog" persistent max-width="400px">
     <BaseCard>
-      <BaseFormTitle>Actualización de Fuentes</BaseFormTitle>
+      <BaseFormTitle>
+        Actualización de Fuentes
+        <VSpacer />
+        <VIcon dark @click="fetchPrinters">refresh</VIcon>
+      </BaseFormTitle>
       <VCardText>
         <VForm @keyup.native.enter="validate">
           <VSelect
@@ -53,7 +57,7 @@ export default {
     loading: false
   }),
   mounted() {
-    ipcRenderer.send('get-printers');
+    this.fetchPrinters();
 
     ipcRenderer.on('printers-fetched', (e, printers) => {
       this.printers = printers;
@@ -69,6 +73,9 @@ export default {
       this.$validator.validate().then(res => {
         if (res) this.uploadFonts();
       });
+    },
+    fetchPrinters() {
+      ipcRenderer.send('get-printers');
     },
     uploadFonts() {
       console.log('sending fonts');

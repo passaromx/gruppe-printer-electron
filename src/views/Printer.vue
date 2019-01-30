@@ -62,6 +62,7 @@ export default {
       // console.log('synced', data);
       this.setLabels(data.labels);
       this.setConfig(data.config);
+      this.setIsOnline(true);
       setTimeout(() => { this.dialog = false; }, 300);
       // this.dialog = false;
     });
@@ -84,8 +85,11 @@ export default {
     });
 
     ipcRenderer.on('errorSync', (e, error) => {
-      // console.log('errorsync', error);
-      setTimeout(() => { this.dialog = false; }, 300);
+      console.log('errorsync', error);
+      setTimeout(() => {
+        if (error.code === 'ENETUNREACH' || error.code === 'ESOCKETTIMEDOUT') this.setIsOnline(false);
+        this.dialog = false;
+      }, 300);
       this.sendError({
         error,
         type: 'warning'
@@ -108,6 +112,7 @@ export default {
   },
   methods: {
     ...mapMutations('printer', ['setIsSyncing', 'setLabels', 'setConfig']),
+    ...mapMutations(['setIsOnline']),
     ...mapActions('printer', ['updateSysInfo']),
     ...mapActions(['sendError']),
     sync(fromNavigation) {

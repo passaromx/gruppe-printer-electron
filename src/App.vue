@@ -103,6 +103,7 @@
     </VContent>
 
     <DeleteConfirm v-if="isAdmin"/>
+    <OfflineSnackbar v-if="$route.name !== 'Login' && !isAdmin"/>
     <Snackbar />
   </VApp>
 </template>
@@ -117,6 +118,7 @@ export default {
   components: {
     DeleteConfirm: () => import('@/components/DeleteConfirm'),
     Snackbar: () => import('@/components/Snackbar'),
+    OfflineSnackbar: () => import('@/components/OfflineSnackbar'),
     FontUploader: () => import('@/components/FontUploader')
   },
   mounted() {
@@ -124,6 +126,10 @@ export default {
     this.$eventHub.$on('closeDrawer', () => {
       this.mini = true;
     });
+
+    this.setIsOnline(navigator.onLine);
+    window.addEventListener('online', () => { this.onNetworkRestored(); });
+    window.addEventListener('offline', () => { this.setIsOnline(false); });
   },
   data() {
     return {
@@ -144,12 +150,16 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['signOut']),
-    ...mapMutations(['setFontDialog']),
+    ...mapMutations(['setFontDialog', 'setIsOnline']),
     ...mapMutations('printer', ['setIsSyncing', 'setLabels', 'setConfig']),
     logout() {
       this.signOut().then(() => {
         this.$router.push({ name: 'Login' });
       });
+    },
+    onNetworkRestored() {
+      this.setIsOnline(true);
+      this.$eventHub.$emit('sync');
     },
     sync() {
       this.$eventHub.$emit('sync');
@@ -165,6 +175,8 @@ export default {
   },
   beforeDestroy() {
     this.$eventHub.$off('closeDrawer');
+    window.removeEventListener('online', this.onNetworkRestored());
+    window.removeEventListener('offline', this.setIsOnline(false));
   }
 };
 </script>
