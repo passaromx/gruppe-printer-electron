@@ -42,6 +42,15 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "users" */ './views/Clients.vue'),
     },
     {
+      path: '/progress',
+      meta: { public: true },
+      name: 'Progress',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "login" */ './views/Progress.vue'),
+    },
+    {
       path: '*',
       redirect: '/Login'
     }

@@ -171,6 +171,8 @@ app.on('ready', async () => {
 });
 
 autoUpdater.on('update-available', () => {
+  // Track progress percent
+  let downloadProgress = 0;
   // Prompt user to update
   dialog.showMessageBox({
     type: 'info',
@@ -184,7 +186,35 @@ autoUpdater.on('update-available', () => {
     // Else start download and show download progress in new window
     autoUpdater.downloadUpdate();
 
+    // Create progress window
+    const progressWin = new BrowserWindow({
+      width: 350,
+      height: 35,
+      useContentSize: true,
+      autoHideMenuBar: true,
+      maximizable: false,
+      fullscreen: false,
+      fullscreenable: false,
+      resizable: false
+    });
+
+    // Load progress HTML
+    progressWin.loadURL('app://./index.html#progress');
+
+    // Listen for preogress request from progressWin
+    ipcMain.on('download-progress-request', e => {
+      e.returnValue = downloadProgress;
+    });
+
+    // Track download progress on autoUpdater
+    autoUpdater.on('download-progress', d => {
+      downloadProgress = d.percent;
+    });
+
+
     autoUpdater.on('update-downloaded', () => {
+      // Close progressWin
+      if (progressWin) progressWin.close();
       // Prompt user to quit and install update
       dialog.showMessageBox({
         type: 'info',
