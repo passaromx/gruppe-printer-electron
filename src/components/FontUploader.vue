@@ -16,7 +16,7 @@
 
           <VExpandTransition>
             <div class="mt-4" v-if="loading">
-              <span>Actualizando fuentes, esto puede tardar unos minutos.</span>
+              <span>Actualizando fuentes, esto puede tardar unos minutos...</span>
               <VProgressLinear indeterminate />
             </div>
           </VExpandTransition>
