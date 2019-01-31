@@ -63,7 +63,8 @@ export default {
       this.printers = printers;
     });
     ipcRenderer.on('fonts-uploaded', () => {
-      // dismiss loader && modal
+      this.loading = false;
+      this.setFontDialog(false);
     });
   },
   computed: { ...mapState(['fontDialog']) },
@@ -85,10 +86,10 @@ export default {
       // }, 500);
       ipcRenderer.send('update-fonts', this.selectedPrinter);
 
-      setTimeout(() => {
-        this.loading = false;
-        this.setFontDialog(false);
-      }, 3000);
+      // setTimeout(() => {
+      //   this.loading = false;
+      //   this.setFontDialog(false);
+      // }, 3000);
     }
   },
   beforeDestroy() {

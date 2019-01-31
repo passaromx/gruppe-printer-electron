@@ -132,10 +132,19 @@ ipcMain.on('print', (e, printer, label, data, format) => {
     });
 });
 
-ipcMain.on('update-fonts', (e, printer) => {
+ipcMain.on('update-fonts', (e, printerName) => {
   const fonts = arial + arialbold;
-  printLabel(printer, fonts)
-    .then(printed => console.log(printed))
+  printLabel(printerName, fonts)
+    .then(() => {
+      setInterval(() => {
+        const printers = win.webContents.getPrinters();
+        printers.forEach(printer => {
+          if (printer.name === printerName) {
+            if (printer.status === 3) e.sender.send('fonts-uploaded');
+          }
+        });
+      }, 3500);
+    })
     .catch(err => console.log(err));
 });
 
