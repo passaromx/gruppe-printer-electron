@@ -176,7 +176,7 @@ autoUpdater.on('update-available', () => {
   // Prompt user to update
   dialog.showMessageBox({
     type: 'info',
-    title: 'Actualizaci{on disponible',
+    title: 'Actualización disponible',
     message: 'Una nueva versión está disponible. Actualizar ahora',
     buttons: ['Actualizar']
   }, buttonIndex => {
@@ -187,9 +187,9 @@ autoUpdater.on('update-available', () => {
     autoUpdater.downloadUpdate();
 
     // Create progress window
-    const progressWin = new BrowserWindow({
-      width: 350,
-      height: 35,
+    let progressWin = new BrowserWindow({
+      width: 400,
+      height: 100,
       useContentSize: true,
       autoHideMenuBar: true,
       maximizable: false,
@@ -200,6 +200,8 @@ autoUpdater.on('update-available', () => {
 
     // Load progress HTML
     progressWin.loadURL('app://./index.html#progress');
+
+    progressWin.on('closed', () => { progressWin = null; });
 
     // Listen for preogress request from progressWin
     ipcMain.on('download-progress-request', e => {

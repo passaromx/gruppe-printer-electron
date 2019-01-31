@@ -1,7 +1,8 @@
 <template>
-  <VProgressLinear
-    :value="progress"
-  ></VProgressLinear>
+  <VContainer>
+    <span>Descargando, esto puede tardar varios minutos</span>
+    <VProgressLinear :value="progress" indeterminate/>
+  </VContainer>
 </template>
 
 <script>
@@ -16,7 +17,7 @@ export default {
     setInterval(() => {
       // Request a sync response via IPC
       this.progress = ipcRenderer.sendSync('download-progress-request');
-    }, 500);
+    }, 1000);
   }
 };
 </script>
