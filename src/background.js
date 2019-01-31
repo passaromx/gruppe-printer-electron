@@ -185,9 +185,9 @@ autoUpdater.on('update-available', () => {
   // Prompt user to update
   dialog.showMessageBox({
     type: 'info',
-    title: 'Update Available',
-    message: 'A new version of Readit is available. Do you want to update now?',
-    buttons: ['Update', 'No']
+    title: 'Actualización disponible',
+    message: 'Una nueva versión está disponible. Actualizar ahora',
+    buttons: ['Actualizar']
   }, buttonIndex => {
     // If not 'Update' button, return
     if (buttonIndex !== 0) return;
@@ -196,9 +196,9 @@ autoUpdater.on('update-available', () => {
     autoUpdater.downloadUpdate();
 
     // Create progress window
-    const progressWin = new BrowserWindow({
-      width: 350,
-      height: 35,
+    let progressWin = new BrowserWindow({
+      width: 400,
+      height: 100,
       useContentSize: true,
       autoHideMenuBar: true,
       maximizable: false,
@@ -209,6 +209,8 @@ autoUpdater.on('update-available', () => {
 
     // Load progress HTML
     progressWin.loadURL('app://./index.html#progress');
+
+    progressWin.on('closed', () => { progressWin = null; });
 
     // Listen for preogress request from progressWin
     ipcMain.on('download-progress-request', e => {
@@ -227,9 +229,9 @@ autoUpdater.on('update-available', () => {
       // Prompt user to quit and install update
       dialog.showMessageBox({
         type: 'info',
-        title: 'Update Ready',
-        message: 'A new version of Readit is ready. Quit and install now?',
-        buttons: ['Yes', 'Later']
+        title: 'Descarga completa',
+        message: 'Se ha completado la descarga. Haz click en instalar.',
+        buttons: ['Instalar']
       }, buttonIndexx => {
         // Update if 'Yes'
         if (buttonIndexx === 0) autoUpdater.quitAndInstall();

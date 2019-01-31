@@ -1,7 +1,7 @@
 appId: com.passaro.gruppeprinter
 publish:
     provider: github
-    token: f47509656b25bf79ff7130ab6601871d5f5e025a
+    token: 7aef51c252864b74ebc7af65c33141c7ac9d3442
 "files": [
       "dist_electron/**/*",
       "package.json"
