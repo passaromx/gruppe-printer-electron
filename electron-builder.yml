@@ -14,5 +14,7 @@ publish:
   "category": "public.app-category.productivity"
 }
 win: {
-  verifyUpdateCodeSignature: false
+  certificateFile: "private/passaromx.pfx",
+  verifyUpdateCodeSignature: false,
+  publisherName: "passaromx"
 }

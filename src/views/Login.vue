@@ -34,6 +34,7 @@
           />
           <VLayout justify-end>
             <VBtn
+              color="primary"
               class="mt-3"
               :disabled="isLoading"
               :loading="isLoading"
