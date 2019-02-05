@@ -11,4 +11,4 @@ moment.updateLocale('es', {
 
 // Helpers
 Vue.filter('prettyDate', val => moment(val).format('L'));
-Vue.filter('dateAndTime', val => moment(val).format('DD/MM/YYYY HH:mm'));
+Vue.filter('dateAndTime', val => (val ? moment(val).format('DD/MM/YYYY HH:mm') : 'No disponible'));

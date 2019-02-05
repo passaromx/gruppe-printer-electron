@@ -1,8 +1,8 @@
 <template>
-  <FilterableList :items="users" :settings="settings">
+  <FilterableList :items="users" :settings="settings" :lines="2">
     <VListTileContent slot-scope="props">
       <VListTileTitle>{{ props.item.email }}</VListTileTitle>
-      <!-- <VListTileSubTitle>Some Other info</VListTileSubTitle> -->
+      <VListTileSubTitle>Inicio de sesión: {{ props.item.lastLogin|dateAndTime }}</VListTileSubTitle>
     </VListTileContent>
   </FilterableList>
 </template>

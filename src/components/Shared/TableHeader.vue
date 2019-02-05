@@ -33,6 +33,7 @@
           <VTextField
             class="pt-0"
             v-model="search"
+            @input="handleInput"
             placeholder="Buscar..."
             append-icon="search"
             hide-details
@@ -92,6 +93,9 @@ export default {
   },
   methods: {
     ...mapMutations(['setToDelete']),
+    handleInput(val) {
+      this.$emit('onSearch', val);
+    },
     deleteItems() {
       const toDelete = {
         items: this.selected,
