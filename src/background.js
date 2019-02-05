@@ -76,6 +76,12 @@ ipcMain.on('get-system-info', e => {
   e.sender.send('system-info-fetched', result);
 });
 
+// ipcMain.on('view-pdf', (e, client, label) => {
+// const userDataPath = app.getPath('userData');
+// const labelPdf = fs.readFileSync(`${userDataPath}/data/${client}/${label}`, { encoding: 'base64' });
+// fs.writeFileSync(`${userDataPath}/data/${client}/pdf.txt`, labelPdf);
+// });
+
 ipcMain.on('check-mac', (e, info) => {
   let checks = false;
   const { mac, network } = info;
