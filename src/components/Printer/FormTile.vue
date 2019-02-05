@@ -60,7 +60,10 @@
             </VFlex>
           </VLayout>
           <VLayout justify-end>
-            <VBtn :disabled="!selectedLabel">
+            <VBtn
+              @click="viewPdf"
+              :disabled="!selectedLabel"
+            >
               <!-- <VIcon class="mr-2">cloud_download</VIcon> -->
               Ver PDF
             </VBtn>
@@ -161,6 +164,9 @@ export default {
       'setSelectedLabel',
       'setCopies'
     ]),
+    viewPdf() {
+      ipcRenderer.send('view-pdf', this.user.client._id, this.selectedLabel.labelPdf.url);
+    },
     formatDisplayPrinters() {
       this.timeout = setTimeout(() => { this.printers = this.displayPrinters; }, 500);
       window.addEventListener('resize', () => {
