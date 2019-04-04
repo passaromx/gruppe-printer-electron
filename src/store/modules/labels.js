@@ -8,8 +8,12 @@ const actions = {
       axios.get(`labels?client=${client}`)
       // axios.get('labels')
         .then(res => {
-          resolve(res.data);
-          commit('setLabels', res.data);
+          const labels = res.data.map(label => ({
+            ...label,
+            description: `${label.sku} ${label.name}`
+          }));
+          resolve(labels);
+          commit('setLabels', labels);
         })
         .catch(err => {
           reject();

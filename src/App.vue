@@ -111,6 +111,8 @@
 <script>
 import menu from '@/api/menu';
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
+/* eslint-disable import/no-extraneous-dependencies */
+import { ipcRenderer } from 'electron';
 // import appMenu from '@/api/desktop-menu';
 
 export default {
@@ -125,6 +127,10 @@ export default {
     // appMenu(this);
     this.$eventHub.$on('closeDrawer', () => {
       this.mini = true;
+    });
+
+    ipcRenderer.on('update-available', () => {
+      this.logout();
     });
 
     this.setIsOnline(navigator.onLine);
@@ -167,6 +173,10 @@ export default {
   },
   watch: {
     isReady(val) {
+      // console.log(this.$route);
+      if (this.$route.name === 'Progress') {
+        return;
+      }
       if (val && this.isLoggedIn) {
         this.$router.push({ name: this.isAdmin ? 'Labels' : 'Printer' });
       }

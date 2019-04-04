@@ -8,9 +8,10 @@
       </VCardTitle>
       <VDivider />
 
-      <TableHeader @newItem="newItem"/>
+      <TableHeader @newItem="newItem" @onSearch="handleSearch"/>
 
       <VDataTable
+        :search="search"
         :loading="fetching"
         :headers="userListHeaders"
         :items="clients"
@@ -60,6 +61,7 @@ export default {
   data() {
     return {
       userListHeaders,
+      search: '',
       dialog: false,
       editedItem: {
         name: null,
@@ -92,7 +94,8 @@ export default {
     };
   },
   mounted() {
-    if (this.clients.length === 0) this.fetch();
+    // if (this.clients.length === 0) this.fetch();
+    this.fetch();
   },
   computed: { ...mapState('clients', ['clients', 'fetching', 'selectedClient']) },
   methods: {
@@ -112,6 +115,7 @@ export default {
       };
       this.setToDelete(toDelete);
     },
+    handleSearch(val) { this.search = val; },
     openDialogWith(item) {
       this.$eventHub.$emit('openFormDialog', {
         form: 'client',

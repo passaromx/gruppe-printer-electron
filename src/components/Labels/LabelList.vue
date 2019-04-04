@@ -19,12 +19,14 @@
       <VDivider/>
 
       <TableHeader
-module="labels"
-:selected="selected"
-@newItem="dialog = true"
-condensed/>
+        module="labels"
+        :selected="selected"
+        @newItem="dialog = true"
+        @onSearch="handleSearch"
+        condensed/>
 
       <VDataTable
+        :search="search"
         v-model="selected"
         :loading="fetching"
         :headers="headers"
@@ -150,6 +152,7 @@ export default {
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
+    handleSearch(val) { this.search = val; },
     refreshLabels() {
       this.fetch(this.fromClient);
     },

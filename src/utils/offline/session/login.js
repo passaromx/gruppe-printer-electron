@@ -5,6 +5,10 @@ const fs = require('fs');
 
 const userDataPath = (electron.app || electron.remote.app).getPath('userData');
 const dataPath = path.join(userDataPath, 'data');
+const dataPathExists = fs.existsSync(`${dataPath}`);
+if (!dataPathExists) {
+  fs.mkdirSync(path.join(userDataPath, 'data'), { recursive: true });
+}
 
 module.exports = async (username, password, user, jwt, authenticate) => new Promise((resolve, reject) => {
   let config;

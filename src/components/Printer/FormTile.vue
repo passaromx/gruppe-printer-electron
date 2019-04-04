@@ -77,9 +77,9 @@
 
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, shell } from 'electron';
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
-import { mynVars, maltaVars, clients } from '@/api/constants';
+import { mynVars, maltaVars, clients, filesURL } from '@/api/constants';
 
 export default {
   $_veeValidate: { validator: 'new' },
@@ -162,12 +162,12 @@ export default {
       'setCopies'
     ]),
     viewPdf() {
-      console.log('view pdf call');
       ipcRenderer.send(
         'view-pdf',
         this.user.client._id,
         this.selectedLabel.labelPdf.url
       );
+
     },
     formatDisplayPrinters() {
       this.timeout = setTimeout(() => {
