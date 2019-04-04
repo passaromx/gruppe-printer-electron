@@ -192,6 +192,7 @@ app.on('ready', async () => {
 });
 
 autoUpdater.on('update-available', () => {
+  win.webContents.send('update-available');
   // Track progress percent
   let downloadProgress = 0;
   // Prompt user to update
