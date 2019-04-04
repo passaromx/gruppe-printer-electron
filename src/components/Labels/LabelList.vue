@@ -9,14 +9,14 @@
         <!-- <h5 class="headline">Precintos</h5> -->
         <VLayout row justify-space-between align-center>
           <VFlex xs4>
-            <ClientSelect />
+            <ClientSelect/>
           </VFlex>
           <VFlex xs1 class="text-xs-right">
             <VIcon @click="refreshLabels">refresh</VIcon>
           </VFlex>
         </VLayout>
       </VCardTitle>
-      <VDivider />
+      <VDivider/>
 
       <TableHeader
         module="labels"
@@ -35,18 +35,15 @@
       >
         <template slot="items" slot-scope="props">
           <td>
-            <VCheckbox
-              v-model="props.selected"
-              primary
-              hide-details
-            ></VCheckbox>
+            <VCheckbox v-model="props.selected" primary hide-details></VCheckbox>
           </td>
           <td>{{ props.item.name }}</td>
           <td class="text-xs-right">{{ props.item.sku }}</td>
           <td class="text-xs-right">
-            <a href="javascript:void(0)" @click="previewFile(props.item.authorization)">
-              {{ props.item.authorization.name || 'n/a' }}
-            </a>
+            <a
+              href="javascript:void(0)"
+              @click="previewFile(props.item.authorization)"
+            >{{ props.item.authorization.name || 'n/a' }}</a>
           </td>
           <td>
             <VLayout row justify-center>
@@ -61,7 +58,7 @@
                   <VIcon>image</VIcon>
                 </VBtn>
                 <span>Ver imagen</span>
-              </VTooltip> -->
+              </VTooltip>-->
               <VTooltip bottom>
                 <VBtn
                   slot="activator"
@@ -74,22 +71,20 @@
                 </VBtn>
                 <span>Ver PDF</span>
               </VTooltip>
-
             </VLayout>
 
             <!-- <a href="javascript:void(0)" @click="previewFile(props.item.labelPdf)">
               {{ props.item.labelPng.name || 'n/a' }}
-            </a> -->
+            </a>-->
           </td>
           <td class="text-xs-center">
             <VTooltip bottom>
               <VBtn
-                slot="activator"
-                flat
-                color="grey darken-2"
-                icon
-                @click="editItem(props.item)"
-              >
+slot="activator"
+flat
+color="grey darken-2"
+icon
+@click="editItem(props.item)">
                 <VIcon small>edit</VIcon>
               </VBtn>
               <span>Editar</span>
@@ -124,7 +119,7 @@ export default {
         label: null,
         labelPdf: null,
         labelPng: null,
-        authorization: null,
+        authorization: null
       },
       defaultItem: {
         name: null,
@@ -132,13 +127,15 @@ export default {
         label: null,
         labelPdf: null,
         labelPng: null,
-        authorization: null,
+        authorization: null
       },
       headers: labelListHeaders
     };
   },
   mounted() {
-    this.$eventHub.$on('clear-selected', () => { this.selected = []; });
+    this.$eventHub.$on('clear-selected', () => {
+      this.selected = [];
+    });
   },
   onDestroy() {
     this.$eventHub.$off('clear-selected');

@@ -1,8 +1,18 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import {
-  app, protocol, BrowserWindow, ipcMain, dialog
+  app,
+  protocol,
+  BrowserWindow,
+  ipcMain,
+  dialog,
+  shell, remote
 } from 'electron';
-import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib';
+import {
+  createProtocol,
+  installVueDevtools
+} from 'vue-cli-plugin-electron-builder/lib';
+
+const path = require('path');
 
 const os = require('os');
 const fs = require('fs');
@@ -12,7 +22,10 @@ const { autoUpdater } = require('electron-updater');
 const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
 const { login } = require('./utils/offline/session');
-const { arial, arialbold } = require('./utils/offline/printer/fonts');
+const {
+  arial,
+  arialbold
+} = require('./utils/offline/printer/fonts');
 autoUpdater.logger = require('electron-log');
 
 autoUpdater.autoDownload = false;
@@ -28,6 +41,7 @@ let win;
 
 // Standard scheme must be registered before the app is ready
 protocol.registerStandardSchemes(['app'], { secure: true });
+
 function createWindow() {
   // console.log(process.versions);
   // Create the browser window.
@@ -64,7 +78,7 @@ ipcMain.on('get-system-info', e => {
   let result = Object.keys(networkIfaces).map(key => ({
     key,
     info: networkIfaces[key].filter(iface => (iface.mac !== '00:00:00:00:00:00'
-      && iface.mac !== 'ff:ff:ff:ff:ff')
+        && iface.mac !== 'ff:ff:ff:ff:ff')
       && iface.family !== 'IPv6')
   }));
   result = result.filter(item => item.info.length);
@@ -77,15 +91,35 @@ ipcMain.on('get-system-info', e => {
   e.sender.send('system-info-fetched', result);
 });
 
-// ipcMain.on('view-pdf', (e, client, label) => {
-// const userDataPath = app.getPath('userData');
-// const labelPdf = fs.readFileSync(`${userDataPath}/data/${client}/${label}`, { encoding: 'base64' });
-// fs.writeFileSync(`${userDataPath}/data/${client}/pdf.txt`, labelPdf);
-// });
+ipcMain.on('view-pdf', (e, client, file) => {
+  console.log('view pdf called', client, file);
+  let documentsPath = app.getPath('documents');
+  documentsPath = path.join(documentsPath, 'gruppe');
+  const url = `file://${documentsPath}/${client}/${file}`;
+  if (url.includes('.pdf')) {
+    console.log('pdf', url);
+    shell.openExternal(url);
+  } else {
+    console.log('nopdf', url);
+    const newWin = new remote.BrowserWindow({
+      width: 500,
+      height: 800,
+      webPreferences: { plugins: true }
+    });
+    newWin.loadURL(url);
+    newWin.setMenu(null);
+    newWin.on('closed', () => {
+      win = null;
+    });
+  }
+});
 
 ipcMain.on('check-mac', (e, info) => {
   let checks = false;
-  const { mac, network } = info;
+  const {
+    mac,
+    network
+  } = info;
   if (networkIfaces[network]) {
     checks = networkIfaces[network].some(item => item.mac === mac);
   }
@@ -94,8 +128,8 @@ ipcMain.on('check-mac', (e, info) => {
 });
 
 ipcMain.on('selected-label', (e, client, label) => {
-  const userDataPath = app.getPath('userData');
-  const labelPng = fs.readFileSync(`${userDataPath}/data/${client}/${label}`, { encoding: 'base64' });
+  const userDataPath = app.getPath('documents');
+  const labelPng = fs.readFileSync(`${userDataPath}/gruppe/${client}/${label}`, { encoding: 'base64' });
 
   e.sender.send('image-ready', `data:image/jpeg;base64,${labelPng}`);
 });
@@ -181,6 +215,7 @@ app.on('activate', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
+  console.log(process.versions);
   // log.info('app is ready!')
   createWindow();
   if (isDevelopment && !process.env.IS_TEST) {
@@ -223,7 +258,9 @@ autoUpdater.on('update-available', () => {
     // Load progress HTML
     progressWin.loadURL('app://./index.html#progress');
 
-    progressWin.on('closed', () => { progressWin = null; });
+    progressWin.on('closed', () => {
+      progressWin = null;
+    });
 
     // Listen for preogress request from progressWin
     ipcMain.on('download-progress-request', e => {
