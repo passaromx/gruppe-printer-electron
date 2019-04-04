@@ -6,6 +6,7 @@ import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-buil
 
 const os = require('os');
 const fs = require('fs');
+// const printer = require('printer');
 // const PDFWindow = require('electron-pdf-window');
 const { autoUpdater } = require('electron-updater');
 const { sync } = require('./utils/offline/label');
@@ -101,7 +102,10 @@ ipcMain.on('selected-label', (e, client, label) => {
 
 ipcMain.on('get-printers', e => {
   const printers = win.webContents.getPrinters();
-  // console.log(printers);
+  // const printers = printer.getPrinters();
+  // console.log(process.versions);
+  // console.log(printer.getPrinter('ZDesigner 105SLPlus-203dpi ZPL'))
+  console.log(printers);
   e.sender.send('printers-fetched', printers);
 });
 
@@ -144,8 +148,10 @@ ipcMain.on('update-fonts', (e, printerName) => {
     .then(() => {
       setInterval(() => {
         const printers = win.webContents.getPrinters();
+
         printers.forEach(printer => {
           if (printer.name === printerName) {
+            console.log('status', printer.status);
             if (printer.status === 3) e.sender.send('fonts-uploaded');
           }
         });
@@ -186,6 +192,7 @@ app.on('ready', async () => {
 });
 
 autoUpdater.on('update-available', () => {
+  win.webContents.send('update-available');
   // Track progress percent
   let downloadProgress = 0;
   // Prompt user to update
