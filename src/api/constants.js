@@ -1,6 +1,5 @@
-
-export const filesURL = 'http://localhost:1337';
-// export const filesURL = 'http://3.81.203.178:1337';
+// export const filesURL = 'http://localhost:1337';
+export const filesURL = 'http://3.81.203.178:1337';
 export const apiURL = `${filesURL}/`;
 
 export const roles = {
@@ -84,21 +83,20 @@ export const maltaVars = {
       value: null,
       class: 'xs12',
       dateFormat: 'DDMMMYYYY',
-      styles: [
-        {
-          top: 3.3,
-          right: 7,
-          weight: 500,
-          rotation: 0,
-          fontSize: '1.8vh'
-        },
-        {
-          bottom: 20,
-          left: 7,
-          weight: 600,
-          fontSize: '1.4vh',
-          rotation: 90
-        }
+      styles: [{
+        top: 3.3,
+        right: 7,
+        weight: 500,
+        rotation: 0,
+        fontSize: '1.8vh'
+      },
+      {
+        bottom: 20,
+        left: 7,
+        weight: 600,
+        fontSize: '1.4vh',
+        rotation: 90
+      }
       ]
     }
   },
@@ -151,46 +149,44 @@ export const mynVars = {
   descriptionFormat: 'batch-sequential'
 };
 
-export const labelListHeaders = [
-  {
-    text: 'Nombre',
-    align: 'left',
-    sortable: false,
-    value: 'name'
-  },
-  {
-    text: 'SKU',
-    value: 'sku',
-    align: 'right'
-  },
-  {
-    text: 'Autorización',
-    value: 'auth',
-    align: 'right',
-    sortable: false
-  },
-  {
-    text: 'Etiqueta',
-    value: 'label',
-    align: 'center',
-    sortable: false
-  },
-  {
-    text: 'Acciones',
-    sortable: false,
-    align: 'center'
-  }
+export const labelListHeaders = [{
+  text: 'Nombre',
+  align: 'left',
+  sortable: false,
+  value: 'name'
+},
+{
+  text: 'SKU',
+  value: 'sku',
+  align: 'right'
+},
+{
+  text: 'Autorización',
+  value: 'auth',
+  align: 'right',
+  sortable: false
+},
+{
+  text: 'Etiqueta',
+  value: 'label',
+  align: 'center',
+  sortable: false
+},
+{
+  text: 'Acciones',
+  sortable: false,
+  align: 'center'
+}
 ];
 
-export const userListHeaders = [
-  {
-    text: 'Nombre',
-    align: 'left',
-    value: 'name'
-  },
-  {
-    text: 'Acciones',
-    align: 'center',
-    value: 'calories'
-  }
+export const userListHeaders = [{
+  text: 'Nombre',
+  align: 'left',
+  value: 'name'
+},
+{
+  text: 'Acciones',
+  align: 'center',
+  value: 'calories'
+}
 ];

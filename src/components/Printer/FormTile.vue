@@ -23,7 +23,8 @@
                 return-object
                 ref="printers"
                 item-text="displayName"
-                item-value="name"/>
+                item-value="name"
+              />
             </VFlex>
             <VFlex xs12 class="pt-0">
               <span>
@@ -31,9 +32,7 @@
                 <span
                   class="blue--text text--darken-3 printer-refresh font-weight-medium"
                   @click="getPrinters"
-                >
-                  click aquí
-                </span>
+                >click aquí</span>
               </span>
             </VFlex>
 
@@ -41,12 +40,11 @@
               <LabelAutocomplete
                 name="labels"
                 v-validate="'required'"
-                :messages="errors.collect('labels')"/>
+                :messages="errors.collect('labels')"
+              />
             </VFlex>
           </VLayout>
-          <Form
-            v-if="this.user"
-            :client="this.user.client._id" />
+          <Form v-if="this.user" :client="this.user.client._id"/>
           <VLayout row justify-start class="mt-3">
             <VFlex xs6>
               <VTextField
@@ -56,14 +54,12 @@
                 v-validate="'required|min_value:1|max_value:5000'"
                 :error-messages="errors.collect('copies')"
                 label="Copias"
-                :value="1" />
+                :value="1"
+              />
             </VFlex>
           </VLayout>
           <VLayout justify-end>
-            <VBtn
-              @click="viewPdf"
-              :disabled="!selectedLabel"
-            >
+            <VBtn @click="viewPdf" :disabled="!selectedLabel">
               <!-- <VIcon class="mr-2">cloud_download</VIcon> -->
               Ver PDF
             </VBtn>
@@ -71,14 +67,11 @@
               @click="print"
               :disabled="errors.items.length > 0 || !selectedLabel || !printer.name"
               color="primary"
-            >
-              Imprimir
-            </VBtn>
+            >Imprimir</VBtn>
           </VLayout>
         </VContainer>
       </VCardText>
     </VuePerfectScrollbar>
-
   </BaseCard>
 </template>
 
@@ -145,10 +138,14 @@ export default {
     displayPrinters() {
       if (this.$refs.printers) {
         let displayNameLength = this.$refs.printers.$el.clientWidth;
-        displayNameLength = (displayNameLength / 11) - (350 / displayNameLength);
+        displayNameLength = displayNameLength / 11 - 350 / displayNameLength;
         return this.printers.map(printer => {
-          const name = printer.description.length ? printer.description : printer.name;
-          printer.displayName = `${name.substr(0, displayNameLength)} ${name.length > displayNameLength ? '...' : ''}`;
+          const name = printer.description.length
+            ? printer.description
+            : printer.name;
+          printer.displayName = `${name.substr(0, displayNameLength)} ${
+            name.length > displayNameLength ? '...' : ''
+          }`;
           return printer;
         });
       }
@@ -165,10 +162,17 @@ export default {
       'setCopies'
     ]),
     viewPdf() {
-      ipcRenderer.send('view-pdf', this.user.client._id, this.selectedLabel.labelPdf.url);
+      console.log('view pdf call');
+      ipcRenderer.send(
+        'view-pdf',
+        this.user.client._id,
+        this.selectedLabel.labelPdf.url
+      );
     },
     formatDisplayPrinters() {
-      this.timeout = setTimeout(() => { this.printers = this.displayPrinters; }, 500);
+      this.timeout = setTimeout(() => {
+        this.printers = this.displayPrinters;
+      }, 500);
       window.addEventListener('resize', () => {
         this.printers = this.displayPrinters;
       });
@@ -178,9 +182,7 @@ export default {
       ipcRenderer.send('get-printers');
     },
     setClientVariables() {
-      const vars = this.user.client._id === clients.myn
-        ? this.mynVars
-        : this.maltaVars;
+      const vars = this.user.client._id === clients.myn ? this.mynVars : this.maltaVars;
       this.setVariables(vars);
     },
     handleScroll(e) {
@@ -196,7 +198,7 @@ export default {
       });
       const data = {
         ...variables,
-        copies: +this.copies,
+        copies: +this.copies
       };
 
       const printData = {
@@ -204,10 +206,18 @@ export default {
         client: this.user.client._id
       };
 
-      ipcRenderer.send('print', this.printer.name, this.selectedLabel, printData, this.user.client.settings.format);
+      ipcRenderer.send(
+        'print',
+        this.printer.name,
+        this.selectedLabel,
+        printData,
+        this.user.client.settings.format
+      );
       // update sys info
       const systemInfo = JSON.parse(localStorage.getItem('systemInfo'));
-      systemInfo.printerName = this.printer.description.length ? this.printer.description : this.printer.name;
+      systemInfo.printerName = this.printer.description.length
+        ? this.printer.description
+        : this.printer.name;
       systemInfo.print = {
         date: new Date().toISOString(),
         label: this.selectedLabel._id,
@@ -226,7 +236,7 @@ export default {
 </script>
 
 <style scoped>
-  .printer-refresh:hover {
-    cursor: pointer;
-  }
+.printer-refresh:hover {
+  cursor: pointer;
+}
 </style>

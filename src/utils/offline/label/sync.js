@@ -7,7 +7,7 @@ const fs = require('fs');
 const { apiURL } = require('../../../api/constants');
 
 const userDataPath = (electron.app || electron.remote.app).getPath('userData');
-
+const documentsPath = (electron.app || electron.remote.app).getPath('documents');
 module.exports = client => new Promise((resolve, reject) => {
   let forceSync = false;
   const id = client._id;
@@ -17,11 +17,23 @@ module.exports = client => new Promise((resolve, reject) => {
     forceSync = true;
     fs.mkdirSync(path.join(userDataPath, 'data'), { recursive: true });
   }
+  const documentsDataPath = path.join(documentsPath, 'gruppe');
+  const documentsDataPathExists = fs.existsSync(`${documentsDataPath}`);
+  if (!documentsDataPathExists) {
+    forceSync = true;
+    fs.mkdirSync(path.join(documentsPath, 'gruppe'), { recursive: true });
+  }
   const clientExists = fs.existsSync(`${dataPath}/${id}`);
   if (!clientExists) {
     forceSync = true;
     fs.mkdirSync(`${dataPath}/${id}`, { recursive: true });
     fs.mkdirSync(`${dataPath}/${id}/uploads`, { recursive: true });
+  }
+  const clientDocumentsExists = fs.existsSync(`${documentsDataPath}/${id}`);
+  if (!clientDocumentsExists) {
+    forceSync = true;
+    fs.mkdirSync(`${documentsDataPath}/${id}`, { recursive: true });
+    fs.mkdirSync(`${documentsDataPath}/${id}/uploads`, { recursive: true });
   }
 
   let config = fs.existsSync(`${dataPath}/${id}/config.json`);
@@ -34,12 +46,12 @@ module.exports = client => new Promise((resolve, reject) => {
   }
 
 
-  let labels = fs.existsSync(`${dataPath}/${id}/labels.json`);
+  let labels = fs.existsSync(`${documentsDataPath}/${id}/labels.json`);
   if (labels) {
-    labels = JSON.parse(fs.readFileSync(`${dataPath}/${id}/labels.json`, 'utf8'));
+    labels = JSON.parse(fs.readFileSync(`${documentsDataPath}/${id}/labels.json`, 'utf8'));
   } else {
     forceSync = true;
-    fs.writeFileSync(`${dataPath}/${id}/labels.json`, '[]');
+    fs.writeFileSync(`${documentsDataPath}/${id}/labels.json`, '[]');
     labels = [];
   }
   const lastSync = forceSync ? 0 : config.lastSync || 0;
@@ -59,7 +71,8 @@ module.exports = client => new Promise((resolve, reject) => {
     }
     config.lastSync = body.lastSync;
     config.client = client;
-    labels = labels.filter(label => body.allLabels.some(item => item.toString() === label._id.toString()));
+    labels = labels.filter(label => body.allLabels.some(item => item.toString() === label
+      ._id.toString()));
     if (body.labels.length > 0) {
       body.labels.forEach(label => {
         const index = labels.findIndex(i => i._id === label._id.toString());
@@ -76,7 +89,7 @@ module.exports = client => new Promise((resolve, reject) => {
       request(`${apiURL}${upload.url}`, { encoding: null }, (error, resp, download) => {
         if (error) reject(error);
         const filename = upload.url;
-        fs.writeFileSync(`${dataPath}/${id}${filename}`, download, e => {
+        fs.writeFileSync(`${documentsDataPath}/${id}${filename}`, download, e => {
           if (e) {
             console.log(e);
             reject(e);
@@ -86,7 +99,7 @@ module.exports = client => new Promise((resolve, reject) => {
       });
     });
     fs.writeFileSync(`${dataPath}/${id}/config.json`, config);
-    fs.writeFileSync(`${dataPath}/${id}/labels.json`, labels);
+    fs.writeFileSync(`${documentsDataPath}/${id}/labels.json`, labels);
 
 
     resolve({
