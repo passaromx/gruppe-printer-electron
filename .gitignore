@@ -21,7 +21,8 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+*.yml
 
 #Electron-builder output
 /dist_electron
-electron-builder.yml
+./electron-builder.yml
