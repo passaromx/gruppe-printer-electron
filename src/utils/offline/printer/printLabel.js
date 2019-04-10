@@ -48,7 +48,6 @@ module.exports = async (printer, data) => new Promise((resolve, reject) => {
     printer,
     type: 'RAW', // type: RAW, TEXT, PDF, JPEG, .. depends on platform
     success(jobID) {
-      console.log(`sent to printer with ID: ${jobID}`);
       resolve(jobID);
     },
     error(err) { console.log(err); reject(err); }

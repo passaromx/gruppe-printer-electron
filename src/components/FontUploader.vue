@@ -30,10 +30,10 @@
 
       <VCardActions>
         <VSpacer />
-        <VBtn
+        <!-- <VBtn
           flat
           @click="close"
-          >{{ loading ? 'Hecho' : 'Cancelar' }}</VBtn>
+          >{{ loading ? 'Hecho' : 'Cancelar' }}</VBtn> -->
         <VBtn
           :disabled="loading"
           flat
