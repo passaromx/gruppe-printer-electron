@@ -13,7 +13,7 @@ import {
 } from 'vue-cli-plugin-electron-builder/lib';
 
 const path = require('path');
-
+const print = require('printer');
 const os = require('os');
 const fs = require('fs');
 // const printer = require('printer');
@@ -175,21 +175,30 @@ ipcMain.on('print', (e, printer, label, data, format) => {
         .catch(err => console.log(err));
     });
 });
-
 ipcMain.on('update-fonts', (e, printerName) => {
   const fonts = arial + arialbold;
   printLabel(printerName, fonts)
-    .then(() => {
-      setInterval(() => {
-        const printers = win.webContents.getPrinters();
+    .then(jobID => {
+      const intervalPrintStatus = setInterval(() => {
+        try {
+          print.getJob(printerName, jobID);
+        } catch (err) {
+          clearInterval(intervalPrintStatus);
+          setTimeout(() => {
+            e.sender.send('fonts-uploaded');
+          }, 3500);
+        }
+      }, 500);
+
+
+      /* const printers = win.webContents.getPrinters();
 
         printers.forEach(printer => {
           if (printer.name === printerName) {
-            console.log('status', printer.status);
-            if (printer.status === 3) e.sender.send('fonts-uploaded');
+            printer.status != 0 && console.log('status', printer.status);
+            //if (printer.status === 3) e.sender.send('fonts-uploaded');
           }
-        });
-      }, 3500);
+        }); */
     })
     .catch(err => console.log(err));
 });
