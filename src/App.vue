@@ -1,6 +1,6 @@
 <template>
   <VApp>
-    <FontUploader v-if="isAdmin"/>
+    <FontUploader/>
 
     <VNavigationDrawer
       v-if="isLoggedIn"
@@ -68,7 +68,6 @@
         </VListTile>
 
         <VListTile
-          v-if="isAdmin"
           @click="setFontDialog(true)"
         >
           <VListTileAction>

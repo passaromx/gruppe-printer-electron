@@ -9,12 +9,12 @@ module.exports = (format, params) => {
     const { description, expireDate, productionDate } = params;
     start = `^XA
       ^MMC
-      ^PW768
+      ^PW832
       ^LL1199
       ^LS0
-      ^FT301,590^A0I,31,31^FH\^FD${description || ''}^FS
+      ^FT260,585^A0I,37,37^FH\^FD${description || ''}^FS
       ^FT301,680^A0I,31,31^FH\^FD${expireDate || ''}^FS
-      ^FT301,765^A0I,31,31^FH\^FD${productionDate || ''}^FS^LS0`;
+      ^FT270,760^A0I,31,31^FH\^FD${productionDate || ''}^FS^LS0`;
   } else if (format === 'malta') {
     console.log('2', params);
     const { description, weight, date } = params;

@@ -14,6 +14,11 @@ export const clients = {
   malta: '5c38cb394903e5fc92396909'
 };
 
+export const rowsPerPage = [15, 25, 50, {
+  text: '$vuetify.dataIterator.rowsPerPageAll',
+  value: -1
+}];
+
 const maltaFactories = [
   'BAJ', 'CLN', 'GDL', 'MER', 'MOR', 'MTY', 'STJ', 'TEP', 'TLX'
 ];
@@ -127,28 +132,28 @@ export const mynVars = {
     batch: {
       type: 'text',
       label: 'Lote',
-      validation: 'required',
-      value: 'A',
+      validation: 'required|min:6|max:8',
+      value: 'A000001',
     },
-    sequential: {
+    /* sequential: {
       type: 'number',
       label: 'Consecutivo',
       validation: 'required|min_value:1',
       value: '001',
-    },
+    }, */
     description: {
       value: null,
       label: 'Nomenclatura',
       class: 'xs12',
       styles: [{
-        top: 48.8,
-        left: 68,
+        top: 49.5,
+        left: 70,
         weight: 500,
-        fontSize: '1.8vh'
+        fontSize: '1.9vh'
       }]
     },
   },
-  descriptionFormat: 'batch-sequential'
+  descriptionFormat: 'batch'
 };
 
 export const labelListHeaders = [{
