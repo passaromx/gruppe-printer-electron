@@ -14,6 +14,9 @@ const dictionary = {
       min(e, n) {
         return `Mínimo ${n[0]} caractéres.`;
       },
+      max(e, n) {
+        return `Máximo ${n[0]} caractéres.`;
+      },
       min_value(e, n) {
         return `El valor del campo debe ser ${n[0]} o superior.`;
       },

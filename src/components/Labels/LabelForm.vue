@@ -44,7 +44,7 @@
         label="Autorización"
         :value="authName"
         data-vv-name="auth"
-        v-validate="'required'"
+        v-validate="''"
         append-icon="attach_file"
         hint="Toca para seleccionar archivo"
         persistent-hint

@@ -31,6 +31,7 @@
         :loading="fetching"
         :headers="headers"
         :items="labels"
+        :rows-per-page-items="rowsPerPage"
         select-all
       >
         <template slot="items" slot-scope="props">
@@ -80,11 +81,11 @@
           <td class="text-xs-center">
             <VTooltip bottom>
               <VBtn
-slot="activator"
-flat
-color="grey darken-2"
-icon
-@click="editItem(props.item)">
+                slot="activator"
+                flat
+                color="grey darken-2"
+                icon
+                @click="editItem(props.item)">
                 <VIcon small>edit</VIcon>
               </VBtn>
               <span>Editar</span>
@@ -99,7 +100,7 @@ icon
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
 import { shell, remote } from 'electron';
-import { labelListHeaders, filesURL } from '@/api/constants';
+import { labelListHeaders, filesURL, rowsPerPage } from '@/api/constants';
 import { mapActions, mapState } from 'vuex';
 
 export default {
@@ -110,6 +111,7 @@ export default {
   },
   data() {
     return {
+      rowsPerPage,
       dialog: false,
       search: '',
       selected: [],
