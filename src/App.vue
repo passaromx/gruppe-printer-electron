@@ -163,8 +163,10 @@ export default {
       });
     },
     onNetworkRestored() {
+      console.log('network restored');
       this.setIsOnline(true);
       this.$eventHub.$emit('sync');
+      this.$eventHub.$emit('network-restored');
     },
     sync() {
       this.$eventHub.$emit('sync');

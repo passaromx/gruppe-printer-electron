@@ -84,8 +84,8 @@ ipcMain.on('get-system-info', e => {
   result = result.filter(item => item.info.length);
   result = {
     hostname,
-    mac: result[0].info[0].mac,
-    network: result[0].key,
+    mac: result.length > 0 ? result[0].info[0].mac : null,
+    network: result.length > 0 ? result[0].key : null,
     // info: result[0].info[0]
   };
   e.sender.send('system-info-fetched', result);
