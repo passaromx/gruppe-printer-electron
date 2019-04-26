@@ -1,50 +1,54 @@
 <template>
   <VLayout row>
     <VFlex xs6>
-      <VContainer>
-        <VLayout
-          column
-          align-center
-        >
+      <VContainer style="height: 100%">
+        <VLayout column fill-height align-center>
+
           <VImg
-            class="mt-5"
             :src="require('../assets/gruppe_full.png')"
             contain
-            height="150"
-            width="60%" />
-        </VLayout>
-        <VForm class="mx-5 mt-5" @keyup.native.enter="validate">
-          <VTextField
-            label="Correo o usuario"
-            v-model="email"
-            append-icon="alternate_email"
-            data-vv-name="email"
-            v-validate="'required'"
-            :error-messages="errors.collect('email')"
-          />
-          <VTextField
-            label="Contraseña"
-            v-model="password"
-            :append-icon="show ? 'visibility' : 'visibility_off'"
-            :type="show ? 'text' : 'password'"
-            @click:append="show = !show"
-            data-vv-name="password"
-            v-validate="'required'"
-            :error-messages="errors.collect('password')"
-          />
-          <VLayout justify-end>
-            <VBtn
-              color="primary"
-              class="mt-3"
-              :disabled="isLoading"
-              :loading="isLoading"
-              @click="validate"
-            >
-              Iniciar Sesión
-            </VBtn>
+            height="150 px"
+            width="60%"/>
+
+          <VForm class="mt-5" @keyup.native.enter="validate" style="width: 60%">
+            <VTextField
+              label="Correo o usuario"
+              v-model="email"
+              append-icon="alternate_email"
+              data-vv-name="email"
+              v-validate="'required'"
+              :error-messages="errors.collect('email')"
+            />
+            <VTextField
+              label="Contraseña"
+              v-model="password"
+              :append-icon="show ? 'visibility' : 'visibility_off'"
+              :type="show ? 'text' : 'password'"
+              @click:append="show = !show"
+              data-vv-name="password"
+              v-validate="'required'"
+              :error-messages="errors.collect('password')"
+            />
+            <VLayout justify-center>
+              <VBtn
+                color="primary"
+                class="mt-3"
+                :disabled="isLoading"
+                :loading="isLoading"
+                @click="validate"
+              >
+                Iniciar Sesión
+              </VBtn>
+            </VLayout>
+          </VForm>
+
+          <VLayout row justify-end class="mt-5">
+            <span class="caption">v1.0.1</span>
           </VLayout>
-        </VForm>
+
+        </VLayout>
       </VContainer>
+
 
     </VFlex>
     <VFlex xs6>

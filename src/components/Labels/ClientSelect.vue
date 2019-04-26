@@ -16,6 +16,11 @@ import { mapState, mapActions, mapMutations } from 'vuex';
 export default {
   mounted() {
     if (this.clients.length === 0) this.fetch();
+
+    this.$eventHub.$on('network-restored', () => { this.fetch(); });
+  },
+  beforeDestroy() {
+    this.$eventHub.$off('network-restored');
   },
   computed: {
     ...mapState('clients', ['clients', 'fetching']),
