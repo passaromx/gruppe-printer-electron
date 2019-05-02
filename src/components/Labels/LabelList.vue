@@ -42,9 +42,11 @@
           <td class="text-xs-right">{{ props.item.sku }}</td>
           <td class="text-xs-right">
             <a
+              v-if="props.item.authorization"
               href="javascript:void(0)"
               @click="previewFile(props.item.authorization)"
-            >{{ props.item.authorization.name || 'n/a' }}</a>
+            >{{ props.item.authorization.name}}</a>
+            <span v-else>Sin autorización</span>
           </td>
           <td>
             <VLayout row justify-center>
