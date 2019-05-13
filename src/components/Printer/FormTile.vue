@@ -77,9 +77,9 @@
 
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
-import { ipcRenderer, shell } from 'electron';
+import { ipcRenderer } from 'electron';
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
-import { mynVars, maltaVars, clients, filesURL } from '@/api/constants';
+import { mynVars, maltaVars, wisiumVars, clients } from '@/api/constants';
 
 export default {
   $_veeValidate: { validator: 'new' },
@@ -99,6 +99,7 @@ export default {
       weight: 1,
       mynVars,
       maltaVars,
+      wisiumVars,
       resize: false,
       timeout: null,
       divider: false
@@ -167,7 +168,6 @@ export default {
         this.user.client._id,
         this.selectedLabel.labelPdf.url
       );
-
     },
     formatDisplayPrinters() {
       this.timeout = setTimeout(() => {
@@ -182,7 +182,13 @@ export default {
       ipcRenderer.send('get-printers');
     },
     setClientVariables() {
-      const vars = this.user.client._id === clients.myn ? this.mynVars : this.maltaVars;
+      let vars = this.maltaVars;
+      const clientId = this.user.client._id;
+      if (clientId === clients.myn) {
+        vars = this.mynVars;
+      } else if (clientId === clients.wisium) {
+        vars = this.wisiumVars;
+      }
       this.setVariables(vars);
     },
     handleScroll(e) {

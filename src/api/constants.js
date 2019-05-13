@@ -11,7 +11,8 @@ export const roles = {
 
 export const clients = {
   myn: '5c40b928a5888531a0076cbd',
-  malta: '5c38cb394903e5fc92396909'
+  malta: '5c38cb394903e5fc92396909',
+  wisium: '5cd6e9f9d7388839466b2d40'
 };
 
 export const rowsPerPage = [15, 25, 50, {
@@ -150,6 +151,41 @@ export const mynVars = {
         left: 70,
         weight: 500,
         fontSize: '1.9vh'
+      }]
+    },
+  },
+  descriptionFormat: 'batch'
+};
+
+export const wisiumVars = {
+  fields: {
+    title: {
+      type: 'title',
+      class: 'xs12',
+      label: 'Variables'
+    },
+    batch: {
+      type: 'text',
+      class: 'xs12',
+      label: 'Lote',
+      validation: 'required',
+      value: 'A000001',
+    },
+    /* sequential: {
+      type: 'number',
+      label: 'Consecutivo',
+      validation: 'required|min_value:1',
+      value: '001',
+    }, */
+    description: {
+      value: null,
+      label: 'Nomenclatura',
+      class: 'xs12',
+      styles: [{
+        top: 88.0,
+        left: 52,
+        weight: 500,
+        fontSize: '1.55vh'
       }]
     },
   },

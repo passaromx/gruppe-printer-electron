@@ -17,7 +17,8 @@
         alt="label"
         :src="imgPath"
         contain
-        class="preview-img"/>
+        class="preview-img"
+        :style="{ transform: user.client.settings.invert ? 'rotate(180deg)' : 'rotate(0deg)' }"/>
       <VLayout
         v-if="selectedLabel && previewLoader"
         class="loader-bg"
