@@ -29,6 +29,16 @@ module.exports = (format, params) => {
 
       ^FT8,311^A@R,19,19,ARIALBOLD.FNT^FD${date}^FS
       ^FT830,340^A@B,23,23,ARIALBOLD.FNT^FD${description}^FS^LS0`;
+  } else if (format === 'wisium') {
+    console.log('3', params);
+    const { description } = params;
+    start = `^XA
+      ^MMC
+      ^PW831
+      ^LL1319
+      ^LS15
+      ^CFO,100
+      ^FT200,1200^A@,25,25,ARIAL.FNT^FD${description}^FS`;
   }
   return start;
 };

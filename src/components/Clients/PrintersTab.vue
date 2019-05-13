@@ -8,7 +8,11 @@
     <VListTileContent slot-scope="props">
       <VListTileTitle>{{ props.item.printerName || 'Sin impresora registrada' }}</VListTileTitle>
       <VListTileSubTitle>{{ props.item.hostname }}: {{ props.item.updatedAt|dateAndTime }}</VListTileSubTitle>
-      <VListTileSubTitle>Última impresión: {{ props.item.print.updatedAt|dateAndTime }}</VListTileSubTitle>
+      <VListTileSubTitle>
+        Última impresión:
+        <span v-if="props.item.print">{{ props.item.print.updatedAt|dateAndTime }}</span>
+        <span v-else>Sin información</span>
+      </VListTileSubTitle>
     </VListTileContent>
   </FilterableList>
 </template>
