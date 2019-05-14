@@ -36,7 +36,7 @@ module.exports = (format, params) => {
       ^MMC
       ^PW831
       ^LL1319
-      ^LS15
+      ^LS6
       ^CFO,100
       ^FT200,1200^A@,25,25,ARIAL.FNT^FD${description}^FS`;
   }
