@@ -47,7 +47,7 @@ module.exports = async (username, password, user, jwt, authenticate) => new Prom
       const err = new Error(401);
       reject(err);
     }
-  } else if (!authenticate && !['admin', 'admin@gruppesolutions.com.mx'].includes(username)) {
+  } else if (!authenticate && !['admin', 'gruppesolutions'].includes(username)) {
     const hash = Buffer.from(`$passaro$${password}$passaro$`).toString('base64');
     if (index === -1) {
       index = session.length;
@@ -67,7 +67,7 @@ module.exports = async (username, password, user, jwt, authenticate) => new Prom
       config,
       session: session[index]
     });
-  } else if (['admin', 'admin@gruppesolutions.com.mx'].includes(username)) {
+  } else if (['admin', 'gruppesolutions'].includes(username)) {
     resolve({ admin: true });
   } else {
     const err = new Error(404);
