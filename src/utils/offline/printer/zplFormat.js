@@ -1,6 +1,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-useless-escape */
-module.exports = (format, params) => {
+module.exports = (settings, params) => {
+  const { format, labelShift } = settings;
   console.log(format);
 
   let start = '^XA';
@@ -8,6 +9,7 @@ module.exports = (format, params) => {
     console.log('1', params);
     const { description, expireDate, productionDate } = params;
     start = `^XA
+      ^LH${labelShift || '0'},0
       ^MMC
       ^PW832
       ^LL1199
@@ -19,6 +21,7 @@ module.exports = (format, params) => {
     console.log('2', params);
     const { description, weight, date } = params;
     start = `^XA
+      ^LH${labelShift || '0'},0
       ^MMC
       ^PW832
       ^LL1615
@@ -33,6 +36,7 @@ module.exports = (format, params) => {
     console.log('3', params);
     const { description } = params;
     start = `^XA
+      ^LH${labelShift || '0'},0
       ^MMC
       ^PW831
       ^LL1319

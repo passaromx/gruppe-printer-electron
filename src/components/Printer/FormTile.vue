@@ -217,7 +217,7 @@ export default {
         this.printer.name,
         this.selectedLabel,
         printData,
-        this.user.client.settings.format
+        this.user.client.settings
       );
       // update sys info
       const systemInfo = JSON.parse(localStorage.getItem('systemInfo'));
