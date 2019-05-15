@@ -166,9 +166,9 @@ ipcMain.on('login', (e, username, password, user, jwt, authenticate) => {
     });
 });
 
-ipcMain.on('print', (e, printer, label, data, format) => {
+ipcMain.on('print', (e, printer, label, data, settings) => {
   const { getZpl } = require('./utils/offline/printer');
-  getZpl(label.label.url, format, data)
+  getZpl(label.label.url, settings, data)
     .then(zpl => {
       printLabel(printer, zpl)
         .then(printed => console.log(printed))
