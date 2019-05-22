@@ -5,7 +5,7 @@ import {
   BrowserWindow,
   ipcMain,
   dialog,
-  shell, remote
+  // shell, remote
 } from 'electron';
 import {
   createProtocol,
@@ -93,16 +93,17 @@ ipcMain.on('get-system-info', e => {
 });
 
 ipcMain.on('view-pdf', (e, client, file) => {
-  console.log('view pdf called', client, file);
+  // console.log('view pdf called', client, file);
   let documentsPath = app.getPath('documents');
   documentsPath = path.join(documentsPath, 'gruppe');
   const url = `file://${documentsPath}/${client}/${file}`;
   if (url.includes('.pdf')) {
-    console.log('pdf', url);
-    shell.openExternal(url);
+    // console.log('pdf', url);
+    e.sender.send('url-ready', url);
+    // shell.openExternal(url);
   } else {
-    console.log('nopdf', url);
-    const newWin = new remote.BrowserWindow({
+    // console.log('nopdf', url);
+    let newWin = new BrowserWindow({
       width: 500,
       height: 800,
       webPreferences: { plugins: true }
@@ -110,7 +111,7 @@ ipcMain.on('view-pdf', (e, client, file) => {
     newWin.loadURL(url);
     newWin.setMenu(null);
     newWin.on('closed', () => {
-      win = null;
+      newWin = null;
     });
   }
 });
@@ -145,7 +146,7 @@ ipcMain.on('get-printers', e => {
   // const printers = printer.getPrinters();
   // console.log(process.versions);
   // console.log(printer.getPrinter('ZDesigner 105SLPlus-203dpi ZPL'))
-  console.log(printers);
+  // console.log(printers);
   e.sender.send('printers-fetched', printers);
 });
 

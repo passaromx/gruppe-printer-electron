@@ -77,7 +77,7 @@
 
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, shell } from 'electron';
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
 import { mynVars, maltaVars, wisiumVars, clients } from '@/api/constants';
 
@@ -107,6 +107,12 @@ export default {
   },
   mounted() {
     this.getPrinters();
+    ipcRenderer.on('url-ready', (e, url) => {
+      let formattedUrl = url.replace(/\\/g, '/');
+      formattedUrl = formattedUrl.replace('//uploads', '/uploads');
+      // console.log(formattedUrl);
+      shell.openItem(formattedUrl);
+    });
     ipcRenderer.on('printers-fetched', (e, printers) => {
       setTimeout(() => {
         if (!this.firstFetch) {
@@ -236,6 +242,7 @@ export default {
   beforeDestroy() {
     // window.removeEventListener('resize', console.log('removed'));
     ipcRenderer.removeAllListeners('printers-fetched');
+    ipcRenderer.removeAllListeners('url-ready');
     this.setSelectedLabel(null);
   }
 };
