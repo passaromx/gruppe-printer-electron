@@ -124,8 +124,8 @@ export const mynVars = {
       dateFormat: 'DD-MM-YYYY',
       value: new Date().toISOString().substr(0, 10),
       styles: [{
-        top: 34.8,
-        left: 68,
+        top: 34,
+        left: 63,
         weight: 500,
         fontSize: '1.8vh'
       }]
@@ -147,8 +147,8 @@ export const mynVars = {
       label: 'Nomenclatura',
       class: 'xs12',
       styles: [{
-        top: 49.5,
-        left: 70,
+        top: 46,
+        left: 63,
         weight: 500,
         fontSize: '1.9vh'
       }]

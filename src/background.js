@@ -19,6 +19,7 @@ const fs = require('fs');
 // const printer = require('printer');
 // const PDFWindow = require('electron-pdf-window');
 const { autoUpdater } = require('electron-updater');
+// const { apiURL } = require('./api/constants');
 const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
 const { login } = require('./utils/offline/session');
@@ -129,9 +130,14 @@ ipcMain.on('check-mac', (e, info) => {
 
 ipcMain.on('selected-label', (e, client, label) => {
   const userDataPath = app.getPath('documents');
-  const labelPng = fs.readFileSync(`${userDataPath}/gruppe/${client}/${label}`, { encoding: 'base64' });
+  if (fs.existsSync(`${userDataPath}/gruppe/${client}/${label}`)) {
+    const labelPng = fs.readFileSync(`${userDataPath}/gruppe/${client}/${label}`, { encoding: 'base64' });
 
-  e.sender.send('image-ready', `data:image/jpeg;base64,${labelPng}`);
+    e.sender.send('image-ready', `data:image/jpeg;base64,${labelPng}`);
+  } else {
+    // e.sender.send('image-ready', `${apiURL}${label}`);
+    e.sender.send('image-ready', '');
+  }
 });
 
 ipcMain.on('get-printers', e => {
@@ -146,7 +152,7 @@ ipcMain.on('get-printers', e => {
 ipcMain.on('sync', (e, client) => {
   sync(client)
     .then(data => {
-      console.log(data);
+      // console.log(data);
       e.sender.send('synced', data);
       if (data.err) e.sender.send('errorSync', data.err);
     })
