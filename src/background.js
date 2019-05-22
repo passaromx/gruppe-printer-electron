@@ -5,7 +5,7 @@ import {
   BrowserWindow,
   ipcMain,
   dialog,
-  shell, remote
+  // shell, remote
 } from 'electron';
 import {
   createProtocol,
@@ -19,6 +19,7 @@ const fs = require('fs');
 // const printer = require('printer');
 // const PDFWindow = require('electron-pdf-window');
 const { autoUpdater } = require('electron-updater');
+// const { apiURL } = require('./api/constants');
 const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
 const { login } = require('./utils/offline/session');
@@ -92,16 +93,17 @@ ipcMain.on('get-system-info', e => {
 });
 
 ipcMain.on('view-pdf', (e, client, file) => {
-  console.log('view pdf called', client, file);
+  // console.log('view pdf called', client, file);
   let documentsPath = app.getPath('documents');
   documentsPath = path.join(documentsPath, 'gruppe');
   const url = `file://${documentsPath}/${client}/${file}`;
   if (url.includes('.pdf')) {
-    console.log('pdf', url);
-    shell.openExternal(url);
+    // console.log('pdf', url);
+    e.sender.send('url-ready', url);
+    // shell.openExternal(url);
   } else {
-    console.log('nopdf', url);
-    const newWin = new remote.BrowserWindow({
+    // console.log('nopdf', url);
+    let newWin = new BrowserWindow({
       width: 500,
       height: 800,
       webPreferences: { plugins: true }
@@ -109,7 +111,7 @@ ipcMain.on('view-pdf', (e, client, file) => {
     newWin.loadURL(url);
     newWin.setMenu(null);
     newWin.on('closed', () => {
-      win = null;
+      newWin = null;
     });
   }
 });
@@ -129,9 +131,14 @@ ipcMain.on('check-mac', (e, info) => {
 
 ipcMain.on('selected-label', (e, client, label) => {
   const userDataPath = app.getPath('documents');
-  const labelPng = fs.readFileSync(`${userDataPath}/gruppe/${client}/${label}`, { encoding: 'base64' });
+  if (fs.existsSync(`${userDataPath}/gruppe/${client}/${label}`)) {
+    const labelPng = fs.readFileSync(`${userDataPath}/gruppe/${client}/${label}`, { encoding: 'base64' });
 
-  e.sender.send('image-ready', `data:image/jpeg;base64,${labelPng}`);
+    e.sender.send('image-ready', `data:image/jpeg;base64,${labelPng}`);
+  } else {
+    // e.sender.send('image-ready', `${apiURL}${label}`);
+    e.sender.send('image-ready', '');
+  }
 });
 
 ipcMain.on('get-printers', e => {
@@ -139,14 +146,14 @@ ipcMain.on('get-printers', e => {
   // const printers = printer.getPrinters();
   // console.log(process.versions);
   // console.log(printer.getPrinter('ZDesigner 105SLPlus-203dpi ZPL'))
-  console.log(printers);
+  // console.log(printers);
   e.sender.send('printers-fetched', printers);
 });
 
 ipcMain.on('sync', (e, client) => {
   sync(client)
     .then(data => {
-      console.log(data);
+      // console.log(data);
       e.sender.send('synced', data);
       if (data.err) e.sender.send('errorSync', data.err);
     })
