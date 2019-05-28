@@ -14,8 +14,8 @@ module.exports = (settings, params) => {
       ^PW832
       ^LL1279
       ^LS0
-      ^FT310,670^A0I,42,42^FH\^FD${description || ''}^FS
-      ^FT350,820^A0I,40,40^FH\^FD${productionDate || ''}^FS^LS0`;
+      ^FT310,870^A0I,44,44^FH\^FD${description || ''}^FS
+      ^FT350,790^A0I,43,43^FH\^FD${productionDate || ''}^FS^LS0`;
   } else if (format === 'malta') {
     console.log('2', params);
     const { description, weight, date } = params;
