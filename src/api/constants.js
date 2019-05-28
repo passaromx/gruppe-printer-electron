@@ -124,10 +124,10 @@ export const mynVars = {
       dateFormat: 'DD-MM-YYYY',
       value: new Date().toISOString().substr(0, 10),
       styles: [{
-        top: 34,
-        left: 63,
+        top: 37.8,
+        left: 57,
         weight: 500,
-        fontSize: '1.8vh'
+        fontSize: '2.7vh'
       }]
     },
     batch: {
@@ -147,10 +147,10 @@ export const mynVars = {
       label: 'Nomenclatura',
       class: 'xs12',
       styles: [{
-        top: 46,
-        left: 63,
+        top: 31.8,
+        left: 60,
         weight: 500,
-        fontSize: '1.9vh'
+        fontSize: '2.7vh'
       }]
     },
   },
