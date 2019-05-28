@@ -210,6 +210,7 @@ export default {
       });
       const data = {
         ...variables,
+        user: this.user.email,
         copies: +this.copies
       };
 

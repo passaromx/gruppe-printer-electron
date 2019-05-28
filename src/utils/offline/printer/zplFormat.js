@@ -11,11 +11,11 @@ module.exports = (settings, params) => {
     start = `^XA
       ^LH${labelShift || '0'},0
       ^MMC
-      ^PW799
+      ^PW832
       ^LL1279
       ^LS0
-      ^FT280,680^A0I,37,37^FH\^FD${description || ''}^FS
-      ^FT280,850^A0I,31,31^FH\^FD${productionDate || ''}^FS^LS0`;
+      ^FT310,670^A0I,42,42^FH\^FD${description || ''}^FS
+      ^FT350,820^A0I,40,40^FH\^FD${productionDate || ''}^FS^LS0`;
   } else if (format === 'malta') {
     console.log('2', params);
     const { description, weight, date } = params;
