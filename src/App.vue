@@ -1,6 +1,9 @@
 <template>
   <VApp>
     <FontUploader/>
+    <VDialog v-model="contactsDialog" max-width="400px">
+      <ContactDialog @close="contactsDialog = false" />
+    </VDialog>
 
     <VNavigationDrawer
       v-if="isLoggedIn"
@@ -79,6 +82,19 @@
           </VListTileContent>
         </VListTile>
 
+        <VListTile
+          v-if="!isAdmin"
+          @click="contactsDialog = true"
+        >
+          <VListTileAction>
+            <VIcon>help_outline</VIcon>
+          </VListTileAction>
+
+          <VListTileContent>
+            <VListTileTitle>Soporte</VListTileTitle>
+          </VListTileContent>
+        </VListTile>
+
         <VDivider light></VDivider>
 
         <VListTile
@@ -117,6 +133,7 @@ import { ipcRenderer } from 'electron';
 export default {
   name: 'App',
   components: {
+    ContactDialog: () => import('@/components/ContactDialog'),
     DeleteConfirm: () => import('@/components/DeleteConfirm'),
     Snackbar: () => import('@/components/Snackbar'),
     OfflineSnackbar: () => import('@/components/OfflineSnackbar'),
@@ -138,6 +155,7 @@ export default {
   },
   data() {
     return {
+      contactsDialog: false,
       drawer: null,
       menu,
       mini: true
