@@ -6,75 +6,94 @@
     <VCardText>
       <VForm @keyup.native.enter="validate">
         <VTextField
-        label="Nombre"
-        v-model="editedItem.name"
-        data-vv-name="name"
-        v-validate="'required'"
-        :error-messages="errors.collect('name')"/>
-      <VTextField
-        label="SKU"
-        v-model="editedItem.sku"
-        data-vv-name="sku"
-        v-validate="'required'"
-        :error-messages="errors.collect('sku')"/>
+          label="Nombre"
+          v-model="editedItem.name"
+          data-vv-name="name"
+          v-validate="'required'"
+          :error-messages="errors.collect('name')"
+        />
 
-      <VTextField
-        label="Etiqueta"
-        :value="labelName"
-        data-vv-name="label"
-        v-validate="'required'"
-        append-icon="attach_file"
-        clearable
-        hint="Toca para seleccionar archivo"
-        persistent-hint
-        @click="pickFile('label')"
-        @click:clear="clearFile('label')"
-        readonly
-        :error-messages="errors.collect('label')"
-      />
-      <input
-        id="label"
-        ref="label"
-        style="display: none"
-        type="file"
-        accept=".prn"
-        @change="onFilePicked">
+        <VTextField
+          label="SKU"
+          v-model="editedItem.sku"
+          data-vv-name="sku"
+          v-validate="'required'"
+          :error-messages="errors.collect('sku')"
+        />
 
-      <VTextField
-        label="Autorización"
-        :value="authName"
-        data-vv-name="auth"
-        v-validate="''"
-        append-icon="attach_file"
-        hint="Toca para seleccionar archivo"
-        persistent-hint
-        @click="pickFile('auth')"
-        @click:clear="clearFile('auth')"
-        clearable
-        readonly
-        :error-messages="errors.collect('auth')"
-      />
-      <input
-        id="auth"
-        ref="auth"
-        style="display: none"
-        type="file"
-        accept=".pdf,image/*"
-        @change="onFilePicked">
+        <VTextField
+          label="Etiqueta"
+          :value="labelName"
+          data-vv-name="label"
+          v-validate="'required'"
+          append-icon="attach_file"
+          clearable
+          hint="Toca para seleccionar archivo"
+          persistent-hint
+          @click="pickFile('label')"
+          @click:clear="clearFile('label')"
+          readonly
+          :error-messages="errors.collect('label')"
+        />
+        <input
+          id="label"
+          ref="label"
+          style="display: none"
+          type="file"
+          accept=".prn"
+          @change="onFilePicked">
 
-        <VExpandTransition v-if="auth || label">
-          <div class="mt-4" v-if="loading">
-            <VLayout row justify-space-between>
-              <span>{{ uploadProgress === 100 ? 'Creando pdf & png' : 'Subiendo archivos'}}</span>
-              <span>{{ uploadProgress }} %</span>
-            </VLayout>
-            <VProgressLinear
-              v-model="uploadProgress"
-              :indeterminate="uploadProgress === 100"/>
-          </div>
-        </VExpandTransition>
-      </VForm>
+        <VTextField
+          label="Autorización"
+          :value="authName"
+          data-vv-name="auth"
+          v-validate="''"
+          append-icon="attach_file"
+          hint="Toca para seleccionar archivo"
+          persistent-hint
+          @click="pickFile('auth')"
+          @click:clear="clearFile('auth')"
+          clearable
+          readonly
+          :error-messages="errors.collect('auth')"
+        />
 
+        <input
+          id="auth"
+          ref="auth"
+          style="display: none"
+          type="file"
+          accept=".pdf,image/*"
+          @change="onFilePicked">
+
+          <template v-if="labelConfigFields.length > 0">
+            <VTextField
+              v-model="field.value"
+              class="mt-2"
+              v-for="field in labelConfigFields"
+              :key="field.name"
+              :ref="field.name"
+              :label="field.label"
+              :type="field.type"
+              :data-vv-name="field.name"
+              v-validate="'required'"
+              :error-messages="errors.collect(`${field.name}`)"
+            />
+          </template>
+
+          <VExpandTransition v-if="auth || label">
+            <div class="mt-4" v-if="loading">
+              <VLayout row justify-space-between>
+                <span>{{ uploadProgress === 100 ? 'Creando pdf & png' : 'Subiendo archivos'}}</span>
+                <span>{{ uploadProgress }} %</span>
+              </VLayout>
+              <VProgressLinear
+                v-model="uploadProgress"
+                :indeterminate="uploadProgress === 100"/>
+            </div>
+          </VExpandTransition>
+
+        </VForm>
     </VCardText>
 
     <VCardActions>
@@ -100,7 +119,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 
 export default {
   $_veeValidate: { validator: 'new' },
@@ -112,6 +131,7 @@ export default {
   },
   props: ['editedItem'],
   computed: {
+    ...mapGetters('clients', ['clients']),
     ...mapState('labels', ['loading', 'uploadProgress', 'fromClient']),
     isEditMode() {
       return !!this.editedItem._id;
@@ -133,6 +153,17 @@ export default {
         return this.editedItem.authorization.name;
       }
       return null;
+    },
+    labelConfigFields() {
+      if (!this.fromClient) return [];
+      const currentClient = this.clients.find(client => client.id === this.fromClient);
+      if (!currentClient.settings.customFields) {
+        return [];
+      }
+      return currentClient.settings.customFields.map(field => ({
+        ...field,
+        value: null
+      }));
     }
   },
   methods: {
@@ -173,11 +204,19 @@ export default {
       });
     },
     submit() {
+      const settings = {};
+      this.labelConfigFields.forEach(field => {
+        const key = field.name;
+        const value = field.value;
+        settings[key] = value;
+      });
+
       const data = {
         name: this.editedItem.name,
         sku: this.editedItem.sku,
         label: this.label,
-        auth: this.auth
+        auth: this.auth,
+        settings
       };
 
       if (this.isEditMode) {
