@@ -26,11 +26,11 @@ module.exports = (settings, params) => {
       ^LL1615
       ^LS0
       ^CFO,100
-      ^FT125,1562^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS
-      ^FT395,1523^A@I,30,30,ARIAL.FNT^FD${description}^FS
+      ^FT100,1545^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS
+      ^FT385,1510^A@I,30,30,ARIAL.FNT^FD${description}^FS
 
-      ^FT8,311^A@R,19,19,ARIALBOLD.FNT^FD${date}^FS
-      ^FT830,340^A@B,23,23,ARIALBOLD.FNT^FD${description}^FS^LS0`;
+      ^FT6,420^A@R,19,19,ARIALBOLD.FNT^FD${date}^FS
+      ^FT810,340^A@B,23,23,ARIALBOLD.FNT^FD${description}^FS^LS0`;
   } else if (format === 'wisium') {
     console.log('3', params);
     const { description } = params;

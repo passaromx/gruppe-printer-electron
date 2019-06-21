@@ -3,7 +3,7 @@ import { apiURL } from '@/api/constants';
 
 export const authAxios = axios.create({
   baseURL: apiURL,
-  timeout: 3500
+  timeout: 5000
 });
 
 export default axios.create({ baseURL: apiURL });

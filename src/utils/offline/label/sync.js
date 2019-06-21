@@ -58,7 +58,7 @@ module.exports = client => new Promise((resolve, reject) => {
 
   request(`${apiURL}labels/sync?client=${id}&updatedAt_gte=${lastSync}`, {
     json: true,
-    timeout: 3500
+    timeout: 7500
   }, (err, response, body) => {
     // console.log(response);
     if (err || !response) {

@@ -1,7 +1,7 @@
 
-// export const filesURL = 'http://localhost:1337';
+export const filesURL = 'http://localhost:1337';
 
-export const filesURL = 'http://3.81.203.178:1337';
+// export const filesURL = 'http://3.81.203.178:1337';
 export const apiURL = `${filesURL}/`;
 
 export const roles = {
@@ -37,8 +37,8 @@ export const maltaVars = {
       dateFormat: 'D/M/YY',
       value: new Date().toISOString().substr(0, 10),
       styles: [{
-        top: 81,
-        left: 93.3,
+        top: 73.5,
+        left: 93.5,
         width: 100,
         weight: 600,
         rotation: -90,
@@ -73,8 +73,8 @@ export const maltaVars = {
       maxlength: 3,
       value: 40,
       styles: [{
-        top: 1.3,
-        left: 84,
+        top: 2.6,
+        left: 87,
         weight: 600,
         rotation: 0,
         fontSize: '1.4vh'
@@ -92,7 +92,7 @@ export const maltaVars = {
       class: 'xs12',
       dateFormat: 'DDMMMYYYY',
       styles: [{
-        top: 3.3,
+        top: 4.8,
         right: 7,
         weight: 500,
         rotation: 0,
@@ -100,7 +100,7 @@ export const maltaVars = {
       },
       {
         bottom: 20,
-        left: 7,
+        left: 8,
         weight: 600,
         fontSize: '1.4vh',
         rotation: 90

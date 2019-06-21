@@ -11,6 +11,7 @@ module.exports = {
     'global-require': 'off',
     'consistent-return': 'off',
     'no-underscore-dangle': ['error', { allow: ['_id'] }],
+    "linebreak-style": 'off',
     'comma-dangle': 'off',
     'arrow-parens': ['error', 'as-needed'],
     // "no-shadow": ["error", { "allow": ['state'] }],
