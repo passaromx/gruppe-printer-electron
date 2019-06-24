@@ -208,17 +208,24 @@ export default {
       Object.keys(variables).forEach(key => {
         variables[key] = variables[key].value;
       });
-      const data = {
+      let data = {
         ...variables,
         user: this.user.email,
         copies: +this.copies
       };
 
+      if (this.selectedLabel.settings) {
+        data = {
+          ...data,
+          ...this.selectedLabel.settings
+        };
+      }
+
       const printData = {
         ...data,
         client: this.user.client._id
       };
-
+      console.log(printData);
       ipcRenderer.send(
         'print',
         this.printer.name,

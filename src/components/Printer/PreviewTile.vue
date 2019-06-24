@@ -71,9 +71,22 @@ export default {
     formatValue(key) {
       const field = this.variables.fields[key];
       let formattedValue = field.value;
+      if (field.fromSettings) {
+        formattedValue = this.selectedLabel.settings ? this.selectedLabel.settings[key] : '';
+      }
+
+      const addTo = this.variables.fields[key].addTo;
+      const dateFormat = this.variables.fields[key].dateFormat;
+      // console.log(addTo);
+      if (formattedValue && formattedValue.length && addTo && dateFormat) {
+        formattedValue = moment(this.variables.fields[addTo].value).add(formattedValue, 'days').format(dateFormat);
+      }
+
       if (this.variables.fields[key].type === 'date') {
+        console.log(formattedValue);
         formattedValue = moment(formattedValue).format(field.dateFormat);
       }
+
       return `${formattedValue}${key === 'weight' ? 'Kg' : ''}`;
     }
   }

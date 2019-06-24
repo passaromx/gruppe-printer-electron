@@ -162,7 +162,7 @@ export default {
       }
       return currentClient.settings.customFields.map(field => ({
         ...field,
-        value: null
+        value: this.editedItem.settings ? this.editedItem.settings[field.name] : null
       }));
     }
   },

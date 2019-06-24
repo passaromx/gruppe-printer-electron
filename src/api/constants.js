@@ -1,7 +1,7 @@
 
 export const filesURL = 'http://localhost:1337';
-
 // export const filesURL = 'http://3.81.203.178:1337';
+
 export const apiURL = `${filesURL}/`;
 
 export const roles = {
@@ -153,6 +153,18 @@ export const mynVars = {
         fontSize: '2.7vh'
       }]
     },
+    expiryDays: {
+      value: null,
+      fromSettings: true,
+      addTo: 'productionDate',
+      dateFormat: 'DD-MM-YYYY',
+      styles: [{
+        top: 43.5,
+        left: 57,
+        weight: 500,
+        fontSize: '2.7vh'
+      }]
+    }
   },
   descriptionFormat: 'batch'
 };
