@@ -100,7 +100,8 @@ const mutations = {
 const getters = {
   factories: state => state.selectedClient.factories,
   users: state => state.selectedClient.users,
-  printers: state => state.selectedClient.licenses
+  printers: state => state.selectedClient.licenses,
+  clients: state => state.clients
 };
 
 const state = {

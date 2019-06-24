@@ -1,5 +1,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-useless-escape */
+const moment = require('moment');
+
 module.exports = (settings, params) => {
   const { format, labelShift } = settings;
   console.log(format);
@@ -7,7 +9,10 @@ module.exports = (settings, params) => {
   let start = '^XA';
   if (format === 'myn') {
     console.log('1', params);
-    const { description, productionDate } = params;
+    const { description, productionDate, expiryDays } = params;
+
+    const formattedExpiry = expiryDays ? moment(productionDate).add(expiryDays, 'days').format('DD-MM-YYYY') : '';
+
     start = `^XA
       ^LH${labelShift || '0'},0
       ^MMC
@@ -15,7 +20,8 @@ module.exports = (settings, params) => {
       ^LL1279
       ^LS0
       ^FT310,870^A0I,44,44^FH\^FD${description || ''}^FS
-      ^FT350,790^A0I,43,43^FH\^FD${productionDate || ''}^FS^LS0`;
+      ^FT350,790^A0I,43,43^FH\^FD${moment(productionDate).format('DD-MM-YYYY') || ''}^FS^LS0
+      ^FT350,710^A0I,43,43^FH\^FD${formattedExpiry}^FS^LS0`;
   } else if (format === 'malta') {
     console.log('2', params);
     const { description, weight, date } = params;
@@ -26,11 +32,11 @@ module.exports = (settings, params) => {
       ^LL1615
       ^LS0
       ^CFO,100
-      ^FT125,1562^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS
-      ^FT395,1523^A@I,30,30,ARIAL.FNT^FD${description}^FS
+      ^FT100,1545^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS
+      ^FT385,1510^A@I,30,30,ARIAL.FNT^FD${description}^FS
 
-      ^FT8,311^A@R,19,19,ARIALBOLD.FNT^FD${date}^FS
-      ^FT830,340^A@B,23,23,ARIALBOLD.FNT^FD${description}^FS^LS0`;
+      ^FT6,420^A@R,19,19,ARIALBOLD.FNT^FD${date}^FS
+      ^FT810,340^A@B,23,23,ARIALBOLD.FNT^FD${description}^FS^LS0`;
   } else if (format === 'wisium') {
     console.log('3', params);
     const { description } = params;

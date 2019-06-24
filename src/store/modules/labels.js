@@ -28,12 +28,13 @@ const actions = {
   store({ commit }, data) {
     const formData = new FormData();
     const {
-      name, sku, label, auth, client
+      name, sku, label, auth, client, settings
     } = data;
     formData.append('name', name);
     formData.append('sku', sku);
     formData.append('label', label);
     formData.append('client', client);
+    formData.append('settings', JSON.stringify(settings));
     formData.append('authorization', auth);
     commit('setLoading', true);
     return new Promise((resolve, reject) => {
@@ -60,9 +61,12 @@ const actions = {
   },
   update({ commit }, data) {
     const formData = new FormData();
-    const { name, sku, label, auth } = data;
+    const {
+      name, sku, label, auth, settings
+    } = data;
     formData.append('name', name);
     formData.append('sku', sku);
+    formData.append('settings', JSON.stringify(settings));
     if (label) formData.append('label', label);
     if (auth) formData.append('authorization', auth);
     commit('setLoading', true);
