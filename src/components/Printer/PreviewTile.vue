@@ -83,7 +83,7 @@ export default {
       }
 
       if (this.variables.fields[key].type === 'date') {
-        console.log(formattedValue);
+        // console.log(formattedValue);
         formattedValue = moment(formattedValue).format(field.dateFormat);
       }
 

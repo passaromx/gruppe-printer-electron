@@ -31,6 +31,7 @@
     "node-pre-gyp": "^0.12.0",
     "printer": "git+https://github.com/tojocky/node-printer.git",
     "request": "^2.88.0",
+    "request-promise": "^4.2.4",
     "vee-validate": "^2.1.5",
     "vue": "^2.5.17",
     "vue-i18n": "^8.7.0",
