@@ -1,7 +1,7 @@
 <template>
   <BaseCard>
     <BaseFormTitle>
-      {{ isEditMode ? `Editar Autorización: ${editedItem.name}` : 'Nueva Autorización' }}
+      {{ isEditMode ? `Editar Autorización` : 'Nueva Autorización' }}
     </BaseFormTitle>
     <VCardText>
       <VForm @keyup.native.enter="validate">
@@ -22,7 +22,7 @@
           hint="Toca para seleccionar archivo"
           persistent-hint
           @click="pickFile('auth')"
-          @click:clear="clearFile('auth')"
+          @click:clear="clearFile"
           clearable
           readonly
           :error-messages="errors.collect('auth')"
@@ -33,7 +33,7 @@
           ref="auth"
           style="display: none"
           type="file"
-          accept=".pdf/*"
+          accept=".pdf"
           @change="onFilePicked">
 
           <VExpandTransition v-if="auth">
@@ -100,8 +100,8 @@ export default {
       if (this.auth) {
         return this.auth.name;
       }
-      if (this.editedItem.authorization) {
-        return this.editedItem.authorization.name;
+      if (this.editedItem.authPdf) {
+        return this.editedItem.authPdf.name;
       }
       return null;
     },
@@ -131,10 +131,10 @@ export default {
         this.$validator.reset();
       }
     },
-    clearFile(val) {
-      this.$refs[val].value = '';
-      this[val] = null;
-      this.editedItem[val] = null;
+    clearFile() {
+      this.$refs.auth.value = '';
+      this.auth = null;
+      this.editedItem.authPdf = null;
     },
     validate() {
       this.$validator.validateAll().then(valid => {
@@ -149,6 +149,8 @@ export default {
         client: this.fromClient,
         authPdf: this.auth,
       };
+
+      console.log(data);
 
       if (this.isEditMode) {
         data.id = this.editedItem._id;

@@ -8,13 +8,8 @@ const actions = {
       axios.get(`authorizations?client=${client}`)
       // axios.get('authorizations')
         .then(res => {
-          const authorizations = res.data.map(label => ({
-            ...label,
-            description: `${label.sku} ${label.name}`
-          }));
-          console.log('auths', authorizations);
-          resolve(authorizations);
-          commit('setAuthorizations', authorizations);
+          resolve(res.data);
+          commit('setAuthorizations', res.data);
         })
         .catch(err => {
           reject();
@@ -42,7 +37,6 @@ const actions = {
       })
         .then(res => {
           commit('storeItem', res);
-          console.log(res);
           resolve(res);
           showSuccessAlert('Autorización subida exitosamente', commit);
         })
@@ -59,7 +53,7 @@ const actions = {
     const formData = new FormData();
     const { name, auth } = data;
     formData.append('name', name);
-    if (auth) formData.append('authorization', auth);
+    if (auth) formData.append('authPdf', auth);
     commit('setLoading', true);
     return new Promise((resolve, reject) => {
       axios.put(`authorizations/${data.id}`, formData, {
@@ -88,6 +82,7 @@ const actions = {
       axios.delete(`authorizations/deleteMany?ids=${ids}`)
         .then(res => {
           commit('deleteItems', items);
+          console.log(res);
           resolve(res);
           showSuccessAlert('Operación exitosa', commit);
         })
@@ -120,6 +115,8 @@ const mutations = {
   }
 };
 
+const getters = { authorizations: state => state.authorizations };
+
 const state = {
   authorizations: [],
   fromClient: null,
@@ -131,6 +128,7 @@ const state = {
 export default {
   namespaced: true,
   state,
+  getters,
   actions,
   mutations
 };

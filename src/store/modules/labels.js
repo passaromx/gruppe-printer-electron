@@ -2,16 +2,18 @@ import axios from '@/plugins/axios';
 import { set, handleError, showSuccessAlert } from '@/utils';
 
 const actions = {
-  fetch({ commit }, client) {
+  async fetch({ commit }, client) {
     commit('setFetching', true);
+
+    // const authorizations = await dispatch('authorizations/fetch', client, { root: true });
     return new Promise((resolve, reject) => {
       axios.get(`labels?client=${client}`)
-      // axios.get('labels')
         .then(res => {
           const labels = res.data.map(label => ({
             ...label,
             description: `${label.sku} ${label.name}`
           }));
+          // console.log(labels.filter(label => label.sku === 'test'));
           resolve(labels);
           commit('setLabels', labels);
         })
@@ -28,14 +30,14 @@ const actions = {
   store({ commit }, data) {
     const formData = new FormData();
     const {
-      name, sku, label, auth, client, settings
+      name, sku, label, authorization, client, settings
     } = data;
     formData.append('name', name);
     formData.append('sku', sku);
     formData.append('label', label);
     formData.append('client', client);
     formData.append('settings', JSON.stringify(settings));
-    formData.append('authorization', auth);
+    formData.append('authorization', authorization);
     commit('setLoading', true);
     return new Promise((resolve, reject) => {
       axios.post('labels', formData, {
@@ -62,13 +64,14 @@ const actions = {
   update({ commit }, data) {
     const formData = new FormData();
     const {
-      name, sku, label, auth, settings
+      name, sku, label, authorization, settings
     } = data;
     formData.append('name', name);
     formData.append('sku', sku);
+    formData.append('authorization', authorization);
     formData.append('settings', JSON.stringify(settings));
     if (label) formData.append('label', label);
-    if (auth) formData.append('authorization', auth);
+    // if (auth) formData.append('authorization', auth);
     commit('setLoading', true);
     return new Promise((resolve, reject) => {
       axios.put(`labels/${data.id}`, formData, {
@@ -130,6 +133,8 @@ const mutations = {
   }
 };
 
+const getters = { fromClient: state => state.fromClient };
+
 const state = {
   labels: [],
   fromClient: null,
@@ -141,6 +146,7 @@ const state = {
 export default {
   namespaced: true,
   state,
+  getters,
   actions,
   mutations
 };

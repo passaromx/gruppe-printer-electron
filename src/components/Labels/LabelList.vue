@@ -44,7 +44,7 @@
             <a
               v-if="props.item.authorization"
               href="javascript:void(0)"
-              @click="previewFile(props.item.authorization)"
+              @click="previewFile(props.item.authorization.authPdf)"
             >{{ props.item.authorization.name}}</a>
             <span v-else>Sin autorización</span>
           </td>
@@ -161,7 +161,7 @@ export default {
       this.fetch(this.fromClient);
     },
     previewFile(file) {
-      const url = `${filesURL}${file.url}`;
+      const url = file.url.includes('amazon') ? file.url : `${filesURL}${file.url}`;
       if (url.includes('.pdf')) {
         shell.openExternal(url);
       } else {
