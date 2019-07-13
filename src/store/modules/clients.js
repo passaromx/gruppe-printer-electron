@@ -18,6 +18,7 @@ const actions = {
           if (res.data.length > 0 && !state.selectedClient.name) {
             commit('setSelectedClient', res.data[0]);
             commit('labels/setClient', res.data[0]._id, { root: true });
+            commit('authorizations/setClient', res.data[0]._id, { root: true });
           }
         })
         .catch(err => {

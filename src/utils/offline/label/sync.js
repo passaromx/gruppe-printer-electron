@@ -92,13 +92,15 @@ module.exports = client => new Promise((resolve, reject) => {
 
     async function downloadFile(file) {
       const { url } = file;
-      const downloadPath = `${documentsDataPath}/${id}${url}`;
+      const downloadPath = url.includes('http')
+        ? `${documentsDataPath}/${id}/uploads/${url.split('com/')[1]}`
+        : `${documentsDataPath}/${id}${url}`;
 
       console.log(downloadPath);
 
       const downloadRes = await axios({
         method: 'GET',
-        url: `http://3.81.203.178:1337${url}`,
+        url: url.includes('http') ? url : `http://3.81.203.178:1337${url}`,
         timeout: 5000,
         responseType: 'stream'
       });
@@ -125,6 +127,11 @@ module.exports = client => new Promise((resolve, reject) => {
         /* eslint-disable-next-line */
         await downloadFile(upload);
       }
+
+      resolve({
+        labels: labelsJson,
+        config: configJson
+      });
     }
 
     function missingFiles(items) {
@@ -132,10 +139,11 @@ module.exports = client => new Promise((resolve, reject) => {
       const missing = [];
       items.forEach(item => {
         const { label, labelPng, labelPdf } = item;
+
         try {
-          const prn = label ? label.url.split('/')[2] : null;
-          const png = labelPng ? labelPng.url.split('/')[2] : null;
-          const pdf = labelPdf ? labelPdf.url.split('/')[2] : null;
+          const prn = label ? label.url.split('/')[label.url.includes('amazon') ? 3 : 2] : null;
+          const png = labelPng ? labelPng.url.split('/')[labelPng.url.includes('amazon') ? 3 : 2] : null;
+          const pdf = labelPdf ? labelPdf.url.split('/')[labelPdf.url.includes('amazon') ? 3 : 2] : null;
           // console.log(prn);
           if (prn && !fs.existsSync(`${filesPath}/uploads/${prn}`)) missing.push(label);
           if (png && !fs.existsSync(`${filesPath}/uploads/${png}`)) missing.push(labelPng);
@@ -148,21 +156,24 @@ module.exports = client => new Promise((resolve, reject) => {
       return missing;
     }
 
+    fs.writeFileSync(`${dataPath}/${id}/config.json`, config);
+    fs.writeFileSync(`${documentsDataPath}/${id}/labels.json`, labels);
+
     const downloads = lastSync > 0 ? [...body.uploads, ...missingFiles(labelsJson)] : [...body.uploads];
 
     console.log('downloads', downloads.length);
-    processUploads(downloads);
+
     // downloadFile(body.uploads[0]).then(() => {
     //   console.log('file downloaded');
     // });
 
-    fs.writeFileSync(`${dataPath}/${id}/config.json`, config);
-    fs.writeFileSync(`${documentsDataPath}/${id}/labels.json`, labels);
-
-
-    resolve({
-      labels: labelsJson,
-      config: configJson
-    });
+    if (downloads.length > 0) {
+      processUploads(downloads);
+    } else {
+      resolve({
+        labels: labelsJson,
+        config: configJson
+      });
+    }
   });
 });

@@ -15,6 +15,12 @@ const Menu = [
     icon: 'group',
     name: 'Clients',
     isAdmin: true
+  },
+  {
+    title: 'Autorizaciones',
+    icon: 'picture_as_pdf',
+    name: 'Authorizations',
+    isAdmin: true
   }
 ];
 

@@ -131,9 +131,10 @@ ipcMain.on('check-mac', (e, info) => {
 
 ipcMain.on('selected-label', (e, client, label) => {
   const userDataPath = app.getPath('documents');
-  if (fs.existsSync(`${userDataPath}/gruppe/${client}/${label}`)) {
-    console.log('selected label', label);
-    const labelPng = fs.readFileSync(`${userDataPath}/gruppe/${client}/${label}`, { encoding: 'base64' });
+  const labelPath = label.includes('http') ? `uploads/${label.split('com/')[1]}` : label;
+  if (fs.existsSync(`${userDataPath}/gruppe/${client}/${labelPath}`)) {
+    // console.log('selected label', label);
+    const labelPng = fs.readFileSync(`${userDataPath}/gruppe/${client}/${labelPath}`, { encoding: 'base64' });
 
     e.sender.send('image-ready', `data:image/jpeg;base64,${labelPng}`);
   } else {
