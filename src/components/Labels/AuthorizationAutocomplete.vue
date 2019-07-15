@@ -1,7 +1,7 @@
 <template>
   <VAutocomplete
     v-on="$listeners"
-    v-model="selectedAuth"
+    :value="selectedAuth"
     label="Autorización"
     :loading="loading"
     :search-input.sync="search"
