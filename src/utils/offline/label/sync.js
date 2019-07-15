@@ -1,13 +1,17 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const request = require('request');
+// const rp = require('request-promise');
 const electron = require('electron');
 const path = require('path');
+const axios = require('axios');
 
 const fs = require('fs');
 const { apiURL } = require('../../../api/constants');
 
 const userDataPath = (electron.app || electron.remote.app).getPath('userData');
 const documentsPath = (electron.app || electron.remote.app).getPath('documents');
+
+/* eslint-disable-next-line */
 module.exports = client => new Promise((resolve, reject) => {
   let forceSync = false;
   const id = client._id;
@@ -85,26 +89,91 @@ module.exports = client => new Promise((resolve, reject) => {
     const configJson = { ...config };
     labels = JSON.stringify(labels);
     config = JSON.stringify(config);
-    body.uploads.forEach(upload => {
-      request(`${apiURL}${upload.url}`, { encoding: null }, (error, resp, download) => {
-        if (error) reject(error);
-        const filename = upload.url;
-        fs.writeFileSync(`${documentsDataPath}/${id}${filename}`, download, e => {
-          if (e) {
-            console.log(e);
-            reject(e);
-          }
-          resolve(filename);
+
+    async function downloadFile(file) {
+      const { url } = file;
+      const downloadPath = url.includes('http')
+        ? `${documentsDataPath}/${id}/uploads/${url.split('com/')[1]}`
+        : `${documentsDataPath}/${id}${url}`;
+
+      console.log(downloadPath);
+
+      const downloadRes = await axios({
+        method: 'GET',
+        url: url.includes('http') ? url : `http://3.81.203.178:1337${url}`,
+        timeout: 5000,
+        responseType: 'stream'
+      });
+
+      downloadRes.data.pipe(fs.createWriteStream(downloadPath));
+
+      return new Promise((res, rej) => {
+        downloadRes.data.on('end', () => {
+          console.log('downloaded');
+          res();
+        });
+        downloadRes.data.on('error', error => {
+          console.log(error);
+          rej(error);
         });
       });
-    });
+    }
+
+
+    async function processUploads(uploads) {
+      /* eslint-disable-next-line */
+      for (const upload of uploads) {
+        console.log('start');
+        /* eslint-disable-next-line */
+        await downloadFile(upload);
+      }
+
+      resolve({
+        labels: labelsJson,
+        config: configJson
+      });
+    }
+
+    function missingFiles(items) {
+      const filesPath = `${documentsDataPath}/${id}`;
+      const missing = [];
+      items.forEach(item => {
+        const { label, labelPng, labelPdf } = item;
+
+        try {
+          const prn = label ? label.url.split('/')[label.url.includes('amazon') ? 3 : 2] : null;
+          const png = labelPng ? labelPng.url.split('/')[labelPng.url.includes('amazon') ? 3 : 2] : null;
+          const pdf = labelPdf ? labelPdf.url.split('/')[labelPdf.url.includes('amazon') ? 3 : 2] : null;
+          // console.log(prn);
+          if (prn && !fs.existsSync(`${filesPath}/uploads/${prn}`)) missing.push(label);
+          if (png && !fs.existsSync(`${filesPath}/uploads/${png}`)) missing.push(labelPng);
+          if (pdf && !fs.existsSync(`${filesPath}/uploads/${pdf}`)) missing.push(labelPdf);
+        } catch (e) {
+          console.log(e);
+        }
+      });
+
+      return missing;
+    }
+
     fs.writeFileSync(`${dataPath}/${id}/config.json`, config);
     fs.writeFileSync(`${documentsDataPath}/${id}/labels.json`, labels);
 
+    const downloads = lastSync > 0 ? [...body.uploads, ...missingFiles(labelsJson)] : [...body.uploads];
 
-    resolve({
-      labels: labelsJson,
-      config: configJson
-    });
+    console.log('downloads', downloads.length);
+
+    // downloadFile(body.uploads[0]).then(() => {
+    //   console.log('file downloaded');
+    // });
+
+    if (downloads.length > 0) {
+      processUploads(downloads);
+    } else {
+      resolve({
+        labels: labelsJson,
+        config: configJson
+      });
+    }
   });
 });

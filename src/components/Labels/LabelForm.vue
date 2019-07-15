@@ -43,7 +43,9 @@
           accept=".prn"
           @change="onFilePicked">
 
-        <VTextField
+        <AuthorizationAutocomplete class="mt-3" :selectedAuth="editedItem.authorization" @change="setAuthorization"/>
+
+        <!-- <VTextField
           label="Autorización"
           :value="authName"
           data-vv-name="auth"
@@ -64,7 +66,7 @@
           style="display: none"
           type="file"
           accept=".pdf,image/*"
-          @change="onFilePicked">
+          @change="onFilePicked"> -->
 
           <template v-if="labelConfigFields.length > 0">
             <VTextField
@@ -123,10 +125,12 @@ import { mapActions, mapState, mapGetters } from 'vuex';
 
 export default {
   $_veeValidate: { validator: 'new' },
+  components: { AuthorizationAutocomplete: () => import('@/components/Labels/AuthorizationAutocomplete') },
   data() {
     return {
       label: null,
       auth: null,
+      authorization: null
     };
   },
   props: ['editedItem'],
@@ -166,10 +170,18 @@ export default {
       }));
     }
   },
+  watch: {
+    editedItem(val) {
+      this.authorization = val.authorization;
+    }
+  },
   methods: {
     ...mapActions('labels', ['store', 'update']),
     pickFile(input) {
       this.$refs[input].click();
+    },
+    setAuthorization(auth) {
+      this.authorization = auth;
     },
     onFilePicked(e) {
       const { id } = e.target;
@@ -215,9 +227,11 @@ export default {
         name: this.editedItem.name,
         sku: this.editedItem.sku,
         label: this.label,
-        auth: this.auth,
+        // auth: this.auth,
+        authorization: this.authorization ? this.authorization.id : null,
         settings
       };
+      console.log(data);
 
       if (this.isEditMode) {
         data.id = this.editedItem._id;
@@ -230,7 +244,7 @@ export default {
     close() {
       this.$emit('closeDialog');
       this.$refs.label.value = '';
-      this.$refs.auth.value = '';
+      // this.$refs.auth.value = '';
       this.label = null;
       this.auth = null;
       this.$validator.reset();

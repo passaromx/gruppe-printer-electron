@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import { set, handleError } from '@/utils';
 
 import auth from './modules/auth';
+import authorizations from './modules/authorizations';
 import clients from './modules/clients';
 import printer from './modules/printer';
 import labels from './modules/labels';
@@ -33,6 +34,7 @@ const store = new Vuex.Store({
     setSnackbar: set('snackbar')
   },
   modules: {
+    authorizations,
     labels,
     clients,
     printer,

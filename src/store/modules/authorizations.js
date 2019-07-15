@@ -2,20 +2,14 @@ import axios from '@/plugins/axios';
 import { set, handleError, showSuccessAlert } from '@/utils';
 
 const actions = {
-  async fetch({ commit }, client) {
+  fetch({ commit }, client) {
     commit('setFetching', true);
-
-    // const authorizations = await dispatch('authorizations/fetch', client, { root: true });
     return new Promise((resolve, reject) => {
-      axios.get(`labels?client=${client}`)
+      axios.get(`authorizations?client=${client}`)
+      // axios.get('authorizations')
         .then(res => {
-          const labels = res.data.map(label => ({
-            ...label,
-            description: `${label.sku} ${label.name}`
-          }));
-          // console.log(labels.filter(label => label.sku === 'test'));
-          resolve(labels);
-          commit('setLabels', labels);
+          resolve(res.data);
+          commit('setAuthorizations', res.data);
         })
         .catch(err => {
           reject();
@@ -29,18 +23,13 @@ const actions = {
   },
   store({ commit }, data) {
     const formData = new FormData();
-    const {
-      name, sku, label, authorization, client, settings
-    } = data;
+    const { name, authPdf, client } = data;
     formData.append('name', name);
-    formData.append('sku', sku);
-    formData.append('label', label);
     formData.append('client', client);
-    formData.append('settings', JSON.stringify(settings));
-    if (authorization) formData.append('authorization', authorization);
+    formData.append('authPdf', authPdf);
     commit('setLoading', true);
     return new Promise((resolve, reject) => {
-      axios.post('labels', formData, {
+      axios.post('authorizations', formData, {
         onUploadProgress: progressEvent => {
           const progress = Math.round(progressEvent.loaded / progressEvent.total * 100);
           commit('setProgress', progress);
@@ -49,32 +38,25 @@ const actions = {
         .then(res => {
           commit('storeItem', res);
           resolve(res);
-          showSuccessAlert('Etiqueta creada exitosamente', commit);
+          showSuccessAlert('Autorización subida exitosamente', commit);
         })
         .catch(err => {
           reject(err);
           handleError(err, commit);
         })
         .finally(() => {
-          commit('setProgress', 0);
           commit('setLoading', false);
         });
     });
   },
   update({ commit }, data) {
     const formData = new FormData();
-    const {
-      name, sku, label, authorization, settings
-    } = data;
+    const { name, auth } = data;
     formData.append('name', name);
-    formData.append('sku', sku);
-    if (authorization) formData.append('authorization', authorization);
-    formData.append('settings', JSON.stringify(settings));
-    if (label) formData.append('label', label);
-    // if (auth) formData.append('authorization', auth);
+    if (auth) formData.append('authPdf', auth);
     commit('setLoading', true);
     return new Promise((resolve, reject) => {
-      axios.put(`labels/${data.id}`, formData, {
+      axios.put(`authorizations/${data.id}`, formData, {
         onUploadProgress: progressEvent => {
           const progress = Math.round(progressEvent.loaded / progressEvent.total * 100);
           commit('setProgress', progress);
@@ -90,7 +72,6 @@ const actions = {
           handleError(err, commit);
         })
         .finally(() => {
-          commit('setProgress', 0);
           commit('setLoading', false);
         });
     });
@@ -98,11 +79,12 @@ const actions = {
   delete({ commit }, items) {
     const ids = items.join(',');
     return new Promise((resolve, reject) => {
-      axios.delete(`labels/deleteMany?ids=${ids}`)
+      axios.delete(`authorizations/deleteMany?ids=${ids}`)
         .then(res => {
           commit('deleteItems', items);
+          console.log(res);
           resolve(res);
-          showSuccessAlert('Etiqueta eliminada exitosamente', commit);
+          showSuccessAlert('Operación exitosa', commit);
         })
         .catch(err => {
           reject(err);
@@ -113,30 +95,30 @@ const actions = {
 };
 
 const mutations = {
-  setLabels: set('labels'),
+  setAuthorizations: set('authorizations'),
   setFetching: set('fetching'),
   setLoading: set('loading'),
-  setProgress: set('uploadProgress'),
   setClient: set('fromClient'),
+  setProgress: set('uploadProgress'),
   storeItem: (state, { data }) => {
-    state.labels.push(data);
+    state.authorizations.push(data);
   },
   updateItem: (state, { data }) => {
-    const index = state.labels.findIndex(label => label._id === data._id);
-    if (index > -1) Object.assign(state.labels[index], data);
+    const index = state.authorizations.findIndex(label => label._id === data._id);
+    if (index > -1) Object.assign(state.authorizations[index], data);
   },
   deleteItems: (state, ids) => {
     ids.forEach(id => {
-      const index = state.labels.findIndex(label => label.id === id);
-      if (index > -1) state.labels.splice(index, 1);
+      const index = state.authorizations.findIndex(label => label.id === id);
+      if (index > -1) state.authorizations.splice(index, 1);
     });
   }
 };
 
-const getters = { fromClient: state => state.fromClient };
+const getters = { authorizations: state => state.authorizations };
 
 const state = {
-  labels: [],
+  authorizations: [],
   fromClient: null,
   fetching: false,
   loading: false,

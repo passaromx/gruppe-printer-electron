@@ -42,6 +42,15 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "users" */ './views/Clients.vue'),
     },
     {
+      path: '/authorizations',
+      meta: {
+        requiresAuth: true,
+        isAdmin: true
+      },
+      name: 'Authorizations',
+      component: () => import(/* webpackChunkName: "auth" */ './views/Authorizations.vue'),
+    },
+    {
       path: '/progress',
       meta: { public: true },
       name: 'Progress',

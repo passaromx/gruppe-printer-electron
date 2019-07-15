@@ -9,7 +9,7 @@ const zplFormat = require('./zplFormat');
 const startTrail = '^LS0';
 const endTrail = '^PQ';
 const userDataPath = (electron.app || electron.remote.app).getPath('documents');
-module.exports = async (filePath, settings, params = {
+module.exports = async (file, settings, params = {
   description: 'Variables',
   expireDate: '2018-01-01',
   productionDate: '2017-01-01',
@@ -20,6 +20,7 @@ module.exports = async (filePath, settings, params = {
     const start = zplFormat(settings, params);
     const end = `^PQ${params.copies},1,1,Y^XZ`;
 
+    const filePath = file.includes('amazon') ? `/uploads/${file.split('com/')[1]}` : file;
     let zpl = await fs.readFileSync(`${dataPath}/${params.client}${filePath}`, 'utf8');
 
     zpl = (zpl.split(startTrail))[1];

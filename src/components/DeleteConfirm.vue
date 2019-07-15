@@ -42,6 +42,8 @@ export default {
       switch (this.toDelete.module) {
         case 'labels':
           return `¿Deseas eliminar ${this.toDelete.items.length} precintos?`;
+        case 'authorizations':
+          return `¿Deseas eliminar ${this.toDelete.items.length} autorizaciones?`;
         case 'clients':
           return `¿Deseas eliminar el cliente "${this.toDelete.items[0].name}" con sus etiquetas, usuarios y plantas?`;
         case 'clients/factories':

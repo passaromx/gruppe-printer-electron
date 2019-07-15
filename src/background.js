@@ -96,7 +96,8 @@ ipcMain.on('view-pdf', (e, client, file) => {
   // console.log('view pdf called', client, file);
   let documentsPath = app.getPath('documents');
   documentsPath = path.join(documentsPath, 'gruppe');
-  const url = `file://${documentsPath}/${client}/${file}`;
+  const filePath = file.includes('amazon') ? `uploads/${file.split('com/')[1]}` : file;
+  const url = `file://${documentsPath}/${client}/${filePath}`;
   if (url.includes('.pdf')) {
     // console.log('pdf', url);
     e.sender.send('url-ready', url);
@@ -131,8 +132,10 @@ ipcMain.on('check-mac', (e, info) => {
 
 ipcMain.on('selected-label', (e, client, label) => {
   const userDataPath = app.getPath('documents');
-  if (fs.existsSync(`${userDataPath}/gruppe/${client}/${label}`)) {
-    const labelPng = fs.readFileSync(`${userDataPath}/gruppe/${client}/${label}`, { encoding: 'base64' });
+  const labelPath = label.includes('http') ? `uploads/${label.split('com/')[1]}` : label;
+  if (fs.existsSync(`${userDataPath}/gruppe/${client}/${labelPath}`)) {
+    // console.log('selected label', label);
+    const labelPng = fs.readFileSync(`${userDataPath}/gruppe/${client}/${labelPath}`, { encoding: 'base64' });
 
     e.sender.send('image-ready', `data:image/jpeg;base64,${labelPng}`);
   } else {

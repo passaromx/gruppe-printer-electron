@@ -204,6 +204,25 @@ export const wisiumVars = {
   descriptionFormat: 'batch'
 };
 
+export const authorizationListHeaders = [
+  {
+    text: 'Nombre',
+    align: 'left',
+    value: 'name'
+  },
+  {
+    text: 'Documento',
+    value: 'authPdf',
+    sortable: false,
+    align: 'center'
+  },
+  {
+    text: 'Acciones',
+    sortable: false,
+    align: 'center'
+  }
+];
+
 export const labelListHeaders = [{
   text: 'Nombre',
   align: 'left',

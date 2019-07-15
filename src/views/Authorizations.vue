@@ -1,15 +1,17 @@
 <template>
-  <div>
+  <VContainer>
     <VDialog v-model="dialog" max-width="350" persistent>
-      <LabelForm :editedItem="editedItem" @closeDialog="clearForm"/>
+      <AuthorizationForm :editedItem="editedItem" @closeDialog="clearForm"/>
     </VDialog>
+
+    <h5 class="display-1 mb-4">Autorizaciones</h5>
 
     <BaseCard>
       <VCardTitle>
         <!-- <h5 class="headline">Precintos</h5> -->
         <VLayout row justify-space-between align-center>
           <VFlex xs4>
-            <ClientSelect module="labels"/>
+            <ClientSelect/>
           </VFlex>
           <VFlex xs1 class="text-xs-right">
             <VIcon @click="refreshLabels">refresh</VIcon>
@@ -19,7 +21,7 @@
       <VDivider/>
 
       <TableHeader
-        module="labels"
+        module="authorizations"
         :selected="selected"
         @newItem="dialog = true"
         @onSearch="handleSearch"
@@ -30,7 +32,7 @@
         v-model="selected"
         :loading="fetching"
         :headers="headers"
-        :items="labels"
+        :items="authorizations"
         :rows-per-page-items="rowsPerPage"
         select-all
       >
@@ -39,15 +41,6 @@
             <VCheckbox v-model="props.selected" primary hide-details></VCheckbox>
           </td>
           <td>{{ props.item.name }}</td>
-          <td class="text-xs-right">{{ props.item.sku }}</td>
-          <td class="text-xs-right">
-            <a
-              v-if="props.item.authorization"
-              href="javascript:void(0)"
-              @click="previewFile(props.item.authorization.authPdf)"
-            >{{ props.item.authorization.name}}</a>
-            <span v-else>Sin autorización</span>
-          </td>
           <td>
             <VLayout row justify-center>
               <!-- <VTooltip bottom>
@@ -68,7 +61,7 @@
                   flat
                   color="grey darken-2"
                   icon
-                  @click="previewFile(props.item.labelPdf)"
+                  @click="previewFile(props.item.authPdf)"
                 >
                   <VIcon>picture_as_pdf</VIcon>
                 </VBtn>
@@ -96,19 +89,19 @@
         </template>
       </VDataTable>
     </BaseCard>
-  </div>
+  </VContainer>
 </template>
 
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
 import { shell, remote } from 'electron';
-import { labelListHeaders, filesURL, rowsPerPage } from '@/api/constants';
+import { authorizationListHeaders, rowsPerPage } from '@/api/constants';
 import { mapActions, mapState } from 'vuex';
 
 export default {
   components: {
-    ClientSelect: () => import('@/components/Labels/ClientSelect'),
-    LabelForm: () => import('@/components/Labels/LabelForm'),
+    ClientSelect: () => import('@/components/Authorizations/ClientSelect'),
+    AuthorizationForm: () => import('@/components/Authorizations/AuthorizationForm'),
     TableHeader: () => import('@/components/Shared/TableHeader')
   },
   data() {
@@ -119,21 +112,13 @@ export default {
       selected: [],
       editedItem: {
         name: null,
-        sku: null,
-        label: null,
-        labelPdf: null,
-        labelPng: null,
-        authorization: null
+        authPdf: null
       },
       defaultItem: {
         name: null,
-        sku: null,
-        label: null,
-        labelPdf: null,
-        labelPng: null,
-        authorization: null
+        authPdf: null
       },
-      headers: labelListHeaders
+      headers: authorizationListHeaders
     };
   },
   mounted() {
@@ -144,14 +129,14 @@ export default {
   onDestroy() {
     this.$eventHub.$off('clear-selected');
   },
-  computed: { ...mapState('labels', ['fetching', 'labels', 'fromClient']) },
+  computed: { ...mapState('authorizations', ['fetching', 'authorizations', 'fromClient']) },
   watch: {
     fromClient(val) {
       this.fetch(val);
     }
   },
   methods: {
-    ...mapActions('labels', ['fetch']),
+    ...mapActions('authorizations', ['fetch']),
     editItem(item) {
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
@@ -161,7 +146,7 @@ export default {
       this.fetch(this.fromClient);
     },
     previewFile(file) {
-      const url = file.url.includes('amazon') ? file.url : `${filesURL}${file.url}`;
+      const url = `${file.url}`;
       if (url.includes('.pdf')) {
         shell.openExternal(url);
       } else {
