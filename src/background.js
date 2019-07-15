@@ -96,7 +96,8 @@ ipcMain.on('view-pdf', (e, client, file) => {
   // console.log('view pdf called', client, file);
   let documentsPath = app.getPath('documents');
   documentsPath = path.join(documentsPath, 'gruppe');
-  const url = `file://${documentsPath}/${client}/${file}`;
+  const filePath = file.includes('amazon') ? `uploads/${file.split('com/')[1]}` : file;
+  const url = `file://${documentsPath}/${client}/${filePath}`;
   if (url.includes('.pdf')) {
     // console.log('pdf', url);
     e.sender.send('url-ready', url);
