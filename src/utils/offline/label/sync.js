@@ -98,25 +98,30 @@ module.exports = client => new Promise((resolve, reject) => {
 
       console.log(downloadPath);
 
-      const downloadRes = await axios({
-        method: 'GET',
-        url: url.includes('http') ? url : `http://3.81.203.178:1337${url}`,
-        timeout: 5000,
-        responseType: 'stream'
-      });
-
-      downloadRes.data.pipe(fs.createWriteStream(downloadPath));
-
-      return new Promise((res, rej) => {
-        downloadRes.data.on('end', () => {
-          console.log('downloaded');
-          res();
+      try {
+        const downloadRes = await axios({
+          method: 'GET',
+          url: url.includes('http') ? url : `http://3.81.203.178:1337${url}`,
+          timeout: 5000,
+          responseType: 'stream'
         });
-        downloadRes.data.on('error', error => {
-          console.log(error);
-          rej(error);
+
+        downloadRes.data.pipe(fs.createWriteStream(downloadPath));
+
+        return new Promise((res, rej) => {
+          downloadRes.data.on('end', () => {
+            console.log('downloaded');
+            res();
+          });
+          downloadRes.data.on('error', error => {
+            console.log('download error', error);
+            rej(error);
+          });
         });
-      });
+      } catch (error) {
+        console.log('file not Found');
+        return null;
+      }
     }
 
 
