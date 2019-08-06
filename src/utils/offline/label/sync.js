@@ -139,6 +139,7 @@ module.exports = client => new Promise((resolve, reject) => {
       });
     }
 
+    /* eslint-disable-next-line */
     function missingFiles(items) {
       const filesPath = `${documentsDataPath}/${id}`;
       const missing = [];
@@ -164,7 +165,8 @@ module.exports = client => new Promise((resolve, reject) => {
     fs.writeFileSync(`${dataPath}/${id}/config.json`, config);
     fs.writeFileSync(`${documentsDataPath}/${id}/labels.json`, labels);
 
-    const downloads = lastSync > 0 ? [...body.uploads, ...missingFiles(labelsJson)] : [...body.uploads];
+    // const downloads = lastSync > 0 ? [...body.uploads, ...missingFiles(labelsJson)] : [...body.uploads];
+    const downloads = [...body.uploads];
 
     console.log('downloads', downloads.length);
 

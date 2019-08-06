@@ -9,7 +9,7 @@
         v-if="field.type === 'select'"
         :items="field.items"
         v-model="formData[index]"
-        :disabled="!selectedLabel"
+        :disabled="!selectedLabel || isMock"
         :label="field.label"
         outline
         :hide-details="!errors.collect(index).length"
@@ -17,7 +17,7 @@
       />
       <DatePicker
         v-if="field.type === 'date'"
-        :disabled="!selectedLabel"
+        :disabled="!selectedLabel || isMock"
         @change="handleDate(index, $event)"
         :name="index"
         :label="field.label"
@@ -29,8 +29,7 @@
         :maxlength="field.maxlength || 20"
         v-if="field.type === 'text' || field.type === 'number' "
         :type="field.type"
-        :disabled="!selectedLabel"
-        @input="handleInput(index)"
+        :disabled="!selectedLabel || (isMock && field.name != 'weight')"
         outline
         :hide-details="!errors.collect(index).length"
         v-model="formData[index]"
@@ -38,6 +37,7 @@
         v-validate="field.validation"
         :data-vv-name="index"
         :error-messages="errors.collect(index)"
+        @input="handleInput(index)"
       />
       <span
         v-if="field.type == 'title'"
@@ -61,6 +61,12 @@ import moment from 'moment';
 
 export default {
   // $_veeValidate: { validator: 'new' },
+  props: {
+    isMock: {
+      type: Boolean,
+      default: false
+    }
+  },
   inject: ['$validator'],
   components: { DatePicker: () => import('@/components/Printer/DatePicker') },
   computed: {

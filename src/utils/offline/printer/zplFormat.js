@@ -24,7 +24,7 @@ module.exports = (settings, params) => {
       ^FT350,710^A0I,43,43^FH\^FD${formattedExpiry}^FS^LS0`;
   } else if (format === 'malta') {
     console.log('2', params);
-    const { description, weight, date } = params;
+    const { description, weight, date, isMock } = params;
     start = `^XA
       ^LH${labelShift || '0'},0
       ^MMC
@@ -32,11 +32,14 @@ module.exports = (settings, params) => {
       ^LL1615
       ^LS0
       ^CFO,100
-      ^FT100,1545^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS
+      ^FT100,1545^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS`;
+    if (!isMock) {
+      start = `
+      ${start}
       ^FT385,1510^A@I,30,30,ARIAL.FNT^FD${description}^FS
-
       ^FT6,420^A@R,19,19,ARIALBOLD.FNT^FD${date}^FS
       ^FT810,340^A@B,23,23,ARIALBOLD.FNT^FD${description}^FS^LS0`;
+    }
   } else if (format === 'wisium') {
     console.log('3', params);
     const { description } = params;

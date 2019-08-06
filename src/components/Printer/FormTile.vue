@@ -43,18 +43,26 @@
                 :messages="errors.collect('labels')"
               />
             </VFlex>
+            <VFlex xs12 v-if="user && user.client._id === clients.malta">
+              <VSwitch
+                v-model="isMock"
+                color="primary"
+                label="Impresión de maquila"
+                @change="toggleMock"
+              />
+            </VFlex>
           </VLayout>
-          <Form v-if="this.user" :client="this.user.client._id"/>
+          <Form v-if="this.user" :client="this.user.client._id" :isMock="isMock"/>
           <VLayout row justify-start class="mt-3">
             <VFlex xs6>
               <VTextField
                 outline
-                @input="handleCopies"
                 data-vv-name="copies"
                 v-validate="'required|min_value:1|max_value:5000'"
                 :error-messages="errors.collect('copies')"
                 label="Copias"
                 :value="1"
+                @input="handleCopies"
               />
             </VFlex>
           </VLayout>
@@ -90,6 +98,8 @@ export default {
   },
   data() {
     return {
+      clients,
+      isMock: false,
       scrollSettings: { maxScrollbarLength: 160 },
       firstFetch: true,
       fetchingPrinters: false,
@@ -175,6 +185,10 @@ export default {
         this.selectedLabel.labelPdf.url
       );
     },
+    toggleMock(val) {
+      // console.log('isMock', val);
+      this.$eventHub.$emit('toggle-mock', val);
+    },
     formatDisplayPrinters() {
       this.timeout = setTimeout(() => {
         this.printers = this.displayPrinters;
@@ -208,6 +222,7 @@ export default {
       Object.keys(variables).forEach(key => {
         variables[key] = variables[key].value;
       });
+      variables.isMock = this.isMock;
       let data = {
         ...variables,
         user: this.user.email,

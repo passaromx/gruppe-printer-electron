@@ -70,6 +70,7 @@ export const maltaVars = {
       type: 'number',
       label: 'Peso neto',
       validation: 'required|min_value:1|max_value:999',
+      name: 'weight',
       maxlength: 3,
       value: 40,
       styles: [{
