@@ -1,6 +1,6 @@
 
-export const filesURL = 'http://localhost:1337';
-// export const filesURL = 'http://3.81.203.178:1337';
+// export const filesURL = 'http://localhost:1337';
+export const filesURL = 'http://3.81.203.178:1337';
 
 export const apiURL = `${filesURL}/`;
 
@@ -21,7 +21,7 @@ export const rowsPerPage = [15, 25, 50, {
 }];
 
 const maltaFactories = [
-  'BAJ', 'CLN', 'GDL', 'MER', 'MOR', 'MTY', 'STJ', 'TEP', 'TX', 'TLX'
+  'BAJ', 'CLN', 'MER', 'MTY', 'TX', 'TLX'
 ];
 
 export const maltaVars = {
@@ -109,7 +109,7 @@ export const maltaVars = {
       ]
     }
   },
-  descriptionFormat: 'factory-date-line-shift-group'
+  descriptionFormat: 'factory-date-shift-line-group'
 };
 
 export const mynVars = {
