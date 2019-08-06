@@ -73,6 +73,7 @@ module.exports = client => new Promise((resolve, reject) => {
       });
       return;
     }
+
     config.lastSync = body.lastSync;
     config.client = client;
     labels = labels.filter(label => body.allLabels.some(item => item.toString() === label
@@ -96,7 +97,7 @@ module.exports = client => new Promise((resolve, reject) => {
         ? `${documentsDataPath}/${id}/uploads/${url.split('com/')[1]}`
         : `${documentsDataPath}/${id}${url}`;
 
-      console.log(downloadPath);
+      console.log(url);
 
       try {
         const downloadRes = await axios({
@@ -123,7 +124,6 @@ module.exports = client => new Promise((resolve, reject) => {
         return null;
       }
     }
-
 
     async function processUploads(uploads) {
       /* eslint-disable-next-line */
