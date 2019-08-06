@@ -4,7 +4,13 @@
       <AuthorizationForm :editedItem="editedItem" @closeDialog="clearForm"/>
     </VDialog>
 
-    <h5 class="display-1 mb-4">Autorizaciones</h5>
+    <VLayout row>
+      <VAvatar color="primary">
+        <VIcon dark>picture_as_pdf</VIcon>
+      </VAvatar>
+      <h5 class="display-1 mt-1 mb-4 ml-3">Autorizaciones</h5>
+    </VLayout>
+
 
     <BaseCard>
       <VCardTitle>
