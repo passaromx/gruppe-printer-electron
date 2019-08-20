@@ -25,6 +25,7 @@
     "electron-log": "^2.2.17",
     "electron-pdf-window": "^1.0.12",
     "electron-updater": "^4.0.7",
+    "form-data": "^2.5.0",
     "lodash": "^4.17.11",
     "material-design-icons-iconfont": "^4.0.5",
     "moment": "^2.23.0",

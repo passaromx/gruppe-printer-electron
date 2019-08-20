@@ -91,8 +91,10 @@ module.exports = client => new Promise((resolve, reject) => {
     labels = JSON.stringify(labels);
     config = JSON.stringify(config);
 
-    async function downloadFile(file) {
-      const { url } = file;
+    const filesNotFound = [];
+
+    async function downloadFile(data) {
+      const url = 'file' in data ? data.file.url : data.url;
       const downloadPath = url.includes('http')
         ? `${documentsDataPath}/${id}/uploads/${url.split('com/')[1]}`
         : `${documentsDataPath}/${id}${url}`;
@@ -120,6 +122,9 @@ module.exports = client => new Promise((resolve, reject) => {
           });
         });
       } catch (error) {
+        if (data.type && data.type === 'pdf') {
+          filesNotFound.push(data);
+        }
         console.log('file not Found');
         return null;
       }
@@ -131,6 +136,10 @@ module.exports = client => new Promise((resolve, reject) => {
         console.log('start');
         /* eslint-disable-next-line */
         await downloadFile(upload);
+      }
+
+      if (filesNotFound.length > 0) {
+        fs.writeFileSync(`${documentsDataPath}/${id}/filesNotFound.json`, JSON.stringify(filesNotFound));
       }
 
       resolve({
@@ -151,9 +160,28 @@ module.exports = client => new Promise((resolve, reject) => {
           const png = labelPng ? labelPng.url.split('/')[labelPng.url.includes('amazon') ? 3 : 2] : null;
           const pdf = labelPdf ? labelPdf.url.split('/')[labelPdf.url.includes('amazon') ? 3 : 2] : null;
           // console.log(prn);
-          if (prn && !fs.existsSync(`${filesPath}/uploads/${prn}`)) missing.push(label);
-          if (png && !fs.existsSync(`${filesPath}/uploads/${png}`)) missing.push(labelPng);
-          if (pdf && !fs.existsSync(`${filesPath}/uploads/${pdf}`)) missing.push(labelPdf);
+          if (prn && !fs.existsSync(`${filesPath}/uploads/${prn}`)) {
+            missing.push({
+              type: 'prn',
+              file: label,
+              labelId: item.id
+            });
+          }
+          if (png && !fs.existsSync(`${filesPath}/uploads/${png}`)) {
+            missing.push({
+              type: 'png',
+              file: labelPng,
+              labelId: label.id
+            });
+          }
+          if (pdf && !fs.existsSync(`${filesPath}/uploads/${pdf}`)) {
+            missing.push({
+              labelId: item.id,
+              file: labelPdf,
+              type: 'pdf',
+              prn: prn ? `${filesPath}/uploads/${prn}` : null
+            });
+          }
         } catch (e) {
           console.log(e);
         }
@@ -165,16 +193,13 @@ module.exports = client => new Promise((resolve, reject) => {
     fs.writeFileSync(`${dataPath}/${id}/config.json`, config);
     fs.writeFileSync(`${documentsDataPath}/${id}/labels.json`, labels);
 
-    // const downloads = lastSync > 0 ? [...body.uploads, ...missingFiles(labelsJson)] : [...body.uploads];
-    const downloads = [...body.uploads];
+    const downloads = lastSync > 0 ? [...body.uploads, ...missingFiles(labelsJson)] : [...body.uploads];
+    // const downloads = [...body.uploads];
 
     console.log('downloads', downloads.length);
 
-    // downloadFile(body.uploads[0]).then(() => {
-    //   console.log('file downloaded');
-    // });
-
     if (downloads.length > 0) {
+      // console.log(downloads[0]);
       processUploads(downloads);
     } else {
       resolve({

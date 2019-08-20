@@ -20,6 +20,7 @@ const fs = require('fs');
 // const PDFWindow = require('electron-pdf-window');
 const { autoUpdater } = require('electron-updater');
 // const { apiURL } = require('./api/constants');
+// const { sync, restoreFiles } = require('./utils/offline/label');
 const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
 const { login } = require('./utils/offline/session');
@@ -154,6 +155,14 @@ ipcMain.on('get-printers', e => {
 });
 
 ipcMain.on('sync', (e, client) => {
+  /* restoreFiles(client)
+    .then(() => {
+      console.log('done');
+    })
+    .catch(() => {
+      console.log('error restorig');
+    }); */
+
   sync(client)
     .then(data => {
       // console.log(data);
