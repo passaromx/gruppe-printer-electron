@@ -16,6 +16,7 @@ const path = require('path');
 const print = require('printer');
 const os = require('os');
 const fs = require('fs');
+const shortid = require('shortid');
 // const printer = require('printer');
 // const PDFWindow = require('electron-pdf-window');
 const { autoUpdater } = require('electron-updater');
@@ -24,6 +25,7 @@ const { autoUpdater } = require('electron-updater');
 const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
 const { login } = require('./utils/offline/session');
+const { getZpl, zplFormat, createPrintRecords } = require('./utils/offline/printer');
 const {
   arial,
   arialbold
@@ -185,15 +187,54 @@ ipcMain.on('login', (e, username, password, user, jwt, authenticate) => {
     });
 });
 
-ipcMain.on('print', (e, printer, label, data, settings) => {
-  const { getZpl } = require('./utils/offline/printer');
-  getZpl(label.label.url, settings, data)
+ipcMain.on('print', async (e, printer, label, data, settings) => {
+  const { format } = settings;
+  let zpl = await getZpl(label.label.url, data);
+
+  if (zpl !== null) {
+    if (format !== 'malta') {
+      const start = zplFormat(settings, data);
+      const end = `^PQ${data.copies},1,1,Y^XZ`;
+
+      zpl = start + zpl + end;
+
+      printLabel(printer, zpl)
+        .catch(err => console.log(err));
+    } else {
+      const printRecords = [];
+      /* eslint-disable-next-line */
+      for(let i in data.copies) {
+        const id = shortid.generate();
+        data.uid = id;
+        const start = zplFormat(settings, data);
+        const end = '^PQ1,1,1,Y^XZ';
+
+        zpl = start + zpl + end;
+
+        const record = {
+          id,
+          sku: label.sku,
+          name: label.name,
+          png: label.labelPng.url,
+          points: 100
+        };
+        printRecords.push(record);
+
+        printLabel(printer, zpl)
+          .catch(err => console.log(err));
+      }
+      // update db with all printer records
+      createPrintRecords(label.client, printRecords);
+    }
+  }
+  /* getZpl(label.label.url, settings, data)
     .then(zpl => {
       printLabel(printer, zpl)
         .then(printed => console.log(printed))
         .catch(err => console.log(err));
-    });
+    }); */
 });
+
 ipcMain.on('update-fonts', (e, printerName) => {
   const fonts = arial + arialbold;
   printLabel(printerName, fonts)

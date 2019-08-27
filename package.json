@@ -33,6 +33,7 @@
     "printer": "git+https://github.com/tojocky/node-printer.git",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
+    "shortid": "^2.2.14",
     "vee-validate": "^2.1.5",
     "vue": "^2.5.17",
     "vue-i18n": "^8.7.0",
