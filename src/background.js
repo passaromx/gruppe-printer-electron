@@ -25,7 +25,7 @@ const { autoUpdater } = require('electron-updater');
 const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
 const { login } = require('./utils/offline/session');
-const { getZpl, zplFormat, createPrintRecords } = require('./utils/offline/printer');
+const { getZpl, zplFormat, createPrintRecords, cancelAllJobs } = require('./utils/offline/printer');
 const {
   arial,
   arialbold
@@ -187,29 +187,38 @@ ipcMain.on('login', (e, username, password, user, jwt, authenticate) => {
     });
 });
 
+ipcMain.on('cancelAll', printer => {
+  cancelAllJobs(printer).catch(err => console.log(err));
+});
+
 ipcMain.on('print', async (e, printer, label, data, settings) => {
   const { format } = settings;
-  let zpl = await getZpl(label.label.url, data);
+  const rawZpl = await getZpl(label.label.url, data);
 
-  if (zpl !== null) {
+  if (rawZpl !== null) {
     if (format !== 'malta') {
       const start = zplFormat(settings, data);
       const end = `^PQ${data.copies},1,1,Y^XZ`;
 
-      zpl = start + zpl + end;
+      const zpl = start + rawZpl + end;
 
       printLabel(printer, zpl)
         .catch(err => console.log(err));
     } else {
       const printRecords = [];
       /* eslint-disable-next-line */
-      for(let i in data.copies) {
+      for (let i in [...Array(data.copies)]) {
+        // console.log('generating uid');
+        // console.log('generated id', data.uid);
+        /* eslint-disable-next-line */
+        
         const id = shortid.generate();
         data.uid = id;
         const start = zplFormat(settings, data);
+        // console.log('srtart', start);
         const end = '^PQ1,1,1,Y^XZ';
 
-        zpl = start + zpl + end;
+        const formattedZpl = start + rawZpl + end;
 
         const record = {
           id,
@@ -220,8 +229,7 @@ ipcMain.on('print', async (e, printer, label, data, settings) => {
         };
         printRecords.push(record);
 
-        printLabel(printer, zpl)
-          .catch(err => console.log(err));
+        printLabel(printer, formattedZpl);
       }
       // update db with all printer records
       createPrintRecords(label.client, printRecords);

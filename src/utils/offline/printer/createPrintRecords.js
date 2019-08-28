@@ -1,5 +1,5 @@
-import { axios } from 'axios';
-import persistPrintRecords from './persistPrintRecords';
+const axios = require('axios');
+const persistPrintRecords = require('./persistPrintRecords');
 
 const { apiURL } = require('../../../api/constants');
 

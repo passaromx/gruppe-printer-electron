@@ -76,6 +76,11 @@
               :disabled="errors.items.length > 0 || !selectedLabel || !printer.name"
               color="primary"
             >Imprimir</VBtn>
+            <VBtn
+              @click="cancelAll"
+              :disabled="!printer.name"
+              color="red lighten-2"
+            >Cancelar</VBtn>
           </VLayout>
         </VContainer>
       </VCardText>
@@ -216,6 +221,9 @@ export default {
     },
     handleCopies(val) {
       this.setCopies(val);
+    },
+    cancelAll() {
+      ipcRenderer.send('cancelAll', this.printer.name);
     },
     print() {
       const variables = { ...this.variables.fields };

@@ -4,5 +4,6 @@ module.exports = {
   getZpl: require('./getZpl'),
   printLabel: require('./printLabel'),
   zplFormat: require('./zplFormat'),
-  createPrintRecords: require('./createPrintRecords')
+  createPrintRecords: require('./createPrintRecords'),
+  cancelAllJobs: require('./cancelAllJobs')
 };
