@@ -42,10 +42,10 @@ const print = require('printer');
 
 // ^XZ`;
 
-module.exports = async (printer, data) => new Promise((resolve, reject) => {
+module.exports = async (printerName, data) => new Promise((resolve, reject) => {
   print.printDirect({
     data,
-    printer,
+    printerName,
     type: 'RAW', // type: RAW, TEXT, PDF, JPEG, .. depends on platform
     success(jobID) {
       resolve(jobID);

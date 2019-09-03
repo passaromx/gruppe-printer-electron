@@ -76,11 +76,11 @@
               :disabled="errors.items.length > 0 || !selectedLabel || !printer.name"
               color="primary"
             >Imprimir</VBtn>
-            <VBtn
+            <!-- <VBtn
               @click="cancelAll"
               :disabled="!printer.name"
               color="red lighten-2"
-            >Cancelar</VBtn>
+            >Cancelar</VBtn> -->
           </VLayout>
         </VContainer>
       </VCardText>

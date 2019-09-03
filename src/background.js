@@ -25,7 +25,9 @@ const { autoUpdater } = require('electron-updater');
 const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
 const { login } = require('./utils/offline/session');
-const { getZpl, zplFormat, createPrintRecords, cancelAllJobs } = require('./utils/offline/printer');
+const {
+  getZpl, zplFormat, createPrintRecords, cancelAllJobs, syncPrintRecords
+} = require('./utils/offline/printer');
 const {
   arial,
   arialbold
@@ -156,7 +158,7 @@ ipcMain.on('get-printers', e => {
   e.sender.send('printers-fetched', printers);
 });
 
-ipcMain.on('sync', (e, client) => {
+ipcMain.on('sync', async (e, client) => {
   /* restoreFiles(client)
     .then(() => {
       console.log('done');
@@ -164,6 +166,12 @@ ipcMain.on('sync', (e, client) => {
     .catch(() => {
       console.log('error restorig');
     }); */
+
+  try {
+    await syncPrintRecords(client._id);
+  } catch (error) {
+    console.log(error);
+  }
 
   sync(client)
     .then(data => {
@@ -192,6 +200,12 @@ ipcMain.on('cancelAll', printer => {
 });
 
 ipcMain.on('print', async (e, printer, label, data, settings) => {
+  try {
+    await syncPrintRecords(label.client.id);
+  } catch (error) {
+    console.log(error);
+  }
+
   const { format } = settings;
   const rawZpl = await getZpl(label.label.url, data);
 
@@ -221,15 +235,20 @@ ipcMain.on('print', async (e, printer, label, data, settings) => {
         const formattedZpl = start + rawZpl + end;
 
         const record = {
-          id,
+          uid: id,
           sku: label.sku,
           name: label.name,
-          png: label.labelPng.url,
-          points: 100
+          printedAt: new Date().toISOString(),
+          // png: label.labelPng.url,
+          score: 100
         };
         printRecords.push(record);
 
-        printLabel(printer, formattedZpl);
+        printLabel(printer, formattedZpl)
+          .then(jobId => {
+            console.log(`sent to printer with id ${jobId}`);
+          })
+          .catch(err => console.log(err));
       }
       // update db with all printer records
       createPrintRecords(label.client, printRecords);

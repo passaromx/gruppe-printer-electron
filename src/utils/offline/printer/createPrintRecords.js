@@ -5,15 +5,13 @@ const { apiURL } = require('../../../api/constants');
 
 module.exports = async (client, printRecords) => {
   try {
-    const response = await axios.post(`${apiURL}printRecords/bulk`, printRecords);
-    if (response.status === 201) {
-      console.log('bulk creation success');
-    } else {
-      // save data in local file
-      persistPrintRecords(client, printRecords);
+    const response = await axios.post(`${apiURL}printRecords`, printRecords);
+    if (response.status === 200) {
+      console.log(`created ${response.data.length} records`);
     }
   } catch (error) {
     // save data in local file
+    console.log('persisting');
     persistPrintRecords(client, printRecords);
   }
 };

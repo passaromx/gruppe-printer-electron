@@ -36,7 +36,7 @@ module.exports = (settings, params) => {
       ^CFO,100
       ^FT100,1545^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS`;
     if (!isMock) {
-      console.log('format uid', uid);
+      // console.log('format uid', uid);
       start = `
       ${start}
       ^FT385,1510^A@I,30,30,ARIAL.FNT^FD${description}^FS
