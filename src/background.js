@@ -210,7 +210,7 @@ ipcMain.on('print', async (e, printer, label, data, settings) => {
   const rawZpl = await getZpl(label.label.url, data);
 
   if (rawZpl !== null) {
-    if (format !== 'malta') {
+    if (format !== 'malta' || (format === 'malta' && !data.score)) {
       const start = zplFormat(settings, data);
       const end = `^PQ${data.copies},1,1,Y^XZ`;
 
@@ -240,7 +240,7 @@ ipcMain.on('print', async (e, printer, label, data, settings) => {
           name: label.name,
           printedAt: new Date().toISOString(),
           // png: label.labelPng.url,
-          score: 100
+          score: data.score
         };
         printRecords.push(record);
 

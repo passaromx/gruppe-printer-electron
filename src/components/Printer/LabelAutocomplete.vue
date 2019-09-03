@@ -70,6 +70,7 @@ export default {
     handleChange(value) {
       this.setSelectedLabel(value);
       if (value) {
+        console.log('selected', value);
         this.$eventHub.$emit('compute-desc');
         ipcRenderer.send('selected-label', this.client, value.labelPng.url);
       }

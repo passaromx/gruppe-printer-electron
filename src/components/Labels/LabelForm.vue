@@ -161,6 +161,7 @@ export default {
     labelConfigFields() {
       if (!this.fromClient) return [];
       const currentClient = this.clients.find(client => client.id === this.fromClient);
+      console.log(currentClient);
       if (!currentClient.settings.customFields) {
         return [];
       }
