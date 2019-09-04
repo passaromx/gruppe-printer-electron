@@ -78,7 +78,7 @@
               :label="field.label"
               :type="field.type"
               :data-vv-name="field.name"
-              v-validate="'required'"
+              v-validate="field.required ? 'required' : ''"
               :error-messages="errors.collect(`${field.name}`)"
             />
           </template>

@@ -41,8 +41,12 @@ module.exports = (settings, params) => {
       ${start}
       ^FT385,1510^A@I,30,30,ARIAL.FNT^FD${description}^FS
       ^FT6,420^A@R,19,19,ARIALBOLD.FNT^FD${date}^FS
-      ^FT810,340^A@B,23,23,ARIALBOLD.FNT^FD${description}^FS^LS0
-      ^FT6,600^A@R,23,23,ARIAL.FNT^FD${uid}^FS^LS0`;
+      ^FT810,340^A@B,23,23,ARIALBOLD.FNT^FD${description}^FS^LS0`;
+
+      if (uid) {
+        start = `${start}
+        ^FT6,600^A@R,23,23,ARIAL.FNT^FD${uid}^FS^LS0`;
+      }
     }
   } else if (format === 'wisium') {
     console.log('3', params);

@@ -67,21 +67,32 @@
             </VFlex>
           </VLayout>
           <VLayout justify-end>
-            <VBtn @click="viewPdf" :disabled="!selectedLabel">
+            <VBtn
+              class="mx-2"
+              block
+              :disabled="!selectedLabel"
+              @click="viewPdf"
+            >
               <!-- <VIcon class="mr-2">cloud_download</VIcon> -->
               Ver PDF
             </VBtn>
             <VBtn
-              @click="print"
+              class="mx-2"
+              block
               :disabled="errors.items.length > 0 || !selectedLabel || !printer.name"
               color="primary"
+              @click="print"
             >Imprimir</VBtn>
-            <!-- <VBtn
-              @click="cancelAll"
-              :disabled="!printer.name"
-              color="red lighten-2"
-            >Cancelar</VBtn> -->
+
           </VLayout>
+          <VBtn
+            v-if="selectedLabel && selectedLabel.settings.score"
+            block
+            dark
+            color="secondary"
+            :disabled="!printer.name"
+            @click="cancelAll"
+            >Cancelar</VBtn>
         </VContainer>
       </VCardText>
     </VuePerfectScrollbar>

@@ -195,7 +195,7 @@ ipcMain.on('login', (e, username, password, user, jwt, authenticate) => {
     });
 });
 
-ipcMain.on('cancelAll', printer => {
+ipcMain.on('cancelAll', (e, printer) => {
   cancelAllJobs(printer).catch(err => console.log(err));
 });
 
