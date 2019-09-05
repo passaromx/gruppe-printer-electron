@@ -21,7 +21,7 @@ const shortid = require('shortid');
 // const PDFWindow = require('electron-pdf-window');
 const { autoUpdater } = require('electron-updater');
 // const { apiURL } = require('./api/constants');
-// const { sync, restoreFiles } = require('./utils/offline/label');
+const log = require('electron-log');
 const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
 const { login } = require('./utils/offline/session');
@@ -32,12 +32,13 @@ const {
   arial,
   arialbold
 } = require('./utils/offline/printer/fonts');
-autoUpdater.logger = require('electron-log');
 
+log.transports.file.level = 'info';
+/* eslint-disable-next-line */
+// log.catchErrors();
+
+autoUpdater.logger = log;
 autoUpdater.autoDownload = false;
-// const log = require('electron-log');
-
-autoUpdater.logger.transports.file.level = 'info';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -177,9 +178,13 @@ ipcMain.on('sync', async (e, client) => {
     .then(data => {
       // console.log(data);
       e.sender.send('synced', data);
-      if (data.err) e.sender.send('errorSync', data.err);
+      if (data.err) {
+        log.info(data.err);
+        e.sender.send('errorSync', data.err);
+      }
     })
     .catch(err => {
+      log.info(err);
       e.sender.send('errorSync', err);
     });
 });
