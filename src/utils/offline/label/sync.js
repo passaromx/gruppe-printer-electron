@@ -104,7 +104,7 @@ module.exports = client => new Promise((resolve, reject) => {
       try {
         const downloadRes = await axios({
           method: 'GET',
-          url: url.includes('http') ? url : `http://3.81.203.178:1337${url}`,
+          url: url.includes('http') ? url : `http://34.239.219.72:1337${url}`,
           timeout: 5000,
           responseType: 'stream'
         });
