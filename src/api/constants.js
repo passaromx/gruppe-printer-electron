@@ -1,6 +1,6 @@
 
 // export const filesURL = 'http://localhost:1337';
-export const filesURL = 'http://34.239.219.72:1337';
+export const filesURL = 'https://api.gruppesolutions.com.mx';
 
 export const apiURL = `${filesURL}/`;
 
