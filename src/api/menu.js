@@ -1,5 +1,11 @@
 const Menu = [
   {
+    title: 'Resumen',
+    icon: 'dashboard',
+    name: 'Dashboard',
+    isAdmin: true
+  },
+  {
     title: 'Precintos',
     icon: 'label',
     name: 'Labels',
@@ -21,7 +27,7 @@ const Menu = [
     icon: 'picture_as_pdf',
     name: 'Authorizations',
     isAdmin: true
-  }
+  },
 ];
 
 export default Menu;

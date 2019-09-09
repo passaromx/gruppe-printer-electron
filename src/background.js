@@ -171,7 +171,7 @@ ipcMain.on('sync', async (e, client) => {
   try {
     await syncPrintRecords(client._id);
   } catch (error) {
-    console.log(error);
+    console.log(error.response);
   }
 
   sync(client)

@@ -50,6 +50,15 @@ const router = new Router({
       name: 'Authorizations',
       component: () => import(/* webpackChunkName: "auth" */ './views/Authorizations.vue'),
     },
+    // {
+    //   path: '/dashboard',
+    //   meta: {
+    //     requiresAuth: true,
+    //     isAdmin: true
+    //   },
+    //   name: 'Dashboard',
+    //   component: () => import(/* webpackChunkName: "auth" */ './views/Dashboard.vue'),
+    // },
     {
       path: '/progress',
       meta: { public: true },
