@@ -1,10 +1,10 @@
 const Menu = [
-  {
-    title: 'Resumen',
-    icon: 'dashboard',
-    name: 'Dashboard',
-    isAdmin: true
-  },
+  // {
+  //   title: 'Resumen',
+  //   icon: 'dashboard',
+  //   name: 'Dashboard',
+  //   isAdmin: true
+  // },
   {
     title: 'Precintos',
     icon: 'label',
