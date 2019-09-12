@@ -21,7 +21,7 @@ export const rowsPerPage = [15, 25, 50, {
 }];
 
 const maltaFactories = [
-  'BAJ', 'CLN', 'MER', 'MTY', 'TX', 'TLX'
+  'BAJ', 'CLN', 'MER', 'MTY', 'TEX', 'TLX'
 ];
 
 export const maltaVars = {
