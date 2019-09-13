@@ -12,6 +12,7 @@ export const roles = {
 export const clients = {
   myn: '5c40b928a5888531a0076cbd',
   malta: '5c38cb394903e5fc92396909',
+  maltaExport: '5d7bc8789df8ac22b461b2cb',
   wisium: '5cd6e9f9d7388839466b2d40'
 };
 
@@ -107,6 +108,70 @@ export const maltaVars = {
         rotation: 90
       }
       ]
+    }
+  },
+  descriptionFormat: 'factory-date-shift-line-group'
+};
+
+export const maltaExportVars = {
+  fields: {
+    title: {
+      type: 'title',
+      class: 'xs12',
+      label: 'Variables'
+    },
+    date: {
+      type: 'date',
+      label: 'Fecha',
+      dateFormat: 'D/M/YY',
+      value: new Date().toISOString().substr(0, 10),
+      styles: [{
+        bottom: 0.5,
+        left: 5,
+        width: 100,
+        weight: 600,
+        fontSize: '2vh'
+      }]
+    },
+    factory: {
+      type: 'select',
+      label: 'Planta',
+      validation: 'required',
+      items: maltaFactories,
+      value: maltaFactories[0]
+    },
+    line: {
+      type: 'text',
+      label: 'Línea',
+      validation: 'required',
+      maxlength: 2,
+      value: 1
+    },
+    shift: {
+      type: 'text',
+      label: 'Turno',
+      validation: 'required',
+      maxlength: 1,
+      value: 1
+    },
+    group: {
+      type: 'text',
+      label: 'Grupo',
+      maxlength: 4,
+      validation: 'required|min:4',
+      value: 'A001',
+    },
+    description: {
+      value: null,
+      class: 'xs12',
+      dateFormat: 'DDMMMYYYY',
+      styles: [{
+        top: 93.3,
+        right: 6,
+        weight: 500,
+        rotation: 0,
+        fontSize: '1.6vh'
+      }]
     }
   },
   descriptionFormat: 'factory-date-shift-line-group'
