@@ -103,7 +103,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { ipcRenderer, shell } from 'electron';
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
-import { mynVars, maltaVars, wisiumVars, clients } from '@/api/constants';
+import {
+  mynVars, maltaVars, wisiumVars, clients, maltaExportVars
+} from '@/api/constants';
 
 export default {
   $_veeValidate: { validator: 'new' },
@@ -125,6 +127,7 @@ export default {
       weight: 1,
       mynVars,
       maltaVars,
+      maltaExportVars,
       wisiumVars,
       resize: false,
       timeout: null,
@@ -224,6 +227,8 @@ export default {
         vars = this.mynVars;
       } else if (clientId === clients.wisium) {
         vars = this.wisiumVars;
+      } else if (clientId === clients.maltaExport) {
+        vars = this.maltaExportVars;
       }
       this.setVariables(vars);
     },
