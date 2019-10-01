@@ -230,8 +230,16 @@ ipcMain.on('print', async (e, printer, label, data, settings) => {
         // console.log('generating uid');
         // console.log('generated id', data.uid);
         /* eslint-disable-next-line */
-        
-        const id = shortid.generate();
+        const ALPHABET = '0123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ';
+
+        let id = shortid.generate();
+        console.log('raw', id);
+        id = id.replace(/[_Il]/g, () => ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length)));
+
+        if (id.charAt(id.length - 1) === '-') {
+          id = id.replace(/[_Il]/g, () => ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length)));
+        }
+        console.log('formatted', id);
         data.uid = id;
         const start = zplFormat(settings, data);
         // console.log('srtart', start);

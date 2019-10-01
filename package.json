@@ -1,6 +1,6 @@
 {
   "name": "gruppe-printer",
-  "version": "v1.2.1-Beta",
+  "version": "v1.2.2-Beta",
   "author": "Passaro",
   "description": "System for Zebra Printers",
   "private": true,
