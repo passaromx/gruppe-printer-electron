@@ -232,7 +232,7 @@ export default {
         authorization: this.authorization ? this.authorization.id : null,
         settings
       };
-      console.log(data);
+      // console.log(data);
 
       if (this.isEditMode) {
         data.id = this.editedItem._id;

@@ -181,7 +181,7 @@ export default {
       });
     },
     onNetworkRestored() {
-      console.log('network restored');
+      // console.log('network restored');
       this.setIsOnline(true);
       this.$eventHub.$emit('sync');
       this.$eventHub.$emit('network-restored');

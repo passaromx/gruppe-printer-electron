@@ -82,7 +82,7 @@ export default {
           }
           return `${format}${i === 0 ? '' : '-'}${value || ''}`;
         }, '');
-      console.log('computing desc', formatted);
+      // console.log('computing desc', formatted);
       return formatted;
     },
     formData() {

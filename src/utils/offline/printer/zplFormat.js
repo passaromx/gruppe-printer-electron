@@ -8,7 +8,7 @@ module.exports = (settings, params) => {
 
   let start = '^XA';
   if (format === 'myn') {
-    console.log('1', params);
+    // console.log('1', params);
     const { description, productionDate, expiryDays } = params;
 
     const formattedExpiry = expiryDays ? moment(productionDate).add(expiryDays, 'days').format('DD-MM-YYYY') : '';
@@ -48,7 +48,7 @@ module.exports = (settings, params) => {
       ^FT820,1420^A@B,23,23,ARIAL.FNT^FD${uid}^FS^LS0`;
     }
   } else if (format === 'wisium') {
-    console.log('3', params);
+    // console.log('3', params);
     const { description } = params;
     start = `^XA
       ^MMT

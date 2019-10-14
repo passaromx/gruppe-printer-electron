@@ -10,7 +10,7 @@ export const showSuccessAlert = (msg, commit) => {
 export const handleError = (err, commit, type = 'error') => {
   console.log('handlerrro', err);
   const status = err.response ? err.response.status : 505;
-  console.log(status);
+  // console.log(status);
   let message = '';
   switch (status) {
     case 400:
@@ -48,7 +48,7 @@ export const handleError = (err, commit, type = 'error') => {
       msg: message
     }, { root: true });
   } else {
-    console.log('return message');
+    // console.log('return message');
     return message;
   }
 
@@ -56,5 +56,4 @@ export const handleError = (err, commit, type = 'error') => {
   // if (status > 503) isOnline = false;
 
   // commit('setIsOnline', isOnline, { root: true });
-
 };

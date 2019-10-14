@@ -264,7 +264,7 @@ export default {
         ...data,
         client: this.user.client._id
       };
-      console.log(this.printer);
+      // console.log(this.printer);
       ipcRenderer.send(
         'print',
         this.printer.name,

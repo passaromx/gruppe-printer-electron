@@ -150,7 +150,7 @@ export default {
         authPdf: this.auth,
       };
 
-      console.log(data);
+      // console.log(data);
 
       if (this.isEditMode) {
         data.id = this.editedItem._id;

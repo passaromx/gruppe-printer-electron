@@ -66,7 +66,7 @@ export default {
     this.fetchPrinters();
 
     ipcRenderer.on('printers-fetched', (e, printers) => {
-      console.log(printers);
+      // console.log(printers);
       this.printers = printers;
       this.zebra = this.printers.filter(printer => printer.name === 'ZDesigner 105SLPlus-203dpi ZPL')[0];
       // console.log(this.zebra);
@@ -92,7 +92,7 @@ export default {
       ipcRenderer.send('get-printers');
     },
     uploadFonts() {
-      console.log('sending fonts');
+      // console.log('sending fonts');
       this.loading = true;
       // setInterval(() => {
       //   ipcRenderer.send('get-printers');

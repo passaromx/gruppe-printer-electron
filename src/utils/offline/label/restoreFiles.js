@@ -38,7 +38,7 @@ module.exports = client => new Promise((resolve, reject) => {
       formData.append('labelId', data.labelId);
       formData.append('file', file);
 
-      console.log('restoring', data.labelId);
+      // console.log('restoring', data.labelId);
       const response = await axios.post(`${apiURL}labels/restore`, formData, { headers: formData.getHeaders() });
 
       if (response.data) console.log('restored');

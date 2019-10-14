@@ -233,13 +233,13 @@ ipcMain.on('print', async (e, printer, label, data, settings) => {
         const ALPHABET = '0123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ';
 
         let id = shortid.generate();
-        console.log('raw', id);
+        // console.log('raw', id);
         id = id.replace(/[_Il]/g, () => ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length)));
 
         if (id.charAt(id.length - 1) === '-') {
           id = id.replace(/[_Il]/g, () => ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length)));
         }
-        console.log('formatted', id);
+        // console.log('formatted', id);
         data.uid = id;
         const start = zplFormat(settings, data);
         // console.log('srtart', start);
