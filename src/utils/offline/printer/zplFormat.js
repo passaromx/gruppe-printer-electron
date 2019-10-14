@@ -45,7 +45,7 @@ module.exports = (settings, params) => {
 
       if (uid) {
         start = `${start}
-        ^FT820,1400^A@B,23,23,ARIAL.FNT^FD${uid}^FS^LS0`;
+        ^FT820,1420^A@B,23,23,ARIAL.FNT^FD${uid}^FS^LS0`;
       }
     }
   } else if (format === 'wisium') {
