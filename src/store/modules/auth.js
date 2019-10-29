@@ -5,6 +5,7 @@ import { set, handleError } from '@/utils';
 
 const getters = {
   isLoggedIn: store => store.session && store.session.jwt,
+  user: store => store.user,
   isAdmin: store => {
     if (store.user && store.user.role) {
       return store.user.role._id === roles.admin;
@@ -51,6 +52,7 @@ const actions = {
         .then(res => {
           resolve(res.data);
           const { user, jwt } = res.data;
+          console.log(user);
           axios.defaults.headers.common.Authorization = `Bearer ${jwt}`;
           commit('setUser', user);
           commit('setSession', { jwt });

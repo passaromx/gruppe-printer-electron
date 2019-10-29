@@ -3,6 +3,12 @@ export const filesURL = 'https://api.gruppesolutions.com.mx';
 
 export const apiURL = `${filesURL}/`;
 
+export const USER_ROLES = {
+  ADMINISTRATOR: 'root',
+  AUTHENTICATED: 'authenticated',
+  CLIENT_ADMIN: 'clientadmin'
+};
+
 export const roles = {
   admin: '5c2f94bdf80d6665bf53b9d8',
   client: '5c2f94bdf80d6665bf53b9d9'
@@ -288,35 +294,57 @@ export const authorizationListHeaders = [
   }
 ];
 
-export const labelListHeaders = [{
-  text: 'Nombre',
-  align: 'left',
-  sortable: false,
-  value: 'name'
-},
-{
-  text: 'SKU',
-  value: 'sku',
-  align: 'right'
-},
-{
-  text: 'Autorización',
-  value: 'auth',
-  align: 'right',
-  sortable: false
-},
-{
-  text: 'Etiqueta',
-  value: 'label',
-  align: 'center',
-  sortable: false
-},
-{
-  text: 'Acciones',
-  sortable: false,
-  align: 'center'
-}
-];
+export const LABELS_HEADERS = {
+  ADMIN: [
+    {
+      text: 'Nombre',
+      align: 'left',
+      sortable: false,
+      value: 'name'
+    },
+    {
+      text: 'SKU',
+      value: 'sku',
+      align: 'right'
+    },
+    {
+      text: 'Autorización',
+      value: 'auth',
+      align: 'right',
+      sortable: false
+    },
+    {
+      text: 'Etiqueta',
+      value: 'label',
+      align: 'center',
+      sortable: false
+    },
+    {
+      text: 'Acciones',
+      sortable: false,
+      align: 'center'
+    }
+  ],
+  CLIENT_ADMIN: [
+    {
+      text: 'Nombre',
+      align: 'left',
+      sortable: false,
+      value: 'name'
+    },
+    {
+      text: 'SKU',
+      value: 'sku',
+      align: 'right'
+    },
+    {
+      text: 'Etiqueta',
+      value: 'label',
+      align: 'center',
+      sortable: false
+    },
+  ]
+};
 
 export const userListHeaders = [{
   text: 'Nombre',
