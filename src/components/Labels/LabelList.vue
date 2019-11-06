@@ -9,6 +9,39 @@
       <LabelForm :editedItem="editedItem" @closeDialog="clearForm"/>
     </VDialog>
 
+    <VDialog
+      v-model="pdfPreview"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
+      <VCard v-if="selectedLabel">
+        <VToolbar dark color="grey darken-3">
+          <VToolbarTitle>{{ selectedLabel.sku }} - {{ selectedLabel.name }}</VToolbarTitle>
+          <VSpacer />
+          <VBtn icon dark @click="pdfPreview = false">
+            <VIcon>close</VIcon>
+          </VBtn>
+        </VToolbar>
+        <VContainer>
+          <VLayout row wrap justify-center>
+
+              <object
+                v-if="pdfUrl"
+                class="pdf-viewer elevation-10"
+                type="application/pdf"
+                :data="pdfUrl"
+              >
+                <p>Error al visualizar este archivo, intenta más tarde</p>
+              </object>
+
+              <!-- <iframe class="pdf-viewer elevation-10" :src="pdfUrl"></iframe> -->
+
+          </VLayout>
+        </VContainer>
+      </VCard>
+    </VDialog>
+
     <BaseCard>
       <VCardTitle>
         <!-- <h5 class="headline">Precintos</h5> -->
@@ -50,7 +83,7 @@
             <a
               v-if="props.item.authorization"
               href="javascript:void(0)"
-              @click="previewFile(props.item.authorization.authPdf)"
+              @click="previewFile(props.item, 'auth')"
             >{{ props.item.authorization.name}}</a>
             <span v-else>Sin autorización</span>
           </td>
@@ -74,7 +107,7 @@
                   flat
                   color="grey darken-2"
                   icon
-                  @click="previewFile(props.item.labelPdf)"
+                  @click="previewFile(props.item, 'label')"
                 >
                   <VIcon>picture_as_pdf</VIcon>
                 </VBtn>
@@ -124,6 +157,9 @@ export default {
       search: '',
       selected: [],
       USER_ROLES,
+      selectedLabel: null,
+      pdfPreview: false,
+      pdfUrl: null,
       editedItem: {
         name: null,
         sku: null,
@@ -186,8 +222,14 @@ export default {
     refreshLabels() {
       this.fetch(this.fromClient);
     },
-    previewFile(file) {
+    previewFile(label, preview) {
+      const file = preview === 'label' ? label.labelPdf : label.authorization.authPdf;
       const url = file.url.includes('amazon') ? file.url : `${filesURL}${file.url}`;
+      /* this.selectedLabel = label;
+
+      this.pdfUrl = url;
+      console.log(label);
+      this.pdfPreview = true; */
       if (url.includes('.pdf')) {
         shell.openExternal(url);
       } else {
@@ -210,3 +252,16 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.pdf-viewer {
+  height: 500px;
+  width: 100%;
+  border-radius: 8px
+}
+@media (min-width: 769px) {
+  .pdf-viewer {
+    height: calc(100vh - 64px - 48px);
+  }
+}
+</style>
