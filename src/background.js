@@ -16,7 +16,7 @@ const path = require('path');
 const print = require('printer');
 const os = require('os');
 const fs = require('fs');
-const shortid = require('shortid');
+// const shortid = require('shortid');
 // const printer = require('printer');
 // const PDFWindow = require('electron-pdf-window');
 const { autoUpdater } = require('electron-updater');
@@ -26,7 +26,8 @@ const { sync } = require('./utils/offline/label');
 const { printLabel } = require('./utils/offline/printer');
 const { login } = require('./utils/offline/session');
 const {
-  getZpl, zplFormat, createPrintRecords, cancelAllJobs, syncPrintRecords
+  getZpl, zplFormat, cancelAllJobs, syncPrintRecords,
+  // createPrintRecords,
 } = require('./utils/offline/printer');
 const {
   arial,
@@ -211,61 +212,66 @@ ipcMain.on('print', async (e, printer, label, data, settings) => {
     console.log(error);
   }
 
-  const { format } = settings;
+  // const { format } = settings;
   const rawZpl = await getZpl(label.label.url, data);
 
   if (rawZpl !== null) {
-    if (format !== 'malta' || (format === 'malta' && !data.score)) {
-      const start = zplFormat(settings, data);
-      const end = `^PQ${data.copies},1,1,Y^XZ`;
+    const start = zplFormat(settings, data);
+    const end = `^PQ${data.copies},1,1,Y^XZ`;
 
-      const zpl = start + rawZpl + end;
+    const zpl = start + rawZpl + end;
 
-      printLabel(printer, zpl)
-        .catch(err => console.log(err));
-    } else {
-      const printRecords = [];
-      /* eslint-disable-next-line */
-      for (let i in [...Array(data.copies)]) {
-        // console.log('generating uid');
-        // console.log('generated id', data.uid);
-        /* eslint-disable-next-line */
-        const ALPHABET = '0123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ';
+    printLabel(printer, zpl)
+      .catch(err => console.log(err));
 
-        let id = shortid.generate();
-        // console.log('raw', id);
-        id = id.replace(/[_Il]/g, () => ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length)));
 
-        if (id.charAt(id.length - 1) === '-') {
-          id = id.replace(/[_Il]/g, () => ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length)));
-        }
-        // console.log('formatted', id);
-        data.uid = id;
-        const start = zplFormat(settings, data);
-        // console.log('srtart', start);
-        const end = '^PQ1,1,1,Y^XZ';
+    // if (format !== 'malta' || (format === 'malta' && !data.score)) {
+    //   const start = zplFormat(settings, data);
+    //   const end = `^PQ${data.copies},1,1,Y^XZ`;
 
-        const formattedZpl = start + rawZpl + end;
+    //   const zpl = start + rawZpl + end;
 
-        const record = {
-          uid: id,
-          sku: label.sku,
-          name: label.name,
-          printedAt: new Date().toISOString(),
-          // png: label.labelPng.url,
-          score: data.score
-        };
-        printRecords.push(record);
+    //   printLabel(printer, zpl)
+    //     .catch(err => console.log(err));
+    // } else {
+    //   const printRecords = [];
+    //   /* eslint-disable-next-line */
+    //   for (let i in [...Array(data.copies)]) {
+    //     /* eslint-disable-next-line */
+    //     const ALPHABET = '0123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ';
 
-        printLabel(printer, formattedZpl)
-          .then(jobId => {
-            console.log(`sent to printer with id ${jobId}`);
-          })
-          .catch(err => console.log(err));
-      }
-      // update db with all printer records
-      createPrintRecords(label.client, printRecords);
-    }
+    //     let id = shortid.generate();
+    //     // console.log('raw', id);
+    //     id = id.replace(/[_Il]/g, () => ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length)));
+
+    //     if (id.charAt(id.length - 1) === '-') {
+    //       id = id.replace(/[_Il]/g, () => ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length)));
+    //     }
+    //     data.uid = id;
+    //     const start = zplFormat(settings, data);
+    //     const end = '^PQ1,1,1,Y^XZ';
+
+    //     const formattedZpl = start + rawZpl + end;
+
+    //     const record = {
+    //       uid: id,
+    //       sku: label.sku,
+    //       name: label.name,
+    //       printedAt: new Date().toISOString(),
+    //       // png: label.labelPng.url,
+    //       score: data.score
+    //     };
+    //     printRecords.push(record);
+
+    //     printLabel(printer, formattedZpl)
+    //       .then(jobId => {
+    //         console.log(`sent to printer with id ${jobId}`);
+    //       })
+    //       .catch(err => console.log(err));
+    //   }
+    //   // update db with all printer records
+    //   createPrintRecords(label.client, printRecords);
+    // }
   }
   /* getZpl(label.label.url, settings, data)
     .then(zpl => {

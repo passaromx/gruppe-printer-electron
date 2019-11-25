@@ -25,7 +25,8 @@ module.exports = (settings, params) => {
   } else if (format === 'malta') {
     // console.log('2', params);
     const {
-      description, weight, date, isMock, uid
+      description, weight, date, isMock,
+      // uid
     } = params;
     start = `^XA
       ^LH${labelShift || '0'},0
@@ -43,10 +44,10 @@ module.exports = (settings, params) => {
       ^FT6,420^A@R,19,19,ARIALBOLD.FNT^FD${date}^FS
       ^FT810,340^A@B,23,23,ARIALBOLD.FNT^FD${description}^FS^LS0`;
     }
-    if (uid) {
-      start = `${start}
-      ^FT820,1420^A@B,23,23,ARIAL.FNT^FD${uid}^FS^LS0`;
-    }
+    // if (uid) {
+    //   start = `${start}
+    //   ^FT820,1420^A@B,23,23,ARIAL.FNT^FD${uid}^FS^LS0`;
+    // }
   } else if (format === 'wisium') {
     // console.log('3', params);
     const { description } = params;
