@@ -1,49 +1,48 @@
 <template>
   <VLayout row wrap>
-    <VFlex
-      v-for="(field, index) in renderFields"
-      :key="index"
-      :class="field.class || fieldClass(field)"
-    >
-      <VSelect
-        v-if="field.type === 'select'"
-        :items="field.items"
-        v-model="formData[index]"
-        :disabled="!selectedLabel || isMock"
-        :label="field.label"
-        outline
-        :hide-details="!errors.collect(index).length"
-        @change="handleSelect(index, $event)"
-      />
-      <DatePicker
-        v-if="field.type === 'date'"
-        :disabled="!selectedLabel || isMock"
-        @change="handleDate(index, $event)"
-        :name="index"
-        :label="field.label"
-        v-model="field.value"
-        v-validate="'required'"
-        :messages="errors.collect(index)"
-      />
-      <VTextField
-        :maxlength="field.maxlength || 20"
-        v-if="field.type === 'text' || field.type === 'number' "
-        :type="field.type"
-        :disabled="!selectedLabel || (isMock && field.name != 'weight')"
-        outline
-        :hide-details="!errors.collect(index).length"
-        v-model="formData[index]"
-        :label="field.label"
-        v-validate="field.validation"
-        :data-vv-name="index"
-        :error-messages="errors.collect(index)"
-        @input="handleInput(index)"
-      />
-      <span
-        v-if="field.type == 'title'"
-        class="subheading"
-      >{{field.label}}</span>
-    </VFlex>
+    <template v-for="(field, index) in renderFields">
+      <VFlex v-if="!field.fromSettings" :class="field.class || fieldClass(field)" :key="index">
+        <VSelect
+          v-if="field.type === 'select'"
+          :items="field.items"
+          v-model="formData[index]"
+          :disabled="!selectedLabel || isMock"
+          :label="field.label"
+          outline
+          :hide-details="!errors.collect(index).length"
+          @change="handleSelect(index, $event)"
+        />
+        <DatePicker
+          v-if="field.type === 'date'"
+          :disabled="!selectedLabel || isMock"
+          @change="handleDate(index, $event)"
+          :name="index"
+          :label="field.label"
+          v-model="field.value"
+          v-validate="'required'"
+          :messages="errors.collect(index)"
+        />
+        <VTextField
+          :maxlength="field.maxlength || 20"
+          v-if="field.type === 'text' || field.type === 'number'"
+          :type="field.type"
+          :disabled="!selectedLabel || (isMock && field.name != 'weight')"
+          outline
+          :hide-details="!errors.collect(index).length"
+          v-model="formData[index]"
+          :label="field.label"
+          v-validate="field.validation"
+          :data-vv-name="index"
+          :error-messages="errors.collect(index)"
+          @input="handleInput(index)"
+        />
+        <span
+          v-if="field.type == 'title'"
+          class="subheading"
+        >{{field.label}}</span>
+      </VFlex>
+    </template>
+
   </VLayout>
 </template>
 
@@ -97,6 +96,7 @@ export default {
       const fields = { ...this.variables.fields };
       delete fields.description;
       delete fields.sideDescription;
+      console.log('rendering', fields);
       return fields;
     }
   },

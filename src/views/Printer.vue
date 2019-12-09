@@ -17,6 +17,10 @@
             class="mb-0"
           ></VProgressLinear>
         </VCardText>
+        <VCardActions>
+          <VSpacer />
+          <VBtn small @click="dialog = false">Continuar</VBtn>
+        </VCardActions>
       </VCard>
     </VDialog>
     <VLayout row wrap>

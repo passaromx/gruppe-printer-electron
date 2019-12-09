@@ -78,6 +78,7 @@ export default {
     formatValue(key) {
       const field = this.variables.fields[key];
       let formattedValue = field.value;
+      console.log('selectedLabel', this.selectedLabel);
       if (field.fromSettings) {
         formattedValue = this.selectedLabel.settings ? this.selectedLabel.settings[key] : '';
       }
