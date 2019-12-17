@@ -58,7 +58,8 @@ module.exports = (settings, params) => {
       ^LL1319
       ^LS0
       ^CFO,100
-      ^FT200,1200^A@,25,25,ARIAL.FNT^FD${description}^FS`;
+      ^FT580,115^A@I,25,25,ARIAL.FNT^FD${description}^FS`;
+    // ^FT200,1200^A@,25,25,ARIAL.FNT^FD${description}^FS`;
   } else if (format === 'maltaExport') {
     const { description, date } = params;
 
