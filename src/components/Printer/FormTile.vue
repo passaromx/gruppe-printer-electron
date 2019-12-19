@@ -43,7 +43,7 @@
                 :messages="errors.collect('labels')"
               />
             </VFlex>
-            <VFlex xs12 v-if="user && user.client._id === clients.malta">
+            <VFlex xs12 v-if="user && (user.client._id === clients.malta || user.client._id === clients.myn) ">
               <VSwitch
                 v-model="isMock"
                 color="primary"

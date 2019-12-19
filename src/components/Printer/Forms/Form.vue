@@ -26,7 +26,7 @@
           :maxlength="field.maxlength || 20"
           v-if="field.type === 'text' || field.type === 'number'"
           :type="field.type"
-          :disabled="!selectedLabel || (isMock && field.name != 'weight')"
+          :disabled="!selectedLabel || (isMock && (field.name != 'weight' && field.label != 'Lote'))"
           outline
           :hide-details="!errors.collect(index).length"
           v-model="formData[index]"
