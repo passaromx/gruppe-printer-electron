@@ -3,6 +3,13 @@ export const filesURL = 'https://api.gruppesolutions.com.mx';
 
 export const apiURL = `${filesURL}/`;
 
+export const PDF_DOWNLOAD_STATE = {
+  IDLE: 'idle',
+  DOWNLOADING: 'donwloading',
+  PACKAGING: 'packaging',
+  DONE: 'done'
+};
+
 export const USER_ROLES = {
   ADMINISTRATOR: 'root',
   AUTHENTICATED: 'authenticated',

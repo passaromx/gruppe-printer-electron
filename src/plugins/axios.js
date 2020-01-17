@@ -6,4 +6,6 @@ export const authAxios = axios.create({
   timeout: 5000
 });
 
+export const defaultAxios = axios.create({ timeout: 5000 });
+
 export default axios.create({ baseURL: apiURL });
