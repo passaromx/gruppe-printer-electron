@@ -180,15 +180,20 @@ export default {
     async downloadItems() {
       this.downloadDialog = true;
       let token = '';
-      // console.log('download', this.selected);
+      console.log('download', this.selected);
       const zip = new JSZip();
       const downloads = this.selected.map(label => {
-        const { url, name } = label.labelPdf;
+        console.log('label', label);
+        const { url } = label.labelPdf;
+        let { name } = label;
+        name += '.pdf';
         return {
           url,
           name
         };
       });
+
+      console.log(downloads);
 
       this.currentState = PDF_DOWNLOAD_STATE.DOWNLOADING;
 
