@@ -43,7 +43,7 @@
           </VForm>
 
           <VLayout row justify-end class="mt-5">
-            <span class="caption">v1.2.9</span>
+            <span class="caption">v1.3.0</span>
           </VLayout>
 
         </VLayout>
