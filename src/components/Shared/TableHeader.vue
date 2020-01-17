@@ -9,10 +9,10 @@
           <span v-if="currentState === PDF_DOWNLOAD_STATE.DOWNLOADING">
             Descargando {{ currentDownload }} de {{ selected.length }}, esto puede tomar unos minutos
           </span>
-          <span v-else-if="currentState === PDF_DOWNLOAD_STATE.PACKAGING">
+          <span v-if="currentState === PDF_DOWNLOAD_STATE.PACKAGING">
             Comprimiendo descarga...
           </span>
-          <span v-else-if="currentState === PDF_DOWNLOAD_STATE.READY">
+          <span v-if="currentState === PDF_DOWNLOAD_STATE.READY">
             Listo! Haz click en el botón para ver tu descarga en el buscador
           </span>
           <VProgressLinear
@@ -113,7 +113,9 @@
 </template>
 
 <script>
-import { defaultAxios } from '@/plugins/axios';
+/* eslint-disable import/no-extraneous-dependencies */
+import { shell } from 'electron';
+import { authAxios } from '@/plugins/axios';
 import JSZip from 'jszip';
 // import JSZipUtils from 'jszip-utils';
 import { saveAs } from 'save-as';
@@ -161,9 +163,9 @@ export default {
     },
     async downloadFileAsBlob(url) {
       try {
-        console.log(defaultAxios.defaults);
-        delete defaultAxios.defaults.headers.common.Authorization;
-        const response = await defaultAxios({
+        // console.log(authAxios.defaults);
+        // delete authAxios.defaults.headers.common.Authorization;
+        const response = await authAxios({
           url,
           method: 'GET',
           responseType: 'blob'
@@ -177,6 +179,7 @@ export default {
     },
     async downloadItems() {
       this.downloadDialog = true;
+      let token = '';
       // console.log('download', this.selected);
       const zip = new JSZip();
       const downloads = this.selected.map(label => {
@@ -187,7 +190,12 @@ export default {
         };
       });
 
-      this.currentState = PDF_DOWNLOAD_STATE.DONWLOADING;
+      this.currentState = PDF_DOWNLOAD_STATE.DOWNLOADING;
+
+      if (authAxios.defaults.headers.common.Authorization) {
+        token = authAxios.defaults.headers.common.Authorization;
+        delete authAxios.defaults.headers.common.Authorization;
+      }
       for (let i = 0; i < downloads.length; i++) {
         this.currentDownload = i + 1;
         this.progress = Math.floor(this.currentDownload * 100 / this.selected.length);
@@ -198,6 +206,7 @@ export default {
           zip.file(downloads[i].name, data, { binary: true });
         }
       }
+      authAxios.defaults.headers.common.Authorization = token;
       this.progress = 0;
 
       // console.log('zip', zip);
@@ -217,12 +226,15 @@ export default {
         this.progress = Math.floor(metadata.percent);
       })
         .then(content => {
-          saveAs(content, 'test');
+          saveAs(content, 'Precintos');
           // console.log('done');
           this.currentState = PDF_DOWNLOAD_STATE.READY;
         });
     },
     revealInFinder() {
+      shell.showItemInFolder('C:Downloads');
+      this.currentState = PDF_DOWNLOAD_STATE.IDLE;
+      this.progress = 0;
       this.downloadDialog = false;
     }
   }
