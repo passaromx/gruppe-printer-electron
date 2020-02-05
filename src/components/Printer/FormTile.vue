@@ -225,7 +225,7 @@ export default {
       const clientId = this.user.client._id;
       if (clientId === clients.myn) {
         vars = this.mynVars;
-      } else if (clientId === clients.wisium) {
+      } else if (clientId === clients.wisium || clientId === clients.wisiumi) {
         vars = this.wisiumVars;
       } else if (clientId === clients.maltaExport) {
         vars = this.maltaExportVars;

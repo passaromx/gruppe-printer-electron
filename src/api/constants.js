@@ -25,7 +25,8 @@ export const clients = {
   myn: '5c40b928a5888531a0076cbd',
   malta: '5c38cb394903e5fc92396909',
   maltaExport: '5d7bc8789df8ac22b461b2cb',
-  wisium: '5cd6e9f9d7388839466b2d40'
+  wisium: '5cd6e9f9d7388839466b2d40',
+  wisiumi: '5e3b4311cc7db649979e28a8'
 };
 
 export const rowsPerPage = [15, 25, 50, {
