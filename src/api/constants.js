@@ -25,6 +25,7 @@ export const clients = {
   myn: '5c40b928a5888531a0076cbd',
   malta: '5c38cb394903e5fc92396909',
   maltaExport: '5d7bc8789df8ac22b461b2cb',
+  maltaPets: '5e4479b5cc7db649979e3532',
   wisium: '5cd6e9f9d7388839466b2d40',
   wisiumi: '5e3b4311cc7db649979e28a8'
 };
@@ -186,6 +187,95 @@ export const maltaExportVars = {
         rotation: 0,
         fontSize: '1.6vh'
       }]
+    }
+  },
+  descriptionFormat: 'factory-date-shift-line-group'
+};
+
+export const maltaPetsVars = {
+  fields: {
+    title: {
+      type: 'title',
+      class: 'xs12',
+      label: 'Variables'
+    },
+    date: {
+      type: 'date',
+      label: 'Fecha',
+      dateFormat: 'DD/MM/YYYY',
+      value: new Date().toISOString().substr(0, 10),
+      styles: [{
+        top: 13,
+        left: 20,
+        width: 100,
+        weight: 600,
+        rotation: 0,
+        fontSize: '5.2vh'
+      }]
+    },
+    factory: {
+      type: 'select',
+      label: 'Planta',
+      validation: 'required',
+      items: maltaFactories,
+      value: maltaFactories[0]
+    },
+    line: {
+      type: 'text',
+      label: 'Línea',
+      validation: 'required',
+      maxlength: 2,
+      value: 1
+    },
+    shift: {
+      type: 'text',
+      label: 'Turno',
+      validation: 'required',
+      maxlength: 1,
+      value: 1
+    },
+    weight: {
+      type: 'number',
+      label: 'Peso neto',
+      // fromSettings: true,
+      validation: 'required|min_value:1|max_value:999',
+      name: 'weight',
+      maxlength: 3,
+      value: 30,
+      styles: [{
+        top: 2.6,
+        left: 87,
+        weight: 600,
+        rotation: 0,
+        fontSize: '1.4vh'
+      }]
+    },
+    group: {
+      type: 'text',
+      label: 'Grupo',
+      maxlength: 4,
+      validation: 'required|min:4',
+      value: 'A001',
+    },
+    description: {
+      value: null,
+      class: 'xs12',
+      dateFormat: 'DDMMMYYYY',
+      styles: [{
+        top: 4.8,
+        right: 7,
+        weight: 500,
+        rotation: 0,
+        fontSize: '1.8vh'
+      },
+      {
+        bottom: 20,
+        left: 8,
+        weight: 600,
+        fontSize: '1.4vh',
+        rotation: 90
+      }
+      ]
     }
   },
   descriptionFormat: 'factory-date-shift-line-group'

@@ -51,6 +51,25 @@ module.exports = (settings, params) => {
     //   start = `${start}
     //   ^FT820,1420^A@B,23,23,ARIAL.FNT^FD${uid}^FS^LS0`;
     // }
+  } else if (format === 'maltaPets') {
+    const { description, date, weight, isMock } = params;
+
+    start = `^XA
+    ^LH${labelShift || '0'},0
+    ^MMC
+    ^PW832
+    ^LL1615
+    ^LS0
+    ^CFO,100
+    ^FT100,1545^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS`;
+    if (!isMock) {
+      // console.log('format uid', uid);
+      start = `
+      ${start}
+      ^FT385,1510^A@I,30,30,ARIAL.FNT^FD${description}^FS
+      ^FT700,1360^A@I,100,100,ARIALBOLD.FNT^FD${moment(date).format('DD/MM/YYYY')}^FS
+      ^FT810,340^A@B,23,23,ARIALBOLD.FNT^FD${description}^FS^LS0`;
+    }
   } else if (format === 'wisium') {
     // console.log('3', params);
     const { invert } = settings;

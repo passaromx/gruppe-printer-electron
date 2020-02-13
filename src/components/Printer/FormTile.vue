@@ -43,7 +43,13 @@
                 :messages="errors.collect('labels')"
               />
             </VFlex>
-            <VFlex xs12 v-if="user && (user.client._id === clients.malta || user.client._id === clients.myn) ">
+            <VFlex
+              xs12
+              v-if="user && (user.client._id === clients.malta ||
+                user.client._id === clients.myn ||
+                user.client._id === clients.maltaPets
+              )"
+            >
               <VSwitch
                 v-model="isMock"
                 color="primary"
@@ -104,7 +110,7 @@
 import { ipcRenderer, shell } from 'electron';
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
 import {
-  mynVars, maltaVars, wisiumVars, clients, maltaExportVars
+  mynVars, maltaVars, wisiumVars, clients, maltaExportVars, maltaPetsVars
 } from '@/api/constants';
 
 export default {
@@ -128,6 +134,7 @@ export default {
       mynVars,
       maltaVars,
       maltaExportVars,
+      maltaPetsVars,
       wisiumVars,
       resize: false,
       timeout: null,
@@ -229,6 +236,8 @@ export default {
         vars = this.wisiumVars;
       } else if (clientId === clients.maltaExport) {
         vars = this.maltaExportVars;
+      } else if (clientId === clients.maltaPets) {
+        vars = this.maltaPetsVars;
       }
       this.setVariables(vars);
     },
