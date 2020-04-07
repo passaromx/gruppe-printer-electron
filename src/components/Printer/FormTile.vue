@@ -54,6 +54,7 @@
                 v-model="isMock"
                 color="primary"
                 label="Impresión de maquila"
+                hide-details
                 @change="toggleMock"
               />
             </VFlex>
@@ -67,7 +68,7 @@
                 v-validate="'required|min_value:1|max_value:5000'"
                 :error-messages="errors.collect('copies')"
                 label="Copias"
-                :value="1"
+                :value="copies"
                 @input="handleCopies"
               />
             </VFlex>
@@ -79,7 +80,6 @@
               :disabled="!selectedLabel"
               @click="viewPdf"
             >
-              <!-- <VIcon class="mr-2">cloud_download</VIcon> -->
               Ver PDF
             </VBtn>
             <VBtn
@@ -290,6 +290,9 @@ export default {
         user: this.user._id
       };
       this.updateSysInfo(systemInfo);
+      // clear print Data
+      this.$eventHub.$emit('clear-inputs');
+      this.setCopies(1);
     }
   },
   beforeDestroy() {

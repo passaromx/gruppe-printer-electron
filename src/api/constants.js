@@ -303,7 +303,8 @@ export const mynVars = {
     batch: {
       type: 'text',
       label: 'Lote',
-      validation: 'required|min:6|max:8',
+      class: 'xs12',
+      validation: 'required|min:6|max:16',
       value: 'A000001',
     },
     /* sequential: {

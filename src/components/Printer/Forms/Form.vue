@@ -95,9 +95,23 @@ export default {
     this.$eventHub.$on('compute-desc', () => {
       this.setDescription();
     });
+    this.$eventHub.$on('clear-inputs', () => {
+      Object.keys(this.renderFields).forEach(key => {
+        this.renderFields[key].value = null;
+        this.formData[key] = null;
+        this.setVariableValue({
+          name: key,
+          value: null
+        });
+      });
+      this.setDescription();
+      console.log(this.formData);
+      // this.$validator.reset();
+    });
   },
   beforeDestroy() {
     this.$eventHub.$off('compute-desc');
+    this.$eventHub.$off('clear-inputs');
   },
   methods: {
     ...mapMutations('printer', ['setVariableValue', 'setCopies']),
