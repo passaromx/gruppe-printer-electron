@@ -82,7 +82,6 @@ const actions = {
       axios.delete(`authorizations/deleteMany?ids=${ids}`)
         .then(res => {
           commit('deleteItems', items);
-          console.log(res);
           resolve(res);
           showSuccessAlert('Operación exitosa', commit);
         })

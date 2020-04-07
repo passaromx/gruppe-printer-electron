@@ -82,7 +82,6 @@ export default {
   },
   watch: {
     items(val) {
-      // console.log('list', val);
       this.filteredItems = val;
     }
   },

@@ -225,11 +225,7 @@ export default {
     previewFile(label, preview) {
       const file = preview === 'label' ? label.labelPdf : label.authorization.authPdf;
       const url = file.url.includes('amazon') ? file.url : `${filesURL}${file.url}`;
-      /* this.selectedLabel = label;
 
-      this.pdfUrl = url;
-      console.log(label);
-      this.pdfPreview = true; */
       if (url.includes('.pdf')) {
         shell.openExternal(url);
       } else {

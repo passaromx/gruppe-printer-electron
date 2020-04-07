@@ -55,22 +55,14 @@ export default {
       return this.$store.state.auth.user.client._id || null;
     }
   },
-  // watch: {
-  //   search() {
-  //     if (this.formattedLabels.length > 0 || this.fetching) return;
-  //     if (this.client) this.fetch(this.client);
-  //   }
-  // },
   methods: {
     ...mapMutations(['setSelectedLabel']),
-    // ...mapActions(['fetch']),
     handleInput(value) {
       this.$emit('input', value);
     },
     handleChange(value) {
       this.setSelectedLabel(value);
       if (value) {
-        // console.log(value);
         this.$eventHub.$emit('compute-desc');
         ipcRenderer.send('selected-label', this.client, value.labelPng.url);
       }

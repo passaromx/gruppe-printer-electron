@@ -4,11 +4,9 @@ const moment = require('moment');
 
 module.exports = (settings, params) => {
   const { format, labelShift } = settings;
-  // console.log(format);
 
   let start = '^XA';
   if (format === 'myn') {
-    // console.log('1', params);
     const { description, productionDate, expiryDays, isMock } = params;
 
     const formattedExpiry = expiryDays ? moment(productionDate).add(expiryDays, 'days').format('DD-MM-YYYY') : '';
@@ -26,11 +24,7 @@ module.exports = (settings, params) => {
       ^FT350,710^A0I,43,43^FH\^FD${formattedExpiry}^FS^LS0`;
     }
   } else if (format === 'malta') {
-    // console.log('2', params);
-    const {
-      description, weight, date, isMock,
-      // uid
-    } = params;
+    const { description, weight, date, isMock } = params;
     start = `^XA
       ^LH${labelShift || '0'},0
       ^MMC
@@ -40,7 +34,6 @@ module.exports = (settings, params) => {
       ^CFO,100
       ^FT100,1545^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS`;
     if (!isMock) {
-      // console.log('format uid', uid);
       start = `
       ${start}
       ^FT385,1510^A@I,30,30,ARIAL.FNT^FD${description}^FS
@@ -63,7 +56,6 @@ module.exports = (settings, params) => {
     ^CFO,100
     ^FT100,1545^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS`;
     if (!isMock) {
-      // console.log('format uid', uid);
       start = `
       ${start}
       ^FT385,1510^A@I,30,30,ARIAL.FNT^FD${description}^FS
@@ -71,7 +63,6 @@ module.exports = (settings, params) => {
       ^FT810,340^A@B,23,23,ARIALBOLD.FNT^FD${description}^FS^LS0`;
     }
   } else if (format === 'wisium') {
-    // console.log('3', params);
     const { invert } = settings;
     const { description } = params;
     start = `^XA

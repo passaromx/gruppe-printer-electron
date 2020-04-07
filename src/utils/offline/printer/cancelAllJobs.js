@@ -1,13 +1,10 @@
 const print = require('printer');
-// const util = require('util');
 
 module.exports = async printer => {
   const { jobs } = print.getPrinter(printer);
   if (jobs && jobs.length > 0) {
-    // console.log(jobs.length);
     jobs.forEach(job => {
       if (job.status.indexOf('PRINTED') !== -1) {
-        // console.log('too late, already printed');
         return;
       }
       console.log('cancelling...', job.id);

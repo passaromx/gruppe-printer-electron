@@ -36,7 +36,6 @@ module.exports = id => new Promise(async (resolve, reject) => {
   try {
     const response = await axios.post(`${apiURL}printRecords`, records);
     if (response.status === 200) {
-      console.log(`created ${response.data.length} records`);
       fs.writeFileSync(recordsPath, '[]');
       resolve();
     }

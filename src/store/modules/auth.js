@@ -52,7 +52,6 @@ const actions = {
         .then(res => {
           resolve(res.data);
           const { user, jwt } = res.data;
-          console.log(user);
           axios.defaults.headers.common.Authorization = `Bearer ${jwt}`;
           commit('setUser', user);
           commit('setSession', { jwt });

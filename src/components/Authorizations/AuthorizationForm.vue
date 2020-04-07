@@ -114,7 +114,6 @@ export default {
     onFilePicked(e) {
       const { id } = e.target;
       const files = e.target.files || e.dataTransfer.files;
-      // console.log('files', files);
 
       if (files[0] !== undefined) {
         const filename = files[0].name;
@@ -149,8 +148,6 @@ export default {
         client: this.fromClient,
         authPdf: this.auth,
       };
-
-      // console.log(data);
 
       if (this.isEditMode) {
         data.id = this.editedItem._id;

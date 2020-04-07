@@ -8,7 +8,6 @@ const documentsDataPath = path.join(documentsPath, 'gruppe');
 
 
 module.exports = async (client, printRecords) => {
-  console.log('persisting');
   const { id } = client;
   const recordsPath = `${documentsDataPath}/${id}/printRecords.json`;
 

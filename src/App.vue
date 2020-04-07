@@ -168,13 +168,8 @@ export default {
     ...mapState(['isReady']),
     ...mapState('auth', ['user']),
     filteredMenu() {
-      // console.log(this.user);
       const role = this.user.role.type;
       return this.menu.filter(item => item.canAccess.includes(role));
-
-      /* return this.isAdmin
-        ? this.menu.filter(item => item.isAdmin)
-        : this.menu.filter(item => !item.isAdmin); */
     }
   },
   methods: {
@@ -187,7 +182,6 @@ export default {
       });
     },
     onNetworkRestored() {
-      // console.log('network restored');
       this.setIsOnline(true);
       this.$eventHub.$emit('sync');
       this.$eventHub.$emit('network-restored');
@@ -198,7 +192,6 @@ export default {
   },
   watch: {
     isReady(val) {
-      // console.log(this.$route);
       if (this.$route.name === 'Progress') {
         return;
       }

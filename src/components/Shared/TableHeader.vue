@@ -163,8 +163,6 @@ export default {
     },
     async downloadFileAsBlob(url) {
       try {
-        // console.log(authAxios.defaults);
-        // delete authAxios.defaults.headers.common.Authorization;
         const response = await authAxios({
           url,
           method: 'GET',
@@ -180,10 +178,8 @@ export default {
     async downloadItems() {
       this.downloadDialog = true;
       let token = '';
-      console.log('download', this.selected);
       const zip = new JSZip();
       const downloads = this.selected.map(label => {
-        console.log('label', label);
         const { url } = label.labelPdf;
         let { name } = label;
         name += '.pdf';
@@ -192,8 +188,6 @@ export default {
           name
         };
       });
-
-      console.log(downloads);
 
       this.currentState = PDF_DOWNLOAD_STATE.DOWNLOADING;
 
@@ -207,24 +201,11 @@ export default {
         /* eslint-disable-next-line */
         const data = await this.downloadFileAsBlob(downloads[i].url);
         if (data) {
-          // console.log('data', data);
           zip.file(downloads[i].name, data, { binary: true });
         }
       }
       authAxios.defaults.headers.common.Authorization = token;
       this.progress = 0;
-
-      // console.log('zip', zip);
-
-      // downloads.forEach((download, index) => {
-      //   JSZipUtils.getBinaryContent(download.url, (err, data) => {
-      //     if (err) {
-      //       console.log('error', err);
-      //       throw err;
-      //     }
-      //     zip.file(download.name, data, { binary: true });
-      //   });
-      // });
 
       this.currentState = PDF_DOWNLOAD_STATE.PACKAGING;
       zip.generateAsync({ type: 'blob' }, metadata => {
@@ -232,7 +213,6 @@ export default {
       })
         .then(content => {
           saveAs(content, 'Precintos');
-          // console.log('done');
           this.currentState = PDF_DOWNLOAD_STATE.READY;
         });
     },

@@ -146,7 +146,6 @@ export default {
     ipcRenderer.on('url-ready', (e, url) => {
       let formattedUrl = url.replace(/\\/g, '/');
       formattedUrl = formattedUrl.replace('//uploads', '/uploads');
-      // console.log(formattedUrl);
       shell.openItem(formattedUrl);
     });
     ipcRenderer.on('printers-fetched', (e, printers) => {
@@ -212,7 +211,6 @@ export default {
       );
     },
     toggleMock(val) {
-      // console.log('isMock', val);
       this.$eventHub.$emit('toggle-mock', val);
     },
     formatDisplayPrinters() {
@@ -273,7 +271,6 @@ export default {
         ...data,
         client: this.user.client._id
       };
-      // console.log(this.printer);
       ipcRenderer.send(
         'print',
         this.printer.name,
@@ -296,7 +293,6 @@ export default {
     }
   },
   beforeDestroy() {
-    // window.removeEventListener('resize', console.log('removed'));
     ipcRenderer.removeAllListeners('printers-fetched');
     ipcRenderer.removeAllListeners('url-ready');
     this.setSelectedLabel(null);

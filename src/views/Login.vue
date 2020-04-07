@@ -122,7 +122,6 @@ export default {
       });
     },
     submit() {
-      // console.log('submitting', this.email);
       this.setIsLoading(true);
       this.signInUser({
         identifier: this.email,
@@ -133,7 +132,6 @@ export default {
           ipcRenderer.send('login', this.email, this.password, user, jwt);
         })
         .catch(err => {
-          console.log('error login', err);
           const status = err.response ? err.response.status : 0;
           if (status !== 401 && status !== 403) {
             ipcRenderer.send('login', this.email, this.password, null, null, true);

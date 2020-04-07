@@ -59,17 +59,11 @@ export default {
     zebra: null
   }),
   mounted() {
-    /* setInterval(() => {
-      console.log('fetching');
-      this.fetchPrinters();
-    }, 3000) */
     this.fetchPrinters();
 
     ipcRenderer.on('printers-fetched', (e, printers) => {
-      // console.log(printers);
       this.printers = printers;
       this.zebra = this.printers.filter(printer => printer.name === 'ZDesigner 105SLPlus-203dpi ZPL')[0];
-      // console.log(this.zebra);
     });
     ipcRenderer.on('fonts-uploaded', () => {
       this.loading = false;
@@ -92,17 +86,8 @@ export default {
       ipcRenderer.send('get-printers');
     },
     uploadFonts() {
-      // console.log('sending fonts');
       this.loading = true;
-      // setInterval(() => {
-      //   ipcRenderer.send('get-printers');
-      // }, 500);
       ipcRenderer.send('update-fonts', this.selectedPrinter);
-
-      // setTimeout(() => {
-      //   this.loading = false;
-      //   this.setFontDialog(false);
-      // }, 3000);
     }
   },
   beforeDestroy() {

@@ -50,14 +50,6 @@
 import { mapState, mapMutations } from 'vuex';
 import moment from 'moment';
 
-// const today = new Date();
-
-// const addDays = (date, days) => {
-//   const result = new Date(date);
-//   result.setDate(result.getDate() + days);
-//   return result;
-// };
-
 export default {
   // $_veeValidate: { validator: 'new' },
   props: {
@@ -81,7 +73,6 @@ export default {
           }
           return `${format}${i === 0 ? '' : '-'}${value || ''}`;
         }, '');
-      // console.log('computing desc', formatted);
       return formatted;
     },
     formData() {
@@ -96,7 +87,6 @@ export default {
       const fields = { ...this.variables.fields };
       delete fields.description;
       delete fields.sideDescription;
-      console.log('rendering', fields);
       return fields;
     }
   },
@@ -105,16 +95,6 @@ export default {
     this.$eventHub.$on('compute-desc', () => {
       this.setDescription();
     });
-
-    // this.$eventHub.$on('validate', () => {
-    //   this.$validator.validate().then(res => {
-    //     if (res) {
-    //       console.log('valid');
-    //     } else {
-    //       console.log('invalid');
-    //     }
-    //   });
-    // });
   },
   beforeDestroy() {
     this.$eventHub.$off('compute-desc');
@@ -144,7 +124,6 @@ export default {
     },
     setDescription() {
       this.formData.description = this.description;
-      // console.log('setting desc', this.description);
       this.setVariableValue({
         name: 'description',
         value: this.description
