@@ -4,38 +4,15 @@
         Soporte
     </BaseFormTitle>
     <VList three-line>
-        <VListTile avatar>
-        <VListTileAvatar color="teal">
-            <span class="white--text headline">R</span>
-        </VListTileAvatar>
-
-        <VListTileContent>
-            <VListTileTitle>Rodolfo Pérez Ramírez</VListTileTitle>
-            <VListTileSubTitle>rodolfoperez@gruppesolutions.com.mx</VListTileSubTitle>
-            <VListTileSubTitle>Tel: 222 292 6768</VListTileSubTitle>
-        </VListTileContent>
-        </VListTile>
-        <VListTile>
-        <VListTileAvatar color="blue-grey">
-            <span class="white--text headline">G</span>
-        </VListTileAvatar>
-
-        <VListTileContent>
-            <VListTileTitle>Genaro Antonio Trujillo Vargas</VListTileTitle>
-            <VListTileSubTitle>genarotrujillo@gruppesolutions.com.mx</VListTileSubTitle>
-            <VListTileSubTitle>Tel: 222 464 8363</VListTileSubTitle>
-        </VListTileContent>
-        </VListTile>
-        <VListTile>
-        <VListTileAvatar color="indigo">
-            <span class="white--text headline">A</span>
-        </VListTileAvatar>
-
-        <VListTileContent>
-            <VListTileTitle>Alejandro Pérez Ramírez</VListTileTitle>
-            <VListTileSubTitle>alejandroperez@gruppesolutions.com.mx</VListTileSubTitle>
-            <VListTileSubTitle>Tel: 222 548 8820</VListTileSubTitle>
-        </VListTileContent>
+        <VListTile avatar v-for="(contact, i) in contacts" :key="i">
+             <VListTileAvatar :color="contact.color">
+                <span class="white--text headline">{{ contact.name.charAt(0) }}</span>
+            </VListTileAvatar>
+            <VListTileContent>
+                <VListTileTitle>{{ contact.name }}</VListTileTitle>
+                <VListTileSubTitle>{{ contact.email }}</VListTileSubTitle>
+                <VListTileSubTitle>Tel: {{ contact.phone }}</VListTileSubTitle>
+            </VListTileContent>
         </VListTile>
     </VList>
     <VCardActions>
@@ -46,5 +23,30 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      contacts: [
+        {
+          name: 'Genaro Antonio Trujillo Vargas',
+          email: 'genarotrujillo@gruppesolutions.com.mx',
+          phone: '222 464 8363',
+          color: 'blue-grey'
+        },
+        {
+          name: 'Rodolfo Pérez Ramírez',
+          email: 'rodolfoperez@gruppesolutions.com.mx',
+          phone: '222 292 6768',
+          color: 'teal'
+        },
+        {
+          name: 'Alejandro Pérez Ramírez',
+          email: 'alejandroperes@gruppesolutions.com.mx',
+          phone: '222 548 8820',
+          color: 'indigo'
+        },
+      ]
+    };
+  },
+};
 </script>
