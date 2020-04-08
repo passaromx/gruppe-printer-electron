@@ -91,6 +91,20 @@ module.exports = (settings, params) => {
       ^LS0
       ^FT380,70^A@I,30,30,ARIALBOLD.FNT^FD${description}^FS
       ^FT805,30^A@I,38,38,ARIALBOLD.FNT^FD${date}^FS`;
+  } else if (format === 'micros') {
+    const { productionDate, weight, shift, smallWeight } = params;
+    start = `
+      ^XA
+      ^LH${labelShift || '0'},0
+      ^MMC
+      ^PW862
+      ^LL2557
+      ^LS0
+      ^FT350,2140^A@B,150,150,ARIAL.FNT^FD${weight}^FS
+      ^FT520,2280^A@B,150,150,ARIAL.FNT^FD${moment(productionDate).format('DD/MM/YYYY')}^FS
+      ^FT520,1080^A@B,150,150,ARIAL.FNT^FD${shift}^FS
+      ^FT820,2530^A@B,60,60,ARIAL.FNT^FD${smallWeight.toUpperCase()}^FS
+    `;
   }
   return start;
 };

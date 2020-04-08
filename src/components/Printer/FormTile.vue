@@ -110,7 +110,7 @@
 import { ipcRenderer, shell } from 'electron';
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
 import {
-  mynVars, maltaVars, wisiumVars, clients, maltaExportVars, maltaPetsVars
+  mynVars, maltaVars, wisiumVars, clients, maltaExportVars, maltaPetsVars, microsVars
 } from '@/api/constants';
 
 export default {
@@ -136,6 +136,7 @@ export default {
       maltaExportVars,
       maltaPetsVars,
       wisiumVars,
+      microsVars,
       resize: false,
       timeout: null,
       divider: false
@@ -236,6 +237,8 @@ export default {
         vars = this.maltaExportVars;
       } else if (clientId === clients.maltaPets) {
         vars = this.maltaPetsVars;
+      } else if (clientId === clients.micros) {
+        vars = this.microsVars;
       }
       this.setVariables(vars);
     },

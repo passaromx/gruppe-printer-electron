@@ -27,7 +27,8 @@ export const clients = {
   maltaExport: '5d7bc8789df8ac22b461b2cb',
   maltaPets: '5e4479b5cc7db649979e3532',
   wisium: '5cd6e9f9d7388839466b2d40',
-  wisiumi: '5e3b4311cc7db649979e28a8'
+  wisiumi: '5e3b4311cc7db649979e28a8',
+  micros: '5e8e21818a95810d0ef6b6a9'
 };
 
 export const rowsPerPage = [15, 25, 50, {
@@ -373,6 +374,95 @@ export const wisiumVars = {
     },
   },
   descriptionFormat: 'batch'
+};
+
+export const microsVars = {
+  fields: {
+    title: {
+      type: 'title',
+      class: 'xs12',
+      label: 'Variables'
+    },
+    productionDate: {
+      type: 'date',
+      label: 'Fecha de producción',
+      dateFormat: 'DD/MM/YYYY',
+      value: new Date().toISOString().substr(0, 10),
+      styles: [{
+        top: 10,
+        left: 48,
+        weight: 500,
+        rotation: 90,
+        fontSize: '5vh',
+        whiteSpace: 'no-wrap'
+      }]
+    },
+    shift: {
+      type: 'select',
+      label: 'Turno',
+      validation: 'required',
+      items: ['1', '2', '3'],
+      value: '1',
+      styles: [
+        {
+          top: 57,
+          left: 52,
+          weight: 500,
+          rotation: 90,
+          fontSize: '5.8vh'
+        }
+      ]
+    },
+    weight: {
+      type: 'number',
+      label: 'Toneladas',
+      isTons: true,
+      // fromSettings: true,
+      validation: 'required|min_value:1|max_value:100',
+      name: 'weight',
+      maxlength: 3,
+      value: 30,
+      styles: [{
+        top: 15.5,
+        left: 69,
+        weight: 600,
+        rotation: 90,
+        fontSize: '5.8vh',
+      }]
+    },
+    smallWeight: {
+      value: null,
+      type: 'text',
+      class: 'xs12',
+      label: 'Pesada Chica',
+      validation: 'required',
+      styles: [
+        {
+          top: 1,
+          left: 15,
+          weight: 800,
+          fontSize: '2.2vh',
+          textTransform: 'uppercase',
+          rotation: 90
+        }
+      ]
+    },
+    description: {
+      value: null,
+      class: 'xs12',
+      dateFormat: 'DDMMMYYYY',
+      styles: [{
+        display: 'none',
+        top: 1,
+        left: 15,
+        weight: 800,
+        fontSize: '2.1vh',
+        textTransform: 'uppercase',
+        rotation: 90
+      }]
+    }
+  },
+  descriptionFormat: null
 };
 
 export const authorizationListHeaders = [

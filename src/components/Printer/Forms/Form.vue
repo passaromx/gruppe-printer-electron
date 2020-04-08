@@ -63,17 +63,20 @@ export default {
   computed: {
     ...mapState('printer', ['selectedLabel', 'variables', 'descriptionFormat']),
     description() {
-      const formatted = this.variables.descriptionFormat
-        .split('-')
-        .reduce((format, variable, i) => {
-          let value = this.formData[variable];
-          if (this.variables.fields[variable].type === 'date') {
-            const { dateFormat } = this.variables.fields.description;
-            value = moment(this.formData[variable]).format(dateFormat);
-          }
-          return `${format}${i === 0 ? '' : '-'}${value || ''}`;
-        }, '');
-      return formatted;
+      if (this.variables.descriptionFormat) {
+        const formatted = this.variables.descriptionFormat
+          .split('-')
+          .reduce((format, variable, i) => {
+            let value = this.formData[variable];
+            if (this.variables.fields[variable].type === 'date') {
+              const { dateFormat } = this.variables.fields.description;
+              value = moment(this.formData[variable]).format(dateFormat);
+            }
+            return `${format}${i === 0 ? '' : '-'}${value || ''}`;
+          }, '');
+        return formatted;
+      }
+      return '';
     },
     formData() {
       const fields = { ...this.variables.fields };

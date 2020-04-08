@@ -92,7 +92,7 @@ export default {
         formattedValue = moment(formattedValue).format(field.dateFormat);
       }
 
-      return `${formattedValue}${key === 'weight' ? 'Kg' : ''}`;
+      return `${formattedValue}${key === 'weight' && !this.variables.fields[key].isTons ? 'Kg' : ''}`;
     }
   }
 };
