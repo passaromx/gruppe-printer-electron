@@ -85,7 +85,7 @@
             <VBtn
               class="mx-2"
               block
-              :disabled="errors.items.length > 0 || !selectedLabel || !printer.name"
+              :disabled="errors.items.length > 0 || !selectedLabel || !printer.name || !canPrint"
               color="primary"
               @click="print"
             >Imprimir</VBtn>
@@ -178,6 +178,24 @@ export default {
     description() {
       return `${this.line}-${this.turn}-${this.group}-${this.sequential}`;
     },
+    canPrint() {
+      console.log(this.variables);
+      if (this.variables) {
+        let hasNulledfield = false;
+        Object.keys(this.variables.fields).forEach(key => {
+          const { type, value } = this.variables.fields[key];
+          if (type === 'text' || type === 'select' || type === 'data') {
+            if (!value) { hasNulledfield = true; }
+          }
+        });
+
+        console.log(hasNulledfield);
+
+        return !hasNulledfield;
+      }
+
+      return false;
+    },
     displayPrinters() {
       if (this.$refs.printers) {
         let displayNameLength = this.$refs.printers.$el.clientWidth;
@@ -226,6 +244,7 @@ export default {
       this.fetchingPrinters = true;
       ipcRenderer.send('get-printers');
     },
+
     setClientVariables() {
       let vars = this.maltaVars;
       const clientId = this.user.client._id;
