@@ -320,7 +320,7 @@ export const mynVars = {
       class: 'xs12',
       styles: [{
         top: 31.8,
-        left: 60,
+        left: 55,
         weight: 500,
         fontSize: '2.7vh'
       }]

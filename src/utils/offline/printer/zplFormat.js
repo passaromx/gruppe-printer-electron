@@ -17,7 +17,7 @@ module.exports = (settings, params) => {
       ^PW832
       ^LL1279
       ^LS0
-      ^FT310,870^A0I,44,44^FH\^FD${description || ''}^FS`;
+      ^FT335,870^A0I,44,44^FH\^FD${description || ''}^FS`;
     if (!isMock) {
       start = `${start}
       ^FT350,790^A0I,43,43^FH\^FD${moment(productionDate).format('DD-MM-YYYY') || ''}^FS^LS0
