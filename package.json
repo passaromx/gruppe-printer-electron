@@ -1,6 +1,6 @@
 {
   "name": "gruppe-printer",
-  "version": "v1.4.0",
+  "version": "v1.4.1",
   "author": "Passaro",
   "description": "System for Zebra Printers",
   "private": true,
@@ -14,7 +14,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build -w",
+    "electron:build": "vue-cli-service electron:build -w -p always",
     "electron:serve": "vue-cli-service electron:serve",
     "createCert": "electron-builder create-self-signed-cert -p passaromx",
     "postinstall": "electron-builder install-app-deps"

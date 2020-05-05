@@ -100,12 +100,14 @@ export default {
     });
     this.$eventHub.$on('clear-inputs', () => {
       Object.keys(this.renderFields).forEach(key => {
-        this.renderFields[key].value = null;
-        this.formData[key] = null;
-        this.setVariableValue({
-          name: key,
-          value: null
-        });
+        if (key !== 'factory') {
+          this.renderFields[key].value = null;
+          this.formData[key] = null;
+          this.setVariableValue({
+            name: key,
+            value: null
+          });
+        }
       });
       this.setDescription();
       console.log(this.formData);
