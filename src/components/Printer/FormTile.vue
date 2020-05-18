@@ -312,8 +312,8 @@ export default {
         user: this.user._id
       };
       this.updateSysInfo(systemInfo);
-      // clear print Data
-      this.$eventHub.$emit('clear-inputs');
+      // clear print Data, leaving this commented for further reference
+      // this.$eventHub.$emit('clear-inputs');
       this.setCopies(1);
     }
   },
