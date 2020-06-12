@@ -44,6 +44,38 @@ module.exports = (settings, params) => {
     //   start = `${start}
     //   ^FT820,1420^A@B,23,23,ARIAL.FNT^FD${uid}^FS^LS0`;
     // }
+  } else if (format === 'maltaBarcode') {
+    const {
+      description,
+      weight,
+      date,
+      isMock,
+      line,
+      shift,
+      group,
+      factory,
+      sku
+    } = params;
+    const barcode = `${sku}-${factory}-${moment(date).format('DDMMYY')}-${shift}-${line}-${group}`;
+    start = `^XA
+      ^LH${labelShift || '0'},0
+      ^MMC
+      ^PW832
+      ^LL1615
+      ^LS0
+      ^CFO,100
+      ^FT100,1625^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS`;
+    if (!isMock) {
+      start = `
+      ${start}
+      ^FT385,1590^A@I,30,30,ARIAL.FNT^FD${description}^FS
+      ^FT6,500^A@R,19,19,ARIALBOLD.FNT^FD${date}^FS
+      ^FT810,420^A@B,23,23,ARIALBOLD.FNT^FD${description}^FS^LS0
+      ^BY2,2,50
+      ^FO@80,35^BCI^FD${barcode}^FS
+      ^BY2,2,50
+      ^FO@80,1700^BCI^${barcode}^FS`;
+    }
   } else if (format === 'maltaPets') {
     const { description, date, weight, isMock } = params;
 

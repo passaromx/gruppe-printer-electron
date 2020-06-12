@@ -213,6 +213,7 @@ ipcMain.on('print', async (e, printer, label, data, settings) => {
   }
 
   // const { format } = settings;
+  data.sku = label.sku;
   const rawZpl = await getZpl(label.label.url, data);
 
   if (rawZpl !== null) {
