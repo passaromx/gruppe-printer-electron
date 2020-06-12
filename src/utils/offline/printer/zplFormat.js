@@ -61,7 +61,7 @@ module.exports = (settings, params) => {
       ^LH${labelShift || '0'},0
       ^MMC
       ^PW832
-      ^LL1615
+      ^LL1758
       ^LS0
       ^CFO,100
       ^FT100,1625^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS`;
