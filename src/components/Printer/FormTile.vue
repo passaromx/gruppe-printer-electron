@@ -47,7 +47,8 @@
               xs12
               v-if="user && (user.client._id === clients.malta ||
                 user.client._id === clients.myn ||
-                user.client._id === clients.maltaPets
+                user.client._id === clients.maltaPets ||
+                user.client._id === clients.maltaBarcode
               )"
             >
               <VSwitch

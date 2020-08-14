@@ -74,7 +74,7 @@ module.exports = (settings, params) => {
       ^BY2,2,50
       ^FO@80,35^BCI^FD${barcode}^FS
       ^BY2,2,50
-      ^FO@80,1700^BCI^${barcode}^FS`;
+      ^FO@80,1700^BCI^FD${barcode}^FS`;
     }
   } else if (format === 'maltaPets') {
     const { description, date, weight, isMock } = params;
