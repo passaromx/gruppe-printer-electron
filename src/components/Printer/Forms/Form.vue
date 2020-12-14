@@ -12,9 +12,18 @@
           :hide-details="!errors.collect(index).length"
           @change="handleSelect(index, $event)"
         />
+        <VSelect
+          v-if="field.typeM === 'select'"
+          :items="field.itemsM"
+          v-model="formData[index]"
+          :disabled="!selectedLabel || !isMock"
+          :label="field.labelM"
+          outline
+          :hide-details="!errors.collect(index).length"
+          @change="handleSelect(index, $event)"
+        />
         <DatePicker
           v-if="field.type === 'date'"
-          :disabled="!selectedLabel || isMock"
           @change="handleDate(index, $event)"
           :name="index"
           :label="field.label"
@@ -26,7 +35,6 @@
           :maxlength="field.maxlength || 20"
           v-if="field.type === 'text' || field.type === 'number'"
           :type="field.type"
-          :disabled="!selectedLabel || (isMock && (field.name != 'weight' && field.label != 'Lote'))"
           outline
           :hide-details="!errors.collect(index).length"
           v-model="formData[index]"
@@ -63,8 +71,14 @@ export default {
   computed: {
     ...mapState('printer', ['selectedLabel', 'variables', 'descriptionFormat']),
     description() {
-      if (this.variables.descriptionFormat) {
-        const formatted = this.variables.descriptionFormat
+      let dataM = '';
+      if (this.isMock) {
+        dataM = this.variables.descriptionFormatM
+      } else {
+        dataM = this.variables.descriptionFormat
+      };
+      if (dataM) {
+        const formatted = dataM
           .split('-')
           .reduce((format, variable, i) => {
             let value = this.formData[variable];

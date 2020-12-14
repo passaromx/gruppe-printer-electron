@@ -5,7 +5,7 @@
       <div class="variable-wrapper" v-bind:style="{width}" v-if="selectedLabel">
         <div v-for="(key, index) in keys" :key="index">
           <div v-for="(style, j) in variables.fields[key].styles" :key="index + j">
-            <VarDisplay v-if="!isMock || key == 'weight' || key === 'description'" :name="key" :data="style">
+            <VarDisplay v-if="!isMock || isMock || key == 'weight' || key === 'description'" :name="key" :data="style">
               {{ formatValue(key) }}
             </VarDisplay>
           </div>

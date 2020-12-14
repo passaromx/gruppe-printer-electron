@@ -221,6 +221,7 @@ export default {
       'setPreviewLoader',
       'setVariables',
       'setDescriptionFormat',
+      'setDescriptionFormatM',
       'setSelectedLabel',
       'setCopies'
     ]),

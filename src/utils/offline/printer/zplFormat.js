@@ -18,7 +18,7 @@ module.exports = (settings, params) => {
       ^LL1279
       ^LS0
       ^FT335,870^A0I,44,44^FH\^FD${description || ''}^FS`;
-    if (!isMock) {
+    if (!isMock || isMock) {
       start = `${start}
       ^FT350,790^A0I,43,43^FH\^FD${moment(productionDate).format('DD-MM-YYYY') || ''}^FS^LS0
       ^FT350,710^A0I,43,43^FH\^FD${formattedExpiry}^FS^LS0`;
@@ -33,7 +33,7 @@ module.exports = (settings, params) => {
       ^LS0
       ^CFO,100
       ^FT100,1545^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS`;
-    if (!isMock) {
+    if (!isMock || isMock) {
       start = `
       ${start}
       ^FT385,1510^A@I,30,30,ARIAL.FNT^FD${description}^FS
@@ -65,7 +65,7 @@ module.exports = (settings, params) => {
       ^LS0
       ^CFO,100
       ^FT100,1625^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS`;
-    if (!isMock) {
+    if (!isMock || isMock) {
       start = `
       ${start}
       ^FT385,1590^A@I,30,30,ARIAL.FNT^FD${description}^FS
@@ -87,7 +87,7 @@ module.exports = (settings, params) => {
     ^LS0
     ^CFO,100
     ^FT100,1545^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS`;
-    if (!isMock) {
+    if (!isMock || isMock) {
       start = `
       ${start}
       ^FT385,1510^A@I,30,30,ARIAL.FNT^FD${description}^FS

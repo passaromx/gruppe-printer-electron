@@ -1,5 +1,5 @@
-// export const filesURL = 'http://localhost:1337';
-export const filesURL = 'https://api.gruppesolutions.com.mx';
+export const filesURL = 'http://localhost:1337';
+//export const filesURL = 'https://api.gruppesolutions.com.mx';
 
 export const apiURL = `${filesURL}/`;
 
@@ -41,6 +41,10 @@ const maltaFactories = [
   'BAJ', 'CLN', 'MER', 'MTY', 'TEX', 'TLX'
 ];
 
+const maltaFactoriesNumbers = [
+  '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
+];
+
 export const maltaVars = {
   fields: {
     title: {
@@ -68,6 +72,13 @@ export const maltaVars = {
       validation: 'required',
       items: maltaFactories,
       value: maltaFactories[0]
+    },
+    factoryM: {
+      typeM: 'select',
+      labelM: 'Maquilador',
+      validationM: 'required',
+      itemsM: maltaFactoriesNumbers,
+      valueM: maltaFactoriesNumbers[0]
     },
     line: {
       type: 'text',
@@ -127,7 +138,8 @@ export const maltaVars = {
       ]
     }
   },
-  descriptionFormat: 'factory-date-shift-line-group'
+  descriptionFormat: 'factory-date-shift-line-group',
+  descriptionFormatM: 'factoryM-date-shift-line-group'
 };
 
 export const maltaBarcodeVars = {
@@ -157,6 +169,13 @@ export const maltaBarcodeVars = {
       validation: 'required',
       items: maltaFactories,
       value: maltaFactories[0]
+    },
+    factoryM: {
+      typeM: 'select',
+      labelM: 'Maquilador',
+      validationM: 'required',
+      itemsM: maltaFactoriesNumbers,
+      valueM: maltaFactoriesNumbers[0]
     },
     line: {
       type: 'text',
@@ -216,7 +235,8 @@ export const maltaBarcodeVars = {
       ]
     }
   },
-  descriptionFormat: 'factory-date-shift-line-group'
+  descriptionFormat: 'factory-date-shift-line-group',
+  descriptionFormatM: 'factoryM-date-shift-line-group'
 };
 
 export const maltaExportVars = {
@@ -245,6 +265,13 @@ export const maltaExportVars = {
       validation: 'required',
       items: maltaFactories,
       value: maltaFactories[0]
+    },
+    factoryM: {
+      typeM: 'select',
+      labelM: 'Maquilador',
+      validationM: 'required',
+      itemsM: maltaFactoriesNumbers,
+      valueM: maltaFactoriesNumbers[0]
     },
     line: {
       type: 'text',
@@ -280,7 +307,8 @@ export const maltaExportVars = {
       }]
     }
   },
-  descriptionFormat: 'factory-date-shift-line-group'
+  descriptionFormat: 'factory-date-shift-line-group',
+  descriptionFormatM: 'factoryM-date-shift-line-group'
 };
 
 export const maltaPetsVars = {
@@ -310,6 +338,13 @@ export const maltaPetsVars = {
       validation: 'required',
       items: maltaFactories,
       value: maltaFactories[0]
+    },
+    factoryM: {
+      typeM: 'select',
+      labelM: 'Maquilador',
+      validationM: 'required',
+      itemsM: maltaFactoriesNumbers,
+      valueM: maltaFactoriesNumbers[0]
     },
     line: {
       type: 'text',
@@ -369,7 +404,8 @@ export const maltaPetsVars = {
       ]
     }
   },
-  descriptionFormat: 'factory-date-shift-line-group'
+  descriptionFormat: 'factory-date-shift-line-group',
+  descriptionFormatM: 'factoryM-date-shift-line-group'
 };
 
 export const mynVars = {
