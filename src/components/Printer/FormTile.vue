@@ -111,7 +111,7 @@
 import { ipcRenderer, shell } from 'electron';
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
 import {
-  mynVars, maltaVars, wisiumVars, clients, maltaExportVars, maltaPetsVars, microsVars, maltaBarcodeVars
+  mynVars, maltaVars, wisiumVars, clients, maltaExportVars, maltaPetsVars, microsVars, maltaBarcodeVars, wisiumhVars, wisiumvVars
 } from '@/api/constants';
 
 export default {
@@ -139,6 +139,8 @@ export default {
       maltaBarcodeVars,
       wisiumVars,
       microsVars,
+      wisiumhVars,
+      wisiumvVars,
       resize: false,
       timeout: null,
       divider: false
@@ -263,6 +265,10 @@ export default {
         vars = this.maltaBarcodeVars;
       } else if (clientId === clients.micros) {
         vars = this.microsVars;
+      } else if (clientId === clients.wisiumh) {
+        vars = this.wisiumhVars;
+      } else if (clientId === clients.wisiumv) {
+        vars = this.wisiumvVars;
       }
       this.setVariables(vars);
     },

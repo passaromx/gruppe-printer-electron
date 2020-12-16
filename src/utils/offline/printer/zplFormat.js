@@ -112,6 +112,48 @@ module.exports = (settings, params) => {
       start = `${start} 
         ^FT580,115^A@I,25,25,ARIAL.FNT^FD${description}^FS`;
     }
+  } else if (format === 'wisiumh') {
+    const { invert } = settings;
+    const { description, date, productionDate } = params;
+    start = `^XA
+      ^MMT
+      ^LH${labelShift || '0'},0
+      ^PW831
+      ^LL1319
+      ^LS0
+      ^CFO,100`;
+
+    if (invert) {
+      start = `${start} 
+        ^FT300,650^A@,80,80,ARIALBOLD.FNT^FD${description}^FS
+        ^FT250,550^A@,80,80,ARIALBOLD.FNT^FD${date}^FS
+        ^FT350,450^A@,80,80,ARIALBOLD.FNT^FD${productionDate}^FS^LS0`;
+    } else { // not rotated settings
+      start = `${start} 
+        ^FT600,650^A@I,80,80,ARIALBOLD.FNT^FD${description}^FS
+        ^FT500,550^A@I,80,80,ARIALBOLD.FNT^FD${date}^FS
+        ^FT700,450^A@I,80,80,ARIALBOLD.FNT^FD${productionDate}^FS^LS0`;
+    }
+  } else if (format === 'wisiumv') {
+    const { invert } = settings;
+    const { description, date } = params;
+    start = `^XA
+      ^MMT
+      ^LH${labelShift || '0'},0
+      ^PW831
+      ^LL1319
+      ^LS0
+      ^CFO,100`;
+
+    if (invert) {
+      start = `${start} 
+      ^FT450,350^A@R,80,80,ARIALBOLD.FNT^FD${description}^FS
+      ^FT350,450^A@R,80,80,ARIALBOLD.FNT^FD${date}^FS`;
+    } else { // not rotated settings
+      start = `${start} 
+      ^FT450,350^A@R,80,80,ARIALBOLD.FNT^FD${description}^FS
+      ^FT350,450^A@R,80,80,ARIALBOLD.FNT^FD${date}^FS`;
+    }
   } else if (format === 'maltaExport') {
     const { description, date } = params;
 

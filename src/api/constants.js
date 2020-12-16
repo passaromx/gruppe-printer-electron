@@ -1,5 +1,5 @@
-export const filesURL = 'http://localhost:1337';
-//export const filesURL = 'https://api.gruppesolutions.com.mx';
+// export const filesURL = 'http://localhost:1337';
+export const filesURL = 'https://api.gruppesolutions.com.mx';
 
 export const apiURL = `${filesURL}/`;
 
@@ -29,7 +29,9 @@ export const clients = {
   maltaBarcode: '5ee37c988a95810d0ef6fb11',
   wisium: '5cd6e9f9d7388839466b2d40',
   wisiumi: '5e3b4311cc7db649979e28a8',
-  micros: '5e8e21818a95810d0ef6b6a9'
+  micros: '5e8e21818a95810d0ef6b6a9',
+  wisiumh: '5fd7a88da47ddac6458271f8',
+  wisiumv: '5fd9b487f5d17606525f0abf'
 };
 
 export const rowsPerPage = [15, 25, 50, {
@@ -42,7 +44,7 @@ const maltaFactories = [
 ];
 
 const maltaFactoriesNumbers = [
-  '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
+  '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21'
 ];
 
 export const maltaVars = {
@@ -496,6 +498,109 @@ export const wisiumVars = {
         left: 52,
         weight: 500,
         fontSize: '1.55vh'
+      }]
+    },
+  },
+  descriptionFormat: 'batch'
+};
+
+export const wisiumhVars = {
+  fields: {
+    title: {
+      type: 'title',
+      class: 'xs12',
+      label: 'Variables'
+    },
+    batch: {
+      type: 'text',
+      class: 'xs12',
+      label: 'Lote',
+      validation: 'required',
+      value: 'A000000001',
+      maxlength: 10
+    },
+    date: {
+      type: 'text',
+      class: 'xs12',
+      label: 'Lote',
+      validation: 'required',
+      value: 'A002',
+      maxlength: 4,
+      styles: [{
+        top: 55,
+        left: 39,
+        weight: 550,
+        fontSize: '5vh'
+      }]
+    },
+    productionDate: {
+      type: 'text',
+      class: 'xs12',
+      label: 'Lote',
+      validation: 'required',
+      value: 'A00000000000003',
+      maxlength: 15,
+      styles: [{
+        top: 60,
+        left: 12,
+        weight: 550,
+        fontSize: '5vh'
+      }]
+    },
+    description: {
+      value: null,
+      label: 'Nomenclatura',
+      class: 'xs12',
+      styles: [{
+        top: 50,
+        left: 23,
+        weight: 550,
+        fontSize: '5vh'
+      }]
+    },
+  },
+  descriptionFormat: 'batch'
+};
+
+export const wisiumvVars = {
+  fields: {
+    title: {
+      type: 'title',
+      class: 'xs12',
+      label: 'Variables'
+    },
+    batch: {
+      type: 'text',
+      class: 'xs12',
+      label: 'Lote',
+      validation: 'required',
+      value: 'A000000001',
+    },
+    date: {
+      type: 'text',
+      class: 'xs12',
+      label: 'Lote',
+      validation: 'required',
+      value: 'A002',
+      maxlength: 4,
+      styles: [{
+        top: 45,
+        left: 47,
+        weight: 550,
+        fontSize: '5vh',
+        rotation: 90
+      }]
+    },
+    description: {
+      value: null,
+      label: 'Nomenclatura',
+      class: 'xs12',
+      styles: [{
+        top: 35,
+        left: 55,
+        weight: 550,
+        fontSize: '5vh',
+        rotation: 90
       }]
     },
   },
