@@ -514,7 +514,7 @@ export const wisiumhVars = {
     batch: {
       type: 'text',
       class: 'xs12',
-      label: 'Lote',
+      label: 'Código',
       validation: 'required',
       value: 'A000000001',
       maxlength: 10
@@ -522,15 +522,15 @@ export const wisiumhVars = {
     date: {
       type: 'text',
       class: 'xs12',
-      label: 'Lote',
+      label: 'Número de muestra',
       validation: 'required',
       value: 'A002',
       maxlength: 4,
       styles: [{
-        top: 55,
-        left: 39,
+        top: 54,
+        left: 37,
         weight: 550,
-        fontSize: '5vh'
+        fontSize: '6vh'
       }]
     },
     productionDate: {
@@ -542,7 +542,7 @@ export const wisiumhVars = {
       maxlength: 15,
       styles: [{
         top: 60,
-        left: 12,
+        left: 11,
         weight: 550,
         fontSize: '5vh'
       }]
@@ -552,10 +552,10 @@ export const wisiumhVars = {
       label: 'Nomenclatura',
       class: 'xs12',
       styles: [{
-        top: 50,
-        left: 23,
+        top: 48,
+        left: 18,
         weight: 550,
-        fontSize: '5vh'
+        fontSize: '6vh'
       }]
     },
   },
@@ -572,23 +572,23 @@ export const wisiumvVars = {
     batch: {
       type: 'text',
       class: 'xs12',
-      label: 'Lote',
+      label: 'Código del producto',
       validation: 'required',
       value: 'A000000001',
     },
     date: {
       type: 'text',
       class: 'xs12',
-      label: 'Lote',
+      label: 'Número de tarima',
       validation: 'required',
       value: 'A002',
       maxlength: 4,
       styles: [{
-        top: 45,
-        left: 47,
+        top: 57,
+        left: 58,
         weight: 550,
-        fontSize: '5vh',
-        rotation: 90
+        fontSize: '9vh',
+        rotation: 270
       }]
     },
     description: {
@@ -596,11 +596,11 @@ export const wisiumvVars = {
       label: 'Nomenclatura',
       class: 'xs12',
       styles: [{
-        top: 35,
-        left: 55,
+        top: 78,
+        left: 40,
         weight: 550,
-        fontSize: '5vh',
-        rotation: 90
+        fontSize: '11vh',
+        rotation: 270
       }]
     },
   },

@@ -124,15 +124,15 @@ module.exports = (settings, params) => {
       ^CFO,100`;
 
     if (invert) {
-      start = `${start} 
+      start = `${start}
         ^FT300,650^A@,80,80,ARIALBOLD.FNT^FD${description}^FS
         ^FT250,550^A@,80,80,ARIALBOLD.FNT^FD${date}^FS
-        ^FT350,450^A@,80,80,ARIALBOLD.FNT^FD${productionDate}^FS^LS0`;
+        ^FT350,450^A@,80,80,ARIALBOLD.FNT^FD${productionDate}^FS`;
     } else { // not rotated settings
       start = `${start} 
-        ^FT600,650^A@I,80,80,ARIALBOLD.FNT^FD${description}^FS
-        ^FT500,550^A@I,80,80,ARIALBOLD.FNT^FD${date}^FS
-        ^FT700,450^A@I,80,80,ARIALBOLD.FNT^FD${productionDate}^FS^LS0`;
+        ^FT675,650^A@I,100,100,ARIALBOLD.FNT^FD${description}^FS
+        ^FT525,550^A@I,110,110,ARIALBOLD.FNT^FD${date}^FS
+        ^FT735,450^A@I,80,80,ARIALBOLD.FNT^FD${productionDate}^FS`;
     }
   } else if (format === 'wisiumv') {
     const { invert } = settings;
@@ -147,12 +147,12 @@ module.exports = (settings, params) => {
 
     if (invert) {
       start = `${start} 
-      ^FT450,350^A@R,80,80,ARIALBOLD.FNT^FD${description}^FS
-      ^FT350,450^A@R,80,80,ARIALBOLD.FNT^FD${date}^FS`;
+        ^FT500,70^A@R,180,180,ARIALBOLD.FNT^FD${description}^FS
+        ^FT330,320^A@R,200,200,ARIALBOLD.FNT^FD${date}^FS`;
     } else { // not rotated settings
       start = `${start} 
-      ^FT450,350^A@R,80,80,ARIALBOLD.FNT^FD${description}^FS
-      ^FT350,450^A@R,80,80,ARIALBOLD.FNT^FD${date}^FS`;
+      ^FT470,310^A@R,170,170,ARIALBOLD.FNT^FD${description}^FS
+      ^FT300,590^A@R,200,200,ARIALBOLD.FNT^FD${date}^FS`;
     }
   } else if (format === 'maltaExport') {
     const { description, date } = params;
