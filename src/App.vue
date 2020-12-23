@@ -58,7 +58,7 @@
         </VListTile>
 
         <VListTile
-          v-if="!isAdmin"
+          v-if="user.role.type === USER_ROLES.AUTHENTICATED"
           @click="sync"
         >
           <VListTileAction>
@@ -128,6 +128,7 @@ import menu from '@/api/menu';
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
 /* eslint-disable import/no-extraneous-dependencies */
 import { ipcRenderer } from 'electron';
+import { USER_ROLES } from '@/api/constants';
 // import appMenu from '@/api/desktop-menu';
 
 export default {
@@ -158,17 +159,17 @@ export default {
       contactsDialog: false,
       drawer: null,
       menu,
-      mini: true
+      mini: true,
+      USER_ROLES
     };
   },
   computed: {
-    ...mapGetters('auth', ['isLoggedIn', 'isAdmin']),
+    ...mapGetters('auth', ['isLoggedIn', 'isAdmin', 'user']),
     ...mapState(['isReady']),
     ...mapState('auth', ['user']),
     filteredMenu() {
-      return this.isAdmin
-        ? this.menu.filter(item => item.isAdmin)
-        : this.menu.filter(item => !item.isAdmin);
+      const role = this.user.role.type;
+      return this.menu.filter(item => item.canAccess.includes(role));
     }
   },
   methods: {
@@ -181,7 +182,6 @@ export default {
       });
     },
     onNetworkRestored() {
-      console.log('network restored');
       this.setIsOnline(true);
       this.$eventHub.$emit('sync');
       this.$eventHub.$emit('network-restored');
@@ -192,12 +192,12 @@ export default {
   },
   watch: {
     isReady(val) {
-      // console.log(this.$route);
       if (this.$route.name === 'Progress') {
         return;
       }
       if (val && this.isLoggedIn) {
-        this.$router.push({ name: this.isAdmin ? 'Labels' : 'Printer' });
+        const role = this.user.role.type;
+        this.$router.push({ name: role !== USER_ROLES.AUTHENTICATED ? 'Labels' : 'Printer' });
       }
     }
   },

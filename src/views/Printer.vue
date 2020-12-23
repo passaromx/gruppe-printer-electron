@@ -17,6 +17,10 @@
             class="mb-0"
           ></VProgressLinear>
         </VCardText>
+        <VCardActions>
+          <VSpacer />
+          <VBtn small @click="dialog = false">Continuar</VBtn>
+        </VCardActions>
       </VCard>
     </VDialog>
     <VLayout row wrap>
@@ -49,9 +53,7 @@ export default {
   }),
   mounted() {
     this.$eventHub.$emit('closeDrawer');
-    // console.log('printer mounted');
     if (this.user && this.user.client) {
-      // console.log('from mounted');
       this.sync();
       this.updateSystemInfo();
     }
@@ -59,16 +61,13 @@ export default {
     this.$eventHub.$on('sync', () => this.sync(true));
 
     ipcRenderer.on('synced', (e, data) => {
-      // console.log('synced', data);
       this.setLabels(data.labels);
       this.setConfig(data.config);
       this.setIsOnline(true);
       setTimeout(() => { this.dialog = false; }, 300);
-      // this.dialog = false;
     });
 
     ipcRenderer.on('mac-checked', (e, checks) => {
-      // console.log('mac-checked', checks);
       if (checks) {
         this.systemInfo.client = this.user.client._id;
         this.updateSysInfo(this.systemInfo);
@@ -78,7 +77,6 @@ export default {
     });
 
     ipcRenderer.on('system-info-fetched', (e, info) => {
-      // console.log(info);
       if (localStorage) localStorage.setItem('systemInfo', JSON.stringify(info));
       info.client = this.user.client._id;
       this.updateSysInfo(info);
@@ -99,7 +97,6 @@ export default {
   watch: {
     isLoggedIn(val) {
       if (val && !this.dialog) {
-        // console.log('from watch');
         this.sync();
         this.updateSystemInfo();
       }
@@ -117,29 +114,23 @@ export default {
     ...mapActions(['sendError']),
     sync(fromNavigation) {
       this.dialog = true;
-      // console.log('syncing');
       ipcRenderer.send('sync', this.user.client, fromNavigation);
     },
     updateSystemInfo() {
       this.systemInfo = JSON.parse(localStorage.getItem('systemInfo'));
-      // console.log('checking sys info');
       if (this.systemInfo) {
-        // console.log('checking mac');
         ipcRenderer.send('check-mac', this.systemInfo);
       } else {
-        // console.log('fetching sys info');
         ipcRenderer.send('get-system-info');
       }
     }
   },
   beforeDestroy() {
-    // console.log('before destroy', ipcRenderer);
     this.$eventHub.$off('sync');
     ipcRenderer.removeAllListeners('mac-checked');
     ipcRenderer.removeAllListeners('error-sync');
     ipcRenderer.removeAllListeners('system-info-fetched');
     ipcRenderer.removeAllListeners('synced');
-    // console.log('after destroy', ipcRenderer);
   }
 };
 </script>

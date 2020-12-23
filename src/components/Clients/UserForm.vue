@@ -7,6 +7,18 @@
       <VForm @keyup.native.enter="validate">
         <VLayout column>
           <VFlex xs12>
+            <VSelect
+              v-model="editedItem.role"
+              :items="userRoles"
+              label="Rol de usuario"
+              item-text="text"
+              item-value="value"
+              data-vv-name="role"
+              v-validate="'required'"
+              :error-messages="errors.collect('required')"
+            />
+          </VFlex>
+          <VFlex xs12>
             <VTextField
               label="Correo o usuario"
               v-model="editedItem.email"
@@ -54,6 +66,20 @@ import { mapState, mapActions } from 'vuex';
 export default {
   props: ['editedItem'],
   $_veeValidate: { validator: 'new' },
+  data() {
+    return {
+      userRoles: [
+        {
+          text: 'Impresión',
+          value: '5c2f94bdf80d6665bf53b9d9'
+        },
+        {
+          text: 'Administrador',
+          value: '5db772199df8ac22b4703139'
+        }
+      ]
+    };
+  },
   watch: {
     editedItem() {
       this.$validator.reset();
@@ -77,11 +103,6 @@ export default {
     submit() {
       this.editedItem.client = this.selectedClient._id;
       if (!this.isEditMode) {
-        // admin role
-        // this.editedItem.role = '5c2f94bdf80d6665bf53b9d8';
-        // client role
-        this.editedItem.role = '5c2f94bdf80d6665bf53b9d9';
-        // console.log(this.editedItem);
         this.storeUser(this.editedItem)
           .then(() => {
             this.$eventHub.$emit('closeFormDialog');

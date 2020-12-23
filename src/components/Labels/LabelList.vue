@@ -1,7 +1,45 @@
 <template>
   <div>
-    <VDialog v-model="dialog" max-width="350" persistent>
+    <VDialog
+      v-if="user.role.type === USER_ROLES.ADMINISTRATOR"
+      v-model="dialog"
+      max-width="350"
+      persistent
+    >
       <LabelForm :editedItem="editedItem" @closeDialog="clearForm"/>
+    </VDialog>
+
+    <VDialog
+      v-model="pdfPreview"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
+      <VCard v-if="selectedLabel">
+        <VToolbar dark color="grey darken-3">
+          <VToolbarTitle>{{ selectedLabel.sku }} - {{ selectedLabel.name }}</VToolbarTitle>
+          <VSpacer />
+          <VBtn icon dark @click="pdfPreview = false">
+            <VIcon>close</VIcon>
+          </VBtn>
+        </VToolbar>
+        <VContainer>
+          <VLayout row wrap justify-center>
+
+              <object
+                v-if="pdfUrl"
+                class="pdf-viewer elevation-10"
+                type="application/pdf"
+                :data="pdfUrl"
+              >
+                <p>Error al visualizar este archivo, intenta más tarde</p>
+              </object>
+
+              <!-- <iframe class="pdf-viewer elevation-10" :src="pdfUrl"></iframe> -->
+
+          </VLayout>
+        </VContainer>
+      </VCard>
     </VDialog>
 
     <BaseCard>
@@ -9,7 +47,7 @@
         <!-- <h5 class="headline">Precintos</h5> -->
         <VLayout row justify-space-between align-center>
           <VFlex xs4>
-            <ClientSelect module="labels"/>
+            <ClientSelect v-if="user.role.type === 'root'" module="labels"/>
           </VFlex>
           <VFlex xs1 class="text-xs-right">
             <VIcon @click="refreshLabels">refresh</VIcon>
@@ -21,6 +59,7 @@
       <TableHeader
         module="labels"
         :selected="selected"
+        :hide-actions="user.role.type !== USER_ROLES.ADMINISTRATOR"
         @newItem="dialog = true"
         @onSearch="handleSearch"
         condensed/>
@@ -32,19 +71,19 @@
         :headers="headers"
         :items="labels"
         :rows-per-page-items="rowsPerPage"
-        select-all
+        :select-all="user.role.type === USER_ROLES.ADMINISTRATOR"
       >
         <template slot="items" slot-scope="props">
-          <td>
+          <td v-if="user.role.type === USER_ROLES.ADMINISTRATOR">
             <VCheckbox v-model="props.selected" primary hide-details></VCheckbox>
           </td>
           <td>{{ props.item.name }}</td>
           <td class="text-xs-right">{{ props.item.sku }}</td>
-          <td class="text-xs-right">
+          <td v-if="user.role.type === USER_ROLES.ADMINISTRATOR" class="text-xs-right">
             <a
               v-if="props.item.authorization"
               href="javascript:void(0)"
-              @click="previewFile(props.item.authorization.authPdf)"
+              @click="previewFile(props.item, 'auth')"
             >{{ props.item.authorization.name}}</a>
             <span v-else>Sin autorización</span>
           </td>
@@ -68,7 +107,7 @@
                   flat
                   color="grey darken-2"
                   icon
-                  @click="previewFile(props.item.labelPdf)"
+                  @click="previewFile(props.item, 'label')"
                 >
                   <VIcon>picture_as_pdf</VIcon>
                 </VBtn>
@@ -80,7 +119,7 @@
               {{ props.item.labelPng.name || 'n/a' }}
             </a>-->
           </td>
-          <td class="text-xs-center">
+          <td v-if="user.role.type === USER_ROLES.ADMINISTRATOR" class="text-xs-center">
             <VTooltip bottom>
               <VBtn
                 slot="activator"
@@ -102,8 +141,8 @@
 <script>
 /* eslint-disable import/no-extraneous-dependencies */
 import { shell, remote } from 'electron';
-import { labelListHeaders, filesURL, rowsPerPage } from '@/api/constants';
-import { mapActions, mapState } from 'vuex';
+import { LABELS_HEADERS, filesURL, rowsPerPage, USER_ROLES } from '@/api/constants';
+import { mapActions, mapState, mapGetters, mapMutations } from 'vuex';
 
 export default {
   components: {
@@ -117,6 +156,10 @@ export default {
       dialog: false,
       search: '',
       selected: [],
+      USER_ROLES,
+      selectedLabel: null,
+      pdfPreview: false,
+      pdfUrl: null,
       editedItem: {
         name: null,
         sku: null,
@@ -133,10 +176,13 @@ export default {
         labelPng: null,
         authorization: null
       },
-      headers: labelListHeaders
     };
   },
   mounted() {
+    if (this.user.role.type === USER_ROLES.CLIENT_ADMIN) {
+      this.setClient(this.user.client._id);
+    }
+
     this.$eventHub.$on('clear-selected', () => {
       this.selected = [];
     });
@@ -144,14 +190,30 @@ export default {
   onDestroy() {
     this.$eventHub.$off('clear-selected');
   },
-  computed: { ...mapState('labels', ['fetching', 'labels', 'fromClient']) },
+  computed: {
+    ...mapGetters('auth', ['user']),
+    ...mapState('labels', ['fetching', 'labels', 'fromClient']),
+    headers() {
+      if (this.user.role.type === USER_ROLES.ADMINISTRATOR) {
+        return LABELS_HEADERS.ADMIN;
+      }
+
+      return LABELS_HEADERS.CLIENT_ADMIN;
+    }
+  },
   watch: {
-    fromClient(val) {
-      this.fetch(val);
+    fromClient: {
+      handler(val) {
+        if (val) {
+          this.fetch(val);
+        }
+      },
+      immediate: true
     }
   },
   methods: {
     ...mapActions('labels', ['fetch']),
+    ...mapMutations('labels', ['setClient']),
     editItem(item) {
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
@@ -160,8 +222,10 @@ export default {
     refreshLabels() {
       this.fetch(this.fromClient);
     },
-    previewFile(file) {
+    previewFile(label, preview) {
+      const file = preview === 'label' ? label.labelPdf : label.authorization.authPdf;
       const url = file.url.includes('amazon') ? file.url : `${filesURL}${file.url}`;
+
       if (url.includes('.pdf')) {
         shell.openExternal(url);
       } else {
@@ -184,3 +248,16 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.pdf-viewer {
+  height: 500px;
+  width: 100%;
+  border-radius: 8px
+}
+@media (min-width: 769px) {
+  .pdf-viewer {
+    height: calc(100vh - 64px - 48px);
+  }
+}
+</style>

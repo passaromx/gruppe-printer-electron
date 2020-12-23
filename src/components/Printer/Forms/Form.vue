@@ -1,63 +1,62 @@
 <template>
   <VLayout row wrap>
-    <VFlex
-      v-for="(field, index) in renderFields"
-      :key="index"
-      :class="field.class || fieldClass(field)"
-    >
-      <VSelect
-        v-if="field.type === 'select'"
-        :items="field.items"
-        v-model="formData[index]"
-        :disabled="!selectedLabel || isMock"
-        :label="field.label"
-        outline
-        :hide-details="!errors.collect(index).length"
-        @change="handleSelect(index, $event)"
-      />
-      <DatePicker
-        v-if="field.type === 'date'"
-        :disabled="!selectedLabel || isMock"
-        @change="handleDate(index, $event)"
-        :name="index"
-        :label="field.label"
-        v-model="field.value"
-        v-validate="'required'"
-        :messages="errors.collect(index)"
-      />
-      <VTextField
-        :maxlength="field.maxlength || 20"
-        v-if="field.type === 'text' || field.type === 'number' "
-        :type="field.type"
-        :disabled="!selectedLabel || (isMock && field.name != 'weight')"
-        outline
-        :hide-details="!errors.collect(index).length"
-        v-model="formData[index]"
-        :label="field.label"
-        v-validate="field.validation"
-        :data-vv-name="index"
-        :error-messages="errors.collect(index)"
-        @input="handleInput(index)"
-      />
-      <span
-        v-if="field.type == 'title'"
-        class="subheading"
-      >{{field.label}}</span>
-    </VFlex>
+    <template v-for="(field, index) in renderFields">
+      <VFlex v-if="!field.fromSettings" :class="field.class || fieldClass(field)" :key="index">
+        <VSelect
+          v-if="field.type === 'select'"
+          :items="field.items"
+          v-model="formData[index]"
+          :disabled="!selectedLabel || isMock"
+          :label="field.label"
+          outline
+          :hide-details="!errors.collect(index).length"
+          @change="handleSelect(index, $event)"
+        />
+        <VSelect
+          v-if="field.typeM === 'select'"
+          :items="field.itemsM"
+          v-model="formData[index]"
+          :disabled="!selectedLabel || !isMock"
+          :label="field.labelM"
+          outline
+          :hide-details="!errors.collect(index).length"
+          @change="handleSelect(index, $event)"
+        />
+        <DatePicker
+          v-if="field.type === 'date'"
+          @change="handleDate(index, $event)"
+          :name="index"
+          :label="field.label"
+          v-model="field.value"
+          v-validate="'required'"
+          :messages="errors.collect(index)"
+        />
+        <VTextField
+          :maxlength="field.maxlength || 20"
+          v-if="field.type === 'text' || field.type === 'number'"
+          :type="field.type"
+          outline
+          :hide-details="!errors.collect(index).length"
+          v-model="formData[index]"
+          :label="field.label"
+          v-validate="field.validation"
+          :data-vv-name="index"
+          :error-messages="errors.collect(index)"
+          @input="handleInput(index)"
+        />
+        <span
+          v-if="field.type == 'title'"
+          class="subheading"
+        >{{field.label}}</span>
+      </VFlex>
+    </template>
+
   </VLayout>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex';
 import moment from 'moment';
-
-// const today = new Date();
-
-// const addDays = (date, days) => {
-//   const result = new Date(date);
-//   result.setDate(result.getDate() + days);
-//   return result;
-// };
 
 export default {
   // $_veeValidate: { validator: 'new' },
@@ -72,18 +71,26 @@ export default {
   computed: {
     ...mapState('printer', ['selectedLabel', 'variables', 'descriptionFormat']),
     description() {
-      const formatted = this.variables.descriptionFormat
-        .split('-')
-        .reduce((format, variable, i) => {
-          let value = this.formData[variable];
-          if (this.variables.fields[variable].type === 'date') {
-            const { dateFormat } = this.variables.fields.description;
-            value = moment(this.formData[variable]).format(dateFormat);
-          }
-          return `${format}${i === 0 ? '' : '-'}${value || ''}`;
-        }, '');
-      console.log('computing desc', formatted);
-      return formatted;
+      let dataM = '';
+      if (this.isMock) {
+        dataM = this.variables.descriptionFormatM
+      } else {
+        dataM = this.variables.descriptionFormat
+      };
+      if (dataM) {
+        const formatted = dataM
+          .split('-')
+          .reduce((format, variable, i) => {
+            let value = this.formData[variable];
+            if (this.variables.fields[variable].type === 'date') {
+              const { dateFormat } = this.variables.fields.description;
+              value = moment(this.formData[variable]).format(dateFormat);
+            }
+            return `${format}${i === 0 ? '' : '-'}${value || ''}`;
+          }, '');
+        return formatted;
+      }
+      return '';
     },
     formData() {
       const fields = { ...this.variables.fields };
@@ -105,19 +112,25 @@ export default {
     this.$eventHub.$on('compute-desc', () => {
       this.setDescription();
     });
-
-    // this.$eventHub.$on('validate', () => {
-    //   this.$validator.validate().then(res => {
-    //     if (res) {
-    //       console.log('valid');
-    //     } else {
-    //       console.log('invalid');
-    //     }
-    //   });
-    // });
+    this.$eventHub.$on('clear-inputs', () => {
+      Object.keys(this.renderFields).forEach(key => {
+        if (key !== 'factory') {
+          this.renderFields[key].value = null;
+          this.formData[key] = null;
+          this.setVariableValue({
+            name: key,
+            value: null
+          });
+        }
+      });
+      this.setDescription();
+      console.log(this.formData);
+      // this.$validator.reset();
+    });
   },
   beforeDestroy() {
     this.$eventHub.$off('compute-desc');
+    this.$eventHub.$off('clear-inputs');
   },
   methods: {
     ...mapMutations('printer', ['setVariableValue', 'setCopies']),
@@ -144,7 +157,6 @@ export default {
     },
     setDescription() {
       this.formData.description = this.description;
-      // console.log('setting desc', this.description);
       this.setVariableValue({
         name: 'description',
         value: this.description

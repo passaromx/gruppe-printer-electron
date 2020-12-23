@@ -43,7 +43,7 @@
           </VForm>
 
           <VLayout row justify-end class="mt-5">
-            <span class="caption">v1.1.6</span>
+            <span class="caption">v1.4.4</span>
           </VLayout>
 
         </VLayout>
@@ -122,7 +122,6 @@ export default {
       });
     },
     submit() {
-      // console.log('submitting', this.email);
       this.setIsLoading(true);
       this.signInUser({
         identifier: this.email,
@@ -133,7 +132,6 @@ export default {
           ipcRenderer.send('login', this.email, this.password, user, jwt);
         })
         .catch(err => {
-          console.log('error login', err);
           const status = err.response ? err.response.status : 0;
           if (status !== 401 && status !== 403) {
             ipcRenderer.send('login', this.email, this.password, null, null, true);

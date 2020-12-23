@@ -43,11 +43,19 @@
                 :messages="errors.collect('labels')"
               />
             </VFlex>
-            <VFlex xs12 v-if="user && user.client._id === clients.malta">
+            <VFlex
+              xs12
+              v-if="user && (user.client._id === clients.malta ||
+                user.client._id === clients.myn ||
+                user.client._id === clients.maltaPets ||
+                user.client._id === clients.maltaBarcode
+              )"
+            >
               <VSwitch
                 v-model="isMock"
                 color="primary"
                 label="Impresión de maquila"
+                hide-details
                 @change="toggleMock"
               />
             </VFlex>
@@ -61,22 +69,37 @@
                 v-validate="'required|min_value:1|max_value:5000'"
                 :error-messages="errors.collect('copies')"
                 label="Copias"
-                :value="1"
+                :value="copies"
                 @input="handleCopies"
               />
             </VFlex>
           </VLayout>
           <VLayout justify-end>
-            <VBtn @click="viewPdf" :disabled="!selectedLabel">
-              <!-- <VIcon class="mr-2">cloud_download</VIcon> -->
+            <VBtn
+              class="mx-2"
+              block
+              :disabled="!selectedLabel"
+              @click="viewPdf"
+            >
               Ver PDF
             </VBtn>
             <VBtn
-              @click="print"
-              :disabled="errors.items.length > 0 || !selectedLabel || !printer.name"
+              class="mx-2"
+              block
+              :disabled="errors.items.length > 0 || !selectedLabel || !printer.name || !canPrint"
               color="primary"
+              @click="print"
             >Imprimir</VBtn>
+
           </VLayout>
+          <VBtn
+            v-if="selectedLabel && selectedLabel.settings.score"
+            block
+            dark
+            color="secondary"
+            :disabled="!printer.name"
+            @click="cancelAll"
+            >Cancelar</VBtn>
         </VContainer>
       </VCardText>
     </VuePerfectScrollbar>
@@ -87,7 +110,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { ipcRenderer, shell } from 'electron';
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
-import { mynVars, maltaVars, wisiumVars, clients } from '@/api/constants';
+import {
+  mynVars, maltaVars, wisiumVars, clients, maltaExportVars, maltaPetsVars, microsVars, maltaBarcodeVars, wisiumhVars, wisiumvVars
+} from '@/api/constants';
 
 export default {
   $_veeValidate: { validator: 'new' },
@@ -109,7 +134,13 @@ export default {
       weight: 1,
       mynVars,
       maltaVars,
+      maltaExportVars,
+      maltaPetsVars,
+      maltaBarcodeVars,
       wisiumVars,
+      microsVars,
+      wisiumhVars,
+      wisiumvVars,
       resize: false,
       timeout: null,
       divider: false
@@ -120,7 +151,6 @@ export default {
     ipcRenderer.on('url-ready', (e, url) => {
       let formattedUrl = url.replace(/\\/g, '/');
       formattedUrl = formattedUrl.replace('//uploads', '/uploads');
-      // console.log(formattedUrl);
       shell.openItem(formattedUrl);
     });
     ipcRenderer.on('printers-fetched', (e, printers) => {
@@ -152,6 +182,24 @@ export default {
     description() {
       return `${this.line}-${this.turn}-${this.group}-${this.sequential}`;
     },
+    canPrint() {
+      console.log(this.variables);
+      if (this.variables) {
+        let hasNulledfield = false;
+        Object.keys(this.variables.fields).forEach(key => {
+          const { type, value } = this.variables.fields[key];
+          if (type === 'text' || type === 'select' || type === 'data') {
+            if (!value) { hasNulledfield = true; }
+          }
+        });
+
+        console.log(hasNulledfield);
+
+        return !hasNulledfield;
+      }
+
+      return false;
+    },
     displayPrinters() {
       if (this.$refs.printers) {
         let displayNameLength = this.$refs.printers.$el.clientWidth;
@@ -175,6 +223,7 @@ export default {
       'setPreviewLoader',
       'setVariables',
       'setDescriptionFormat',
+      'setDescriptionFormatM',
       'setSelectedLabel',
       'setCopies'
     ]),
@@ -186,7 +235,6 @@ export default {
       );
     },
     toggleMock(val) {
-      // console.log('isMock', val);
       this.$eventHub.$emit('toggle-mock', val);
     },
     formatDisplayPrinters() {
@@ -201,13 +249,26 @@ export default {
       this.fetchingPrinters = true;
       ipcRenderer.send('get-printers');
     },
+
     setClientVariables() {
       let vars = this.maltaVars;
       const clientId = this.user.client._id;
       if (clientId === clients.myn) {
         vars = this.mynVars;
-      } else if (clientId === clients.wisium) {
+      } else if (clientId === clients.wisium || clientId === clients.wisiumi) {
         vars = this.wisiumVars;
+      } else if (clientId === clients.maltaExport) {
+        vars = this.maltaExportVars;
+      } else if (clientId === clients.maltaPets) {
+        vars = this.maltaPetsVars;
+      } else if (clientId === clients.maltaBarcode) {
+        vars = this.maltaBarcodeVars;
+      } else if (clientId === clients.micros) {
+        vars = this.microsVars;
+      } else if (clientId === clients.wisiumh) {
+        vars = this.wisiumhVars;
+      } else if (clientId === clients.wisiumv) {
+        vars = this.wisiumvVars;
       }
       this.setVariables(vars);
     },
@@ -216,6 +277,9 @@ export default {
     },
     handleCopies(val) {
       this.setCopies(val);
+    },
+    cancelAll() {
+      ipcRenderer.send('cancelAll', this.printer.name);
     },
     print() {
       const variables = { ...this.variables.fields };
@@ -240,7 +304,6 @@ export default {
         ...data,
         client: this.user.client._id
       };
-      console.log(printData);
       ipcRenderer.send(
         'print',
         this.printer.name,
@@ -260,10 +323,12 @@ export default {
         user: this.user._id
       };
       this.updateSysInfo(systemInfo);
+      // clear print Data, leaving this commented for further reference
+      // this.$eventHub.$emit('clear-inputs');
+      this.setCopies(1);
     }
   },
   beforeDestroy() {
-    // window.removeEventListener('resize', console.log('removed'));
     ipcRenderer.removeAllListeners('printers-fetched');
     ipcRenderer.removeAllListeners('url-ready');
     this.setSelectedLabel(null);

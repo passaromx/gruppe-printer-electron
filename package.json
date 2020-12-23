@@ -1,6 +1,6 @@
 {
   "name": "gruppe-printer",
-  "version": "v1.1.6",
+  "version": "v1.4.4",
   "author": "Passaro",
   "description": "System for Zebra Printers",
   "private": true,
@@ -14,7 +14,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build -w -p always",
+    "electron:build": "vue-cli-service electron:build -w",
     "electron:serve": "vue-cli-service electron:serve",
     "createCert": "electron-builder create-self-signed-cert -p passaromx",
     "postinstall": "electron-builder install-app-deps"
@@ -25,6 +25,9 @@
     "electron-log": "^2.2.17",
     "electron-pdf-window": "^1.0.12",
     "electron-updater": "^4.0.7",
+    "form-data": "^2.5.0",
+    "jszip": "^3.2.2",
+    "jszip-utils": "^0.1.0",
     "lodash": "^4.17.11",
     "material-design-icons-iconfont": "^4.0.5",
     "moment": "^2.23.0",
@@ -32,6 +35,8 @@
     "printer": "git+https://github.com/tojocky/node-printer.git",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
+    "save-as": "^0.1.8",
+    "shortid": "^2.2.14",
     "vee-validate": "^2.1.5",
     "vue": "^2.5.17",
     "vue-i18n": "^8.7.0",

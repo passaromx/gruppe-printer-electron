@@ -78,7 +78,7 @@
               :label="field.label"
               :type="field.type"
               :data-vv-name="field.name"
-              v-validate="'required'"
+              v-validate="field.required ? 'required' : ''"
               :error-messages="errors.collect(`${field.name}`)"
             />
           </template>
@@ -186,7 +186,6 @@ export default {
     onFilePicked(e) {
       const { id } = e.target;
       const files = e.target.files || e.dataTransfer.files;
-      // console.log('files', files);
 
       if (files[0] !== undefined) {
         const filename = files[0].name;
@@ -227,11 +226,9 @@ export default {
         name: this.editedItem.name,
         sku: this.editedItem.sku,
         label: this.label,
-        // auth: this.auth,
         authorization: this.authorization ? this.authorization.id : null,
         settings
       };
-      console.log(data);
 
       if (this.isEditMode) {
         data.id = this.editedItem._id;

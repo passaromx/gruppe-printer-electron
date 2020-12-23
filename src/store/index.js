@@ -47,7 +47,7 @@ store.dispatch('auth/fetchSession')
     store.commit('setIsReady', true);
   })
   .catch(() => {
-    console.log('err fetchsession');
+    // console.log('err fetchsession');
     if (localStorage) {
       const token = localStorage.getItem('token');
       const user = JSON.parse(localStorage.getItem('USER'));

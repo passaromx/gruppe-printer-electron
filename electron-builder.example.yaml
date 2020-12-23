@@ -1,0 +1,20 @@
+appId: com.passaro.gruppeprinter
+publish:
+    provider: github
+    token: "github-private-token"
+"files": [
+      "dist_electron/**/*",
+      "package.json"
+    ]
+"extends": null
+"directories": {
+  "buildResources": "."
+}
+"mac": {
+  "category": "public.app-category.productivity"
+}
+win: {
+  certificateFile: "private/passaromx.pfx",
+  verifyUpdateCodeSignature: false,
+  publisherName: "passaromx"
+}

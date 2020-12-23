@@ -1,5 +1,37 @@
 <template>
   <div>
+    <VDialog v-model="downloadDialog" max-width="300" persistent>
+      <VCard
+        color="secondary"
+        dark
+      >
+        <VCardText>
+          <span v-if="currentState === PDF_DOWNLOAD_STATE.DOWNLOADING">
+            Descargando {{ currentDownload }} de {{ selected.length }}, esto puede tomar unos minutos
+          </span>
+          <span v-if="currentState === PDF_DOWNLOAD_STATE.PACKAGING">
+            Comprimiendo descarga...
+          </span>
+          <span v-if="currentState === PDF_DOWNLOAD_STATE.READY">
+            Listo! Haz click en el botón para ver tu descarga en el buscador
+          </span>
+          <VProgressLinear
+            v-model="progress"
+            color="white"
+            class="mb-0"
+          ></VProgressLinear>
+        </VCardText>
+        <VCardActions v-if="currentState === PDF_DOWNLOAD_STATE.READY">
+          <VBtn
+            color="primary"
+            @click="revealInFinder"
+          >
+            Ver Descarga
+          </VBtn>
+        </VCardActions>
+      </VCard>
+    </VDialog>
+
     <VExpandTransition>
       <div v-if="selected.length > 0" class="delete-bar">
         <VContainer fluid class="py-0" style="height: 100%">
@@ -13,15 +45,27 @@
               {{ selected.length }} registro{{ selected.length > 1 ? 's' : '' }}
               selecionado{{ selected.length > 1 ? 's' : '' }}
             </span>
-            <VBtn
-              class="mx-0"
-              flat
-              color="red"
-              @click="deleteItems"
-            >
-              <VIcon class="mr-2">delete</VIcon>
-              Borrar
-            </VBtn>
+            <div>
+              <VBtn
+                class="mx-0"
+                flat
+                color="secondary"
+                @click="downloadItems"
+              >
+                <VIcon class="mr-2">archive</VIcon>
+                Descargar PDF
+              </VBtn>
+              <VBtn
+                class="mx-0"
+                flat
+                color="red"
+                @click="deleteItems"
+              >
+                <VIcon class="mr-2">delete</VIcon>
+                Borrar
+              </VBtn>
+            </div>
+
           </VLayout>
         </VContainer>
 
@@ -69,7 +113,14 @@
 </template>
 
 <script>
+/* eslint-disable import/no-extraneous-dependencies */
+import { shell } from 'electron';
+import { authAxios } from '@/plugins/axios';
+import JSZip from 'jszip';
+// import JSZipUtils from 'jszip-utils';
+import { saveAs } from 'save-as';
 import { mapMutations } from 'vuex';
+import { PDF_DOWNLOAD_STATE } from '@/api/constants';
 
 export default {
   props: {
@@ -89,7 +140,14 @@ export default {
     }
   },
   data() {
-    return { search: '' };
+    return {
+      search: '',
+      downloadDialog: false,
+      PDF_DOWNLOAD_STATE,
+      currentState: PDF_DOWNLOAD_STATE.IDLE,
+      currentDownload: 0,
+      progress: 0,
+    };
   },
   methods: {
     ...mapMutations(['setToDelete']),
@@ -102,6 +160,67 @@ export default {
         module: this.module
       };
       this.setToDelete(toDelete);
+    },
+    async downloadFileAsBlob(url) {
+      try {
+        const response = await authAxios({
+          url,
+          method: 'GET',
+          responseType: 'blob'
+        });
+
+        return new Blob([response.data]);
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
+    },
+    async downloadItems() {
+      this.downloadDialog = true;
+      let token = '';
+      const zip = new JSZip();
+      const downloads = this.selected.map(label => {
+        const { url } = label.labelPdf;
+        let { name } = label;
+        name += '.pdf';
+        return {
+          url,
+          name
+        };
+      });
+
+      this.currentState = PDF_DOWNLOAD_STATE.DOWNLOADING;
+
+      if (authAxios.defaults.headers.common.Authorization) {
+        token = authAxios.defaults.headers.common.Authorization;
+        delete authAxios.defaults.headers.common.Authorization;
+      }
+      for (let i = 0; i < downloads.length; i++) {
+        this.currentDownload = i + 1;
+        this.progress = Math.floor(this.currentDownload * 100 / this.selected.length);
+        /* eslint-disable-next-line */
+        const data = await this.downloadFileAsBlob(downloads[i].url);
+        if (data) {
+          zip.file(downloads[i].name, data, { binary: true });
+        }
+      }
+      authAxios.defaults.headers.common.Authorization = token;
+      this.progress = 0;
+
+      this.currentState = PDF_DOWNLOAD_STATE.PACKAGING;
+      zip.generateAsync({ type: 'blob' }, metadata => {
+        this.progress = Math.floor(metadata.percent);
+      })
+        .then(content => {
+          saveAs(content, 'Precintos');
+          this.currentState = PDF_DOWNLOAD_STATE.READY;
+        });
+    },
+    revealInFinder() {
+      shell.showItemInFolder('C:Downloads');
+      this.currentState = PDF_DOWNLOAD_STATE.IDLE;
+      this.progress = 0;
+      this.downloadDialog = false;
     }
   }
 };

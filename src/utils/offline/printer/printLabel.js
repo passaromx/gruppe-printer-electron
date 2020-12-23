@@ -43,6 +43,7 @@ const print = require('printer');
 // ^XZ`;
 
 module.exports = async (printer, data) => new Promise((resolve, reject) => {
+  // console.log(printer);
   print.printDirect({
     data,
     printer,

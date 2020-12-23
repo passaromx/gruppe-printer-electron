@@ -5,7 +5,7 @@
       <div class="variable-wrapper" v-bind:style="{width}" v-if="selectedLabel">
         <div v-for="(key, index) in keys" :key="index">
           <div v-for="(style, j) in variables.fields[key].styles" :key="index + j">
-            <VarDisplay v-if="!isMock || key == 'weight'" :name="key" :data="style">
+            <VarDisplay v-if="!isMock || isMock || key == 'weight' || key === 'description'" :name="key" :data="style">
               {{ formatValue(key) }}
             </VarDisplay>
           </div>
@@ -84,17 +84,15 @@ export default {
 
       const addTo = this.variables.fields[key].addTo;
       const dateFormat = this.variables.fields[key].dateFormat;
-      // console.log(addTo);
       if (formattedValue && formattedValue.length && addTo && dateFormat) {
         formattedValue = moment(this.variables.fields[addTo].value).add(formattedValue, 'days').format(dateFormat);
       }
 
       if (this.variables.fields[key].type === 'date') {
-        // console.log(formattedValue);
         formattedValue = moment(formattedValue).format(field.dateFormat);
       }
 
-      return `${formattedValue}${key === 'weight' ? 'Kg' : ''}`;
+      return `${formattedValue}${key === 'weight' && !this.variables.fields[key].isTons ? 'Kg' : ''}`;
     }
   }
 };

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Printer from './views/Printer';
-import { roles } from '@/api/constants';
+import { USER_ROLES } from '@/api/constants';
 
 Vue.use(Router);
 
@@ -27,7 +27,7 @@ const router = new Router({
       path: '/labels',
       meta: {
         requiresAuth: true,
-        isAdmin: true
+        canAccess: ['root', 'clientadmin']
       },
       name: 'Labels',
       component: () => import(/* webpackChunkName: "about" */ './views/Labels.vue'),
@@ -36,7 +36,7 @@ const router = new Router({
       path: '/clients',
       meta: {
         requiresAuth: true,
-        isAdmin: true
+        canAccess: ['root']
       },
       name: 'Clients',
       component: () => import(/* webpackChunkName: "users" */ './views/Clients.vue'),
@@ -45,11 +45,20 @@ const router = new Router({
       path: '/authorizations',
       meta: {
         requiresAuth: true,
-        isAdmin: true
+        canAccess: ['root']
       },
       name: 'Authorizations',
       component: () => import(/* webpackChunkName: "auth" */ './views/Authorizations.vue'),
     },
+    // {
+    //   path: '/dashboard',
+    //   meta: {
+    //     requiresAuth: true,
+    //     isAdmin: true
+    //   },
+    //   name: 'Dashboard',
+    //   component: () => import(/* webpackChunkName: "auth" */ './views/Dashboard.vue'),
+    // },
     {
       path: '/progress',
       meta: { public: true },
@@ -68,12 +77,21 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const user = JSON.parse(localStorage.getItem('USER'));
-  if (to.matched.some(record => record.meta.isAdmin)) {
-    if (user.role._id === roles.admin) {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    const role = user.role.type;
+    if (to.name === 'Labels' && (role === USER_ROLES.ADMINISTRATOR || role === USER_ROLES.CLIENT_ADMIN)) {
       next();
-    } else {
+    }
+
+    if (to.name === 'Clients' && role !== USER_ROLES.ADMINISTRATOR) {
       next({ name: 'Printer' });
     }
+
+    if (to.name === 'Printer' && role !== USER_ROLES.AUTHENTICATED) {
+      next({ name: 'Labels' });
+    }
+
+    next();
   } else {
     next();
   }
