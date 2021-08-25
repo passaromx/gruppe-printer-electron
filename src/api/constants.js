@@ -44,7 +44,8 @@ const maltaFactories = [
 ];
 
 const maltaFactoriesNumbers = [
-  '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21'
+  // eslint-disable-next-line max-len
+  '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60', '65', '70', '75', '80', '85', '90', '91', '92', '93', '94'
 ];
 
 export const maltaVars = {
@@ -483,6 +484,18 @@ export const wisiumVars = {
       validation: 'required',
       value: 'A000001',
     },
+    productionDate: {
+      type: 'date',
+      label: 'Fecha de producción',
+      dateFormat: 'MM-YYYY',
+      value: new Date().toISOString().substr(0, 10),
+      styles: [{
+        top: 18.8,
+        left: 46,
+        weight: 500,
+        fontSize: '1.5vh'
+      }]
+    },
     /* sequential: {
       type: 'number',
       label: 'Consecutivo',
@@ -500,6 +513,18 @@ export const wisiumVars = {
         fontSize: '1.55vh'
       }]
     },
+    expiryDays: {
+      value: null,
+      fromSettings: true,
+      addTo: 'productionDate',
+      dateFormat: 'MMM-YYYY',
+      styles: [{
+        top: 91.9,
+        left: 37,
+        weight: 500,
+        fontSize: '2vh'
+      }]
+    }
   },
   descriptionFormat: 'batch'
 };

@@ -96,7 +96,9 @@ module.exports = (settings, params) => {
     }
   } else if (format === 'wisium') {
     const { invert } = settings;
-    const { description } = params;
+    const { description, productionDate, expiryDays } = params;
+
+    const formattedExpiry = expiryDays ? moment(productionDate).add(expiryDays, 'days').format('MMM-YYYY') : '';
     start = `^XA
       ^MMT
       ^LH${labelShift || '0'},0
@@ -107,10 +109,12 @@ module.exports = (settings, params) => {
 
     if (invert) {
       start = `${start} 
-        ^FT200,1200^A@,25,25,ARIAL.FNT^FD${description}^FS`;
+        ^FT200,1200^A@,25,25,ARIAL.FNT^FD${description}^FS
+        ^FT290,1240^A0,30,30^FH\^FD${formattedExpiry}^FS^LS0`;
     } else { // not rotated settings
       start = `${start} 
-        ^FT580,115^A@I,25,25,ARIAL.FNT^FD${description}^FS`;
+        ^FT580,115^A@I,25,25,ARIAL.FNT^FD${description}^FS
+        ^FT500,80^A0I,30,30^FH\^FD${formattedExpiry}^FS^LS0`;
     }
   } else if (format === 'wisiumh') {
     const { invert } = settings;
