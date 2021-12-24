@@ -5,9 +5,11 @@
       <div class="variable-wrapper" v-bind:style="{width}" v-if="selectedLabel">
         <div v-for="(key, index) in keys" :key="index">
           <div v-for="(style, j) in variables.fields[key].styles" :key="index + j">
-            <VarDisplay v-if="!isMock || isMock || key == 'weight' || key === 'description'" :name="key" :data="style">
-              {{ formatValue(key) }}
-            </VarDisplay>
+            <div v-if="!isEmpty">
+              <VarDisplay v-if="!isMock || isMock || key == 'weight' || key === 'description'" :name="key" :data="style">
+                {{ formatValue(key) }}
+              </VarDisplay>
+            </div>
           </div>
 
         </div>
@@ -46,6 +48,7 @@ export default {
       label: null,
       imgPath: null,
       isMock: false,
+      isEmpty: false,
     };
   },
   computed: {
@@ -65,6 +68,9 @@ export default {
     this.$eventHub.$on('toggle-mock', isMock => {
       this.isMock = isMock;
     });
+    this.$eventHub.$on('toggle-empty', isEmpty => {
+      this.isEmpty = isEmpty;
+    });
     this.setPreviewLoader(false);
     ipcRenderer.on('image-ready', (e, label) => {
       this.imgPath = label;
@@ -72,6 +78,7 @@ export default {
   },
   beforeDestroy() {
     this.$eventHub.$off('toggle-mock');
+    this.$eventHub.$off('toggle-empty');
   },
   methods: {
     ...mapMutations('printer', ['setPreviewLoader', 'setVariableValue']),

@@ -52,6 +52,13 @@
               )"
             >
               <VSwitch
+                v-model="isEmpty"
+                color="primary"
+                label="Sin datos"
+                hide-details
+                @change="toggleEmpty"
+              />
+              <VSwitch
                 v-model="isMock"
                 color="primary"
                 label="Impresión de maquila"
@@ -125,6 +132,7 @@ export default {
     return {
       clients,
       isMock: false,
+      isEmpty: false,
       scrollSettings: { maxScrollbarLength: 160 },
       firstFetch: true,
       fetchingPrinters: false,
@@ -237,6 +245,9 @@ export default {
     toggleMock(val) {
       this.$eventHub.$emit('toggle-mock', val);
     },
+    toggleEmpty(val) {
+      this.$eventHub.$emit('toggle-empty', val);
+    },
     formatDisplayPrinters() {
       this.timeout = setTimeout(() => {
         this.printers = this.displayPrinters;
@@ -287,6 +298,7 @@ export default {
         variables[key] = variables[key].value;
       });
       variables.isMock = this.isMock;
+      variables.isEmpty = this.isEmpty;
       let data = {
         ...variables,
         user: this.user.email,

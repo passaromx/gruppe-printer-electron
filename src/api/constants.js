@@ -45,7 +45,7 @@ const maltaFactories = [
 
 const maltaFactoriesNumbers = [
   // eslint-disable-next-line max-len
-  '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60', '65', '70', '75', '80', '85', '90', '91', '92', '93', '94'
+  '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60', '65', '70', '75', '80', '85', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99'
 ];
 
 export const maltaVars = {
@@ -517,7 +517,7 @@ export const wisiumVars = {
       value: null,
       fromSettings: true,
       addTo: 'productionDate',
-      dateFormat: 'MMM-YYYY',
+      dateFormat: 'MM-YYYY',
       styles: [{
         top: 91.9,
         left: 37,

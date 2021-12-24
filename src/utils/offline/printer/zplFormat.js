@@ -1,5 +1,6 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-useless-escape */
+
 const moment = require('moment');
 
 module.exports = (settings, params) => {
@@ -18,13 +19,13 @@ module.exports = (settings, params) => {
       ^LL1279
       ^LS0
       ^FT335,870^A0I,44,44^FH\^FD${description || ''}^FS`;
-    if (!isMock || isMock) {
+    if (!isMock) {
       start = `${start}
       ^FT350,790^A0I,43,43^FH\^FD${moment(productionDate).format('DD-MM-YYYY') || ''}^FS^LS0
       ^FT350,710^A0I,43,43^FH\^FD${formattedExpiry}^FS^LS0`;
     }
   } else if (format === 'malta') {
-    const { description, weight, date, isMock } = params;
+    const { description, weight, date, isMock, isEmpty } = params;
     start = `^XA
       ^LH${labelShift || '0'},0
       ^MMC
@@ -33,13 +34,18 @@ module.exports = (settings, params) => {
       ^LS0
       ^CFO,100
       ^FT100,1545^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS`;
-    if (!isMock || isMock) {
-      start = `
-      ${start}
-      ^FT385,1510^A@I,30,30,ARIAL.FNT^FD${description}^FS
-      ^FT6,420^A@R,19,19,ARIALBOLD.FNT^FD${date}^FS
-      ^FT810,340^A@B,23,23,ARIALBOLD.FNT^FD${description}^FS^LS0`;
+    if (isEmpty) {
+      
+    } else {
+      if (!isMock || isMock) {
+        start = `
+        ${start}
+        ^FT385,1510^A@I,30,30,ARIAL.FNT^FD${description}^FS
+        ^FT6,420^A@R,19,19,ARIALBOLD.FNT^FD${date}^FS
+        ^FT810,340^A@B,23,23,ARIALBOLD.FNT^FD${description}^FS^LS0`;
+      }
     }
+    
     // if (uid) {
     //   start = `${start}
     //   ^FT820,1420^A@B,23,23,ARIAL.FNT^FD${uid}^FS^LS0`;
@@ -98,7 +104,7 @@ module.exports = (settings, params) => {
     const { invert } = settings;
     const { description, productionDate, expiryDays } = params;
 
-    const formattedExpiry = expiryDays ? moment(productionDate).add(expiryDays, 'days').format('MMM-YYYY') : '';
+    const formattedExpiry = expiryDays ? moment(productionDate).add(expiryDays, 'days').format('MM-YYYY') : '';
     start = `^XA
       ^MMT
       ^LH${labelShift || '0'},0
