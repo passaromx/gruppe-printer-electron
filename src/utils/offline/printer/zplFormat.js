@@ -23,7 +23,47 @@ module.exports = (settings, params) => {
       start = `${start}
       ^FT350,790^A0I,43,43^FH\^FD${moment(productionDate).format('DD-MM-YYYY') || ''}^FS^LS0
       ^FT350,710^A0I,43,43^FH\^FD${formattedExpiry}^FS^LS0`;
+    } else {
+      start = `${start}
+      ^FT350,790^A0I,43,43^FH\^FD${moment(productionDate).format('DD-MM-YYYY') || ''}^FS^LS0`;
     }
+  } else if (format === 'myncode') {
+    const { 
+      description, 
+      productionDate,
+      expiryDays,
+      isMock,
+      group,
+      sku 
+    } = params;
+
+    const formattedExpiry = expiryDays ? moment(productionDate).add(expiryDays, 'days').format('DD-MM-YYYY') : '';
+
+    const barcode = `${sku}-${description}-${moment(expiryDays).format('DDMMYY')}-${group}`;
+
+    start = `^XA
+      ^LH${labelShift || '0'},0
+      ^MMC
+      ^PW832
+      ^LL1279
+      ^LS0
+      ^FT335,950^A0I,44,44^FH\^FD${description || ''}^FS`;
+      if (!isMock) {
+        start = `${start}
+        ^FT350,865^A0I,43,43^FH\^FD${moment(productionDate).format('DD-MM-YYYY') || ''}^FS^LS0
+        ^FT350,790^A0I,43,43^FH\^FD${formattedExpiry}^FS^LS0
+        ^BY2,2,50
+        ^FO@80,35^BCI^FD${barcode}^FS
+        ^BY2,2,50
+        ^FO@80,1700^BCI^FD${barcode}^FS`;
+      } else {
+        start = `${start}
+        ^FT350,865^A0I,43,43^FH\^FD${moment(productionDate).format('DD-MM-YYYY') || ''}^FS^LS0
+        ^BY2,2,50
+        ^FO@80,35^BCI^FD${barcode}^FS
+        ^BY2,2,50
+        ^FO@80,1700^BCI^FD${barcode}^FS`;
+      }
   } else if (format === 'malta') {
     const { description, weight, date, isMock, isEmpty } = params;
     start = `^XA
@@ -45,11 +85,6 @@ module.exports = (settings, params) => {
         ^FT810,340^A@B,23,23,ARIALBOLD.FNT^FD${description}^FS^LS0`;
       }
     }
-    
-    // if (uid) {
-    //   start = `${start}
-    //   ^FT820,1420^A@B,23,23,ARIAL.FNT^FD${uid}^FS^LS0`;
-    // }
   } else if (format === 'maltaBarcode') {
     const {
       description,

@@ -43,10 +43,23 @@
                 :messages="errors.collect('labels')"
               />
             </VFlex>
+            <VFlex xs12
+              v-if="user && (
+                user.client._id === clients.myn ||
+                user.client._id === clients.myncode
+              )"
+            >
+            <VSwitch
+              v-model="isMock"
+              color="primary"
+              label="Ocultar fecha de caducidad"
+              hide-details
+              @change="toggleMock"
+            />
+            </VFlex>
             <VFlex
               xs12
               v-if="user && (user.client._id === clients.malta ||
-                user.client._id === clients.myn ||
                 user.client._id === clients.maltaPets ||
                 user.client._id === clients.maltaBarcode
               )"
@@ -118,7 +131,7 @@
 import { ipcRenderer, shell } from 'electron';
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
 import {
-  mynVars, maltaVars, wisiumVars, clients, maltaExportVars, maltaPetsVars, microsVars, maltaBarcodeVars, wisiumhVars, wisiumvVars
+  mynVars, maltaVars, wisiumVars, clients, maltaExportVars, maltaPetsVars, microsVars, maltaBarcodeVars, wisiumhVars, wisiumvVars, myncodeVars
 } from '@/api/constants';
 
 export default {
@@ -149,6 +162,7 @@ export default {
       microsVars,
       wisiumhVars,
       wisiumvVars,
+      myncodeVars,
       resize: false,
       timeout: null,
       divider: false
@@ -280,6 +294,8 @@ export default {
         vars = this.wisiumhVars;
       } else if (clientId === clients.wisiumv) {
         vars = this.wisiumvVars;
+      } else if (clientId === clients.myncode) {
+        vars = this.myncodeVars;
       }
       this.setVariables(vars);
     },

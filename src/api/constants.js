@@ -31,7 +31,8 @@ export const clients = {
   wisiumi: '5e3b4311cc7db649979e28a8',
   micros: '5e8e21818a95810d0ef6b6a9',
   wisiumh: '5fd7a88da47ddac6458271f8',
-  wisiumv: '5fd9b487f5d17606525f0abf'
+  wisiumv: '5fd9b487f5d17606525f0abf',
+  myncode: '61c4d20ef5d176065261dbd7'
 };
 
 export const rowsPerPage = [15, 25, 50, {
@@ -719,6 +720,67 @@ export const microsVars = {
     }
   },
   descriptionFormat: null
+};
+
+export const myncodeVars = {
+  fields: {
+    title: {
+      type: 'title',
+      class: 'xs12',
+      label: 'Variables'
+    },
+    productionDate: {
+      type: 'date',
+      label: 'Fecha de producción',
+      dateFormat: 'DD-MM-YYYY',
+      value: new Date().toISOString().substr(0, 10),
+      styles: [{
+        top: 36.8,
+        left: 55,
+        weight: 500,
+        fontSize: '2.7vh'
+      }]
+    },
+    batch: {
+      type: 'text',
+      label: 'Lote',
+      class: 'xs12',
+      validation: 'required|min:6|max:16',
+      value: 'A000001',
+    },
+    group: {
+      type: 'text',
+      label: 'Identificador',
+      maxlength: 1,
+      class: 'xs12',
+      validation: 'required|min:1|max:1',
+      value: '1',
+    },
+    description: {
+      value: null,
+      label: 'Nomenclatura',
+      class: 'xs12',
+      styles: [{
+        top: 30.8,
+        left: 57,
+        weight: 500,
+        fontSize: '2.7vh'
+      }]
+    },
+    expiryDays: {
+      value: null,
+      fromSettings: true,
+      addTo: 'productionDate',
+      dateFormat: 'DD-MM-YYYY',
+      styles: [{
+        top: 42.5,
+        left: 55,
+        weight: 500,
+        fontSize: '2.7vh'
+      }]
+    }
+  },
+  descriptionFormat: 'batch'
 };
 
 export const authorizationListHeaders = [
