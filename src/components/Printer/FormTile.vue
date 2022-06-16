@@ -61,7 +61,8 @@
               xs12
               v-if="user && (user.client._id === clients.malta ||
                 user.client._id === clients.maltaPets ||
-                user.client._id === clients.maltaBarcode
+                user.client._id === clients.maltaBarcode ||
+                user.client._id === clients.maltav1
               )"
             >
               <VSwitch
@@ -131,7 +132,7 @@
 import { ipcRenderer, shell } from 'electron';
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
 import {
-  mynVars, maltaVars, wisiumVars, clients, maltaExportVars, maltaPetsVars, microsVars, maltaBarcodeVars, wisiumhVars, wisiumvVars, myncodeVars
+  mynVars, maltaVars, wisiumVars, clients, maltaExportVars, maltaPetsVars, microsVars, maltaBarcodeVars, wisiumhVars, wisiumvVars, myncodeVars, maltav1Vars, wisiumv1Vars,
 } from '@/api/constants';
 
 export default {
@@ -163,6 +164,8 @@ export default {
       wisiumhVars,
       wisiumvVars,
       myncodeVars,
+      maltav1Vars,
+      wisiumv1Vars,
       resize: false,
       timeout: null,
       divider: false
@@ -296,6 +299,10 @@ export default {
         vars = this.wisiumvVars;
       } else if (clientId === clients.myncode) {
         vars = this.myncodeVars;
+      } else if (clientId === clients.maltav1) {
+        vars = this.maltav1Vars;
+      } else if (clientId === clients.wisiumv1) {
+        vars = this.wisiumv1Vars;
       }
       this.setVariables(vars);
     },

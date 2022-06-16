@@ -39,13 +39,13 @@ module.exports = (settings, params) => {
 
     const formattedExpiry = expiryDays ? moment(productionDate).add(expiryDays, 'days').format('DD-MM-YYYY') : '';
 
-    const barcode = `${sku}-${description}-${moment(expiryDays).format('DDMMYY')}-${group}`;
+    const barcode = `${sku}-${description}-${moment(productionDate).format('DDMMYY')}-${expiryDays}-${group}`;
 
     start = `^XA
       ^LH${labelShift || '0'},0
       ^MMC
-      ^PW832
-      ^LL1279
+      ^PW799
+      ^LL1439
       ^LS0
       ^FT335,950^A0I,44,44^FH\^FD${description || ''}^FS`;
       if (!isMock) {
@@ -55,14 +55,14 @@ module.exports = (settings, params) => {
         ^BY2,2,50
         ^FO@80,35^BCI^FD${barcode}^FS
         ^BY2,2,50
-        ^FO@80,1700^BCI^FD${barcode}^FS`;
+        ^FO@80,1369^BCI^FD${barcode}^FS`;
       } else {
         start = `${start}
         ^FT350,865^A0I,43,43^FH\^FD${moment(productionDate).format('DD-MM-YYYY') || ''}^FS^LS0
         ^BY2,2,50
         ^FO@80,35^BCI^FD${barcode}^FS
         ^BY2,2,50
-        ^FO@80,1700^BCI^FD${barcode}^FS`;
+        ^FO@80,1369^BCI^FD${barcode}^FS`;
       }
   } else if (format === 'malta') {
     const { description, weight, date, isMock, isEmpty } = params;
@@ -139,7 +139,7 @@ module.exports = (settings, params) => {
     const { invert } = settings;
     const { description, productionDate, expiryDays } = params;
 
-    const formattedExpiry = expiryDays ? moment(productionDate).add(expiryDays, 'days').format('MM-YYYY') : '';
+    const formattedExpiry = expiryDays ? moment(productionDate).add(expiryDays, 'days').format('MMM-YYYY') : '';
     start = `^XA
       ^MMT
       ^LH${labelShift || '0'},0
@@ -147,15 +147,15 @@ module.exports = (settings, params) => {
       ^LL1319
       ^LS0
       ^CFO,100`;
-
+      console.log("Hola", formattedExpiry);
     if (invert) {
       start = `${start} 
         ^FT200,1200^A@,25,25,ARIAL.FNT^FD${description}^FS
-        ^FT290,1240^A0,30,30^FH\^FD${formattedExpiry}^FS^LS0`;
+        ^FT290,1240^A0,30,30^FH\^FD${formattedExpiry.toUpperCase()}^FS^LS0`;
     } else { // not rotated settings
       start = `${start} 
         ^FT580,115^A@I,25,25,ARIAL.FNT^FD${description}^FS
-        ^FT500,80^A0I,30,30^FH\^FD${formattedExpiry}^FS^LS0`;
+        ^FT500,80^A0I,30,30^FH\^FD${formattedExpiry.toUpperCase()}^FS^LS0`;
     }
   } else if (format === 'wisiumh') {
     const { invert } = settings;
@@ -224,6 +224,49 @@ module.exports = (settings, params) => {
       ^FT520,1080^A@B,150,150,ARIAL.FNT^FD${shift}^FS
       ^FT820,2530^A@B,60,60,ARIAL.FNT^FD${smallWeight.toUpperCase()}^FS
     `;
+  } else if (format === 'maltav1') {
+    const { description, weight, date, isMock, isEmpty } = params;
+    start = `^XA
+      ^LH${labelShift || '0'},0
+      ^MMC
+      ^PW832
+      ^LL1615
+      ^LS0
+      ^CFO,100
+      ^FT100,1545^A@I,25,25,ARIALBOLD.FNT^FD${weight} KG^FS`;
+    if (isEmpty) {
+      
+    } else {
+      if (!isMock || isMock) {
+        start = `
+        ${start}
+        ^FT385,1510^A@I,30,30,ARIAL.FNT^FD${description}^FS
+        ^FT6,420^A@R,19,19,ARIALBOLD.FNT^FD${date}^FS
+        ^FT810,340^A@B,23,23,ARIALBOLD.FNT^FD${description}^FS^LS0`;
+      }
+    }
+  } else if (format === 'wisiumv1') {
+    const { invert } = settings;
+    const { description, productionDate, expiryDays } = params;
+
+    const formattedExpiry = expiryDays ? moment(productionDate).add(expiryDays, 'days').format('MMM-YYYY') : '';
+    start = `^XA
+      ^MMT
+      ^LH${labelShift || '0'},0
+      ^PW831
+      ^LL1319
+      ^LS0
+      ^CFO,100`;
+    console.log("Hola", formattedExpiry);
+    if (invert) {
+      start = `${start} 
+        ^FT200,1200^A@,25,25,ARIAL.FNT^FD${description}^FS
+        ^FT290,1240^A0,30,30^FH\^FD${formattedExpiry}^FS^LS0`;
+    } else { // not rotated settings
+      start = `${start} 
+        ^FT580,115^A@I,25,25,ARIAL.FNT^FD${description}^FS
+        ^FT500,80^A0I,30,30^FH\^FD${formattedExpiry}^FS^LS0`;
+    }
   }
   return start;
 };
